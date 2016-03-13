@@ -50,7 +50,7 @@ void House::print()
 {
 	std::cout << "House name: " << name << std::endl;
 	std::cout << "House description: " << desc << std::endl;
-	std::cout << "House matrix: " << desc << std::endl;
+	std::cout << "House matrix: " << std::endl;
 
 	for (int i = 0; i < rows; i++)
 	{
