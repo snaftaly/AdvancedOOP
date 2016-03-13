@@ -55,17 +55,13 @@ void HouseManager::houseInput(House& house, string fileName)
 		{
 			fin.get(house.houseMatrix[i][j]);
 		}
-		if (i < house.rows-1)
-		{
-			fin.ignore(); //skip newline and go to the next line
-		}
+		fin.ignore(); //skip newline and go to the next line
 	}
 }
 
 bool HouseManager::hasHouseExtension(char * filename){ // TODO: do this function in a c++ way
-	string fileNameStr = filename;
-	if (fileNameStr.size() >= HOUSE_EXT_SIZE
-			&& strcmp(filename + fileNameStr.size() - HOUSE_EXT_SIZE, HOUSE_EXT) == 0) {
+	if (strlen(filename) >= HOUSE_EXT_SIZE
+			&& strcmp(filename + strlen(filename) - HOUSE_EXT_SIZE, HOUSE_EXT) == 0) {
 	  return true;
 	}
 	return false;
