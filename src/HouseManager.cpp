@@ -41,13 +41,12 @@ void HouseManager::getHouses(std::string housesDirPath){
 
 void HouseManager::houseInput(House& house, string fileName)
 {
-	cout << "Reading house from file" << fileName << endl;
 	ifstream fin(fileName.c_str());
 	std::getline(fin, house.name);
 	std::getline(fin, house.desc);
 	fin >> house.rows;
 	fin >> house.cols;
-	fin.ignore(); //skip newline and go the beginning of matrix
+	fin.ignore(); //skip newline and go to the beginning of matrix
 	house.houseMatrix = new char*[house.rows];
 	for (int i =0; i < house.rows; ++i)
 	{
@@ -58,7 +57,7 @@ void HouseManager::houseInput(House& house, string fileName)
 		}
 		if (i < house.rows-1)
 		{
-			fin.ignore();
+			fin.ignore(); //skip newline and go to the next line
 		}
 	}
 }
