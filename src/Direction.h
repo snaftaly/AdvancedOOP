@@ -1,13 +1,6 @@
-/*
- * Direction.h
- *
- *  Created on: Mar 12, 2016
- *      Author: noaleibo1
- */
+#ifndef __DIRECTION__H_
+#define __DIRECTION__H_
 
-#ifndef DIRECTION_H_
-#define DIRECTION_H_
+enum class Direction {East, West, South, North, Stay};
 
-enum Direction {
-East, West, South, North, Stay
-};
+#endif //__DIRECTION__H_
