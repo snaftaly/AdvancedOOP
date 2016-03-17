@@ -2,30 +2,28 @@
 #define HOUSEMANAGER_H_
 #include <string>
 #include <vector>
+#include <list>
 #include "House.h"
 
+
+// in the next exercises this class will get the houses from files and keep them in a list.
 class HouseManager {
 
-	//private data members
-	std::vector<House> * houseVector;
-
-	// private function
-	static bool hasHouseExtension(char * filename);
-	static void houseInput(House& house, std::string fileName);
-	void getHouses(std::string housesDir);
+	std::list<House> houses;
+	// private function - TODO: for later use
+//	static bool hasHouseExtension(char * filename);
+//	static void houseInput(House& house, std::string fileName);
+//	void getHouses(std::string housesDir);
 public:
-	// public data members
-	int numHouses;
 
-	// public function declerations
 	// HouseManager c'tor signature:
-	HouseManager(std::string &path);
+	HouseManager();
 
-	// HouseManager d'tor signature
-	~HouseManager();
+	// getters
 
-	// get the house vector
-	std::vector<House> * getHouseVector(){ return houseVector; }
+	const std::list<House>& getHouses() const {
+		return houses;
+	}
 };
 
 #endif /* HOUSEMANAGER_H_ */

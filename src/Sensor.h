@@ -4,14 +4,18 @@
 #include "House.h"
 
 class Sensor: public AbstractSensor {
+	// private
 	House * sensorHouse;
 	int boti, botj;
 public:
+	// sensor c'tor declaration
 	Sensor(House * house, int i, int j);
-	virtual ~Sensor();
+	// empty d'tor
+	~Sensor() {};
 
-    // sense function declaration
 	SensorInformation sense() const;
+	void setBotLocation(int i, int j);
+
 };
 
 #endif /* SENSOR_H_ */

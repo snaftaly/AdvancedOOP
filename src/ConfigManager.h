@@ -1,24 +1,21 @@
 #ifndef CONFIGMANAGER_H_
 #define CONFIGMANAGER_H_
 
+#include <iostream>
 #include <string>
+#include <map>
 
 class ConfigManager {
+	std::map<std::string, int> confs;
 public:
-	// data members
-	int MaxSteps;
-	int MaxStepsAfterWinner;
-	int BatteryCapacity;
-	int BatteryConsumptionRate;
-	int BatteryRachargeRate;
-
-	// functions signatures
-
-	// ConfigManager c'tor signatures
-	ConfigManager(); // default c'tor with default values
+	ConfigManager();
 	ConfigManager(std::string &path);
+	void printConfs();
 
-	void printConf();
+	// getters
+	const std::map<std::string, int>& getConfs() const {
+		return confs;
+	}
 };
 
 #endif /* CONFIGMANAGER_H_ */

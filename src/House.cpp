@@ -1,17 +1,16 @@
 #include <iostream>
 #include "House.h"
-
+using namespace std;
 
 // House c'tor - only initialized the matrix to NULL in the init list
 House::House(): name(""), desc(""), rows(0), cols(0), houseMatrix(NULL) { }
 
 // House d'tor implementation
-House::~House(){
-	if (houseMatrix != NULL){
-		for (int i = 0; i < rows; i++){
-			delete [] houseMatrix[i];
-		}
-		delete [] houseMatrix;
+House::~House()
+{
+	if (houseMatrix != NULL)
+	{
+		delete[] houseMatrix;
 	}
 }
 
@@ -23,10 +22,6 @@ House::House(const House& house): rows(0), cols(0), houseMatrix(NULL){
 // House assignment operator implementation
 House& House::operator=(const House& house){
     if(this != &house) {
-    	int i, j;
-    	for (i = 0; i < rows; i++){
-			delete [] houseMatrix[i];
-		}
     	if (houseMatrix != NULL){
     		delete [] houseMatrix;
     	}
@@ -34,34 +29,27 @@ House& House::operator=(const House& house){
 		desc = house.desc;
 		rows = house.rows;
 		cols = house.cols;
-		houseMatrix = new char*[rows];
-		for (i = 0; i < rows; i++){
-			houseMatrix[i] = new char[cols];
-			for (j = 0; j < cols; j++){
-				houseMatrix[i][j] = house.houseMatrix[i][j];
-			}
+		houseMatrix = new string[rows];
+		for (int i = 0; i < rows; i++){
+			houseMatrix[i] = house.houseMatrix[i];
 		}
     }
     return *this;
 }
 
-// House print implementation
-void House::print()
-{
-	std::cout << "House name: " << name << std::endl;
-	std::cout << "House description: " << desc << std::endl;
-	std::cout << "House matrix: " << std::endl;
-
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
-			std::cout << houseMatrix[i][j];
-		}
-		std::cout << std::endl;
-	}
+std::ostream& operator<<(std::ostream& out, const House& house){
+	return out << "Name: " << house.getName() << endl
+			   << "Desc: " << house.getDesc() << endl
+			   << "Matrix: " << endl << house.getHouseMatrixStr();
 }
 
-
-
-
+std::string House::getHouseMatrixStr() const {
+		std::string retStr;
+		if (houseMatrix != NULL){
+			for (int i = 0; i< rows; i++){
+				retStr += houseMatrix[i];
+				retStr += '\n';
+			}
+		}
+		return retStr;
+	}
