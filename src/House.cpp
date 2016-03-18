@@ -53,3 +53,37 @@ std::string House::getHouseMatrixStr() const {
 		}
 		return retStr;
 	}
+
+std::tuple<int, int, int>& House::calculateHouseDirtLevelAndDocking(){
+
+	std::tuple<int, int, int> result = (-1, -1, -1);
+	int dirtLevel = 0;
+	int roboti;
+	int robotj;
+	char currPlace;
+	if (houseMatrix == NULL){
+		return result;
+	}
+	for (int i=0; i<rows; i++){
+		for (int j=0; j<cols; j++){
+			currPlace = houseMatrix[i][j] ;
+			if (currPlace == 'D'){
+				roboti = i;
+				robotj = j;
+			}
+			if (currPlace != 'W' && currPlace[i][j] != ' ' ){
+				dirtLevel += currPlace - '0';
+			}
+		}
+	}
+	std::get<0>(result) = dirtLevel;
+	std::get<1>(result) = roboti;
+	std::get<2>(result) = robotj;
+
+	return result;
+}
+
+
+
+
+

@@ -6,7 +6,7 @@
 class Sensor: public AbstractSensor {
 	// private
 	House * sensorHouse;
-	int boti, botj;
+	int roboti, robotj;
 public:
 	// sensor c'tor declarations
 	Sensor();

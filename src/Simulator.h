@@ -10,6 +10,7 @@
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
 #include "House.h"
+#include "AlgorithmRunner.h"
 #include <list>
 #include <map>
 #include <string>

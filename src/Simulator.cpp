@@ -13,6 +13,7 @@ Simulator::Simulator(std::list<House>& h, std::list<AbstractAlgorithm*>& a, map<
 	algorithms = a;
 	configs = c;
 	createAlgorithmRunnerList();
+	AlgorithmRunner::setConfig(configs);
 
 }
 
@@ -24,21 +25,30 @@ Simulator::~Simulator() {
 
 void Simulator::createAlgorithmRunnerList(){
 	for (AbstractAlgorithm* algo : algorithms){
+		algo->setConfiguration(configs);
 		algorithmRunnerList.emplace_back(AlgorithmRunner(algo));
 	}
 }
 
 void Simulator::runSimulation(){
 
+	bool isStillInCurrentHouse;
 	for (const House& house : houses){
 		setHouseForEachAlgorithmRunner(house);
+		isStillInCurrentHouse = true;
+
+		while (isStillInCurrentHouse){
+			for (AlgorithmRunner algorithmRunner : algorithmRunnerList){
+
+			}
+		}
 	}
 
 }
 
 void Simulator::setHouseForEachAlgorithmRunner(const House& house) const{
 	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
-		algoRunner.setCurrHouse(house);
+		algoRunner.updateHouseAndInfo(house);
 	}
 }
 

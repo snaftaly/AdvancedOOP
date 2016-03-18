@@ -3,6 +3,7 @@
 
 #include <string> // TODO: should we use string or cstring?
 #include <iostream>
+#include <tuple>
 
 class House
 {
@@ -73,6 +74,8 @@ public:
 	void setHouseMatrix(std::string* houseMatrix) {
 		this->houseMatrix = houseMatrix;
 	}
+
+	std::tuple<int, int, int>& calculateHouseDirtLevelAndDocking();
 };
 
 #endif
