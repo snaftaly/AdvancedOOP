@@ -7,12 +7,42 @@
 
 #include "Simulator.h"
 
+//C'tor implementation
+Simulator::Simulator(std::list<House>& h, std::list<AbstractAlgorithm*>& a, map<string, int>& c){
+	houses = h;
+	algorithms = a;
+	configs = c;
+	createAlgorithmRunnerList();
 
-Simulator::Simulator(House* h, simpleAlgorithm* a, Sensor* s): houses(h), algorithms(a), sensor(s){
-	// TODO Auto-generated constructor stub
 }
 
+//D'tor implementation
 Simulator::~Simulator() {
 	// TODO Auto-generated destructor stub
 }
+
+
+void Simulator::createAlgorithmRunnerList(){
+	for (AbstractAlgorithm* algo : algorithms){
+		algorithmRunnerList.emplace_back(AlgorithmRunner(algo));
+	}
+}
+
+void Simulator::runSimulation(){
+
+	for (const House& house : houses){
+		setHouseForEachAlgorithmRunner(house);
+	}
+
+}
+
+void Simulator::setHouseForEachAlgorithmRunner(const House& house) const{
+	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
+		algoRunner.setCurrHouse(house);
+	}
+}
+
+
+
+
 
