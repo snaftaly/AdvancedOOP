@@ -8,14 +8,21 @@ class Sensor: public AbstractSensor {
 	House * sensorHouse;
 	int boti, botj;
 public:
-	// sensor c'tor declaration
-	Sensor(House * house, int i, int j);
+	// sensor c'tor declarations
+	Sensor();
+	Sensor(House * house, int i, int j); // TODO: might not be needed
 	// empty d'tor
 	~Sensor() {};
 
 	SensorInformation sense() const;
-	void setBotLocation(int i, int j);
+	void setRobotLocation(int i, int j);
 
+	// getters
+
+	// setters
+	void setSensorHouse(House * sensorHouse) {
+		this->sensorHouse = sensorHouse;
+	}
 };
 
 #endif /* SENSOR_H_ */
