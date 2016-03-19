@@ -1,15 +1,19 @@
 #ifndef CONFIGMANAGER_H_
 #define CONFIGMANAGER_H_
-
 #include <iostream>
 #include <string>
 #include <map>
+#include <vector>
 
 class ConfigManager {
 	std::map<std::string, int> confs;
+	void processLine(const std::string& line);
+	static std::string trim(std::string& str);
+	static std::vector<std::string> split(const std::string &s, char delim);
 public:
 	ConfigManager();
-	ConfigManager(std::string &path);
+	ConfigManager(const std::string &path);
+	void loadFromFile(const std::string& iniPath);
 	void printConfs();
 
 	// getters

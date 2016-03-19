@@ -16,14 +16,20 @@
 
 class AlgorithmRunner {
 	AbstractAlgorithm* algorithm;
-	House currHouse;
 	Sensor sensor;
+
+	// current house info:
+	House currHouse;
 	int houseTotalDirtLevel;
-	bool isRunning;
-	//TODO refer to battery.
-	std::list<int> housesScore;
+	int roboti, robotj;
+
+	int batteryConsumed;
 	int numOfSteps;
 	int dirtCollected;
+
+	int algoRankInCompetition;
+
+	std::list<int> housesScore;
 	static map<string, int> config;
 
 
@@ -40,7 +46,7 @@ public:
 		return sensor;
 	}
 
-	void updateHouseAndInfo(const House& house);
+	void resetRunnerForNewHouse(const House& house);
 
 	static void setConfig(const map<string, int>& config) {
 		this->config = config;

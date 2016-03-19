@@ -1,17 +1,11 @@
-/*
- * Simulator.cpp
- *
- *  Created on: Mar 11, 2016
- *      Author: noaleibo1
- */
-
 #include "Simulator.h"
 
 //C'tor implementation
-Simulator::Simulator(std::list<House>& h, std::list<AbstractAlgorithm*>& a, map<string, int>& c){
-	houses = h;
-	algorithms = a;
-	configs = c;
+Simulator::Simulator(const string& iniPath, const string& housesPath ): confMgr(iniPath), houseMgr(housesPath){
+	// TODO insert simple algorithm * to algorithms
+
+	// TODO: should we use the hard coded configs (empty c'tor)?
+
 	createAlgorithmRunnerList();
 	AlgorithmRunner::setConfig(configs);
 
@@ -25,7 +19,10 @@ Simulator::~Simulator() {
 
 void Simulator::createAlgorithmRunnerList(){
 	for (AbstractAlgorithm* algo : algorithms){
-		algo->setConfiguration(configs);
+		// set the configurations for the algorithm
+		algo->setConfiguration(confMgr.getConfs());
+
+		// put the algorithm in the algoRunner list
 		algorithmRunnerList.emplace_back(AlgorithmRunner(algo));
 	}
 }
@@ -33,11 +30,11 @@ void Simulator::createAlgorithmRunnerList(){
 void Simulator::runSimulation(){
 
 	bool isStillInCurrentHouse;
-	for (const House& house : houses){
+	for (const House& house : houseMgr.getHouses()){
+		// set the current house for the algorithm runner;
 		setHouseForEachAlgorithmRunner(house);
-		isStillInCurrentHouse = true;
 
-		while (isStillInCurrentHouse){
+		while (true){
 			for (AlgorithmRunner algorithmRunner : algorithmRunnerList){
 
 			}
@@ -48,7 +45,7 @@ void Simulator::runSimulation(){
 
 void Simulator::setHouseForEachAlgorithmRunner(const House& house) const{
 	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
-		algoRunner.updateHouseAndInfo(house);
+		algoRunner.resetRunnerForNewHouse(house);
 	}
 }
 

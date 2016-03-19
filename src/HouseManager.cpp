@@ -7,8 +7,9 @@ using namespace std;
 #define HOUSE_EXT ".house"
 #define HOUSE_EXT_SIZE 6
 
-HouseManager::HouseManager() {
-	// fill the house with hard coded info
+HouseManager::HouseManager(const std::string& housesPath) {
+
+	// fill the house with hard coded data - houses path not yet used
 	houses.emplace_back(House()); // TODO: should we use emplace?
 
 	House& lastInsertedHouse = houses.back();

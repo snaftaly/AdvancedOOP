@@ -74,8 +74,6 @@ public:
 	void setHouseMatrix(std::string* houseMatrix) {
 		this->houseMatrix = houseMatrix;
 	}
-
-	std::tuple<int, int, int>& calculateHouseDirtLevelAndDocking();
 };
 
 #endif

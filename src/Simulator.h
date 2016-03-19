@@ -16,16 +16,16 @@
 #include <string>
 
 class Simulator {
+	HouseManager houseMgr;
+	ConfigManager confMgr;
 
-	std::list<House> houses;
 	std::list<AbstractAlgorithm*> algorithms;
-	map<string, int> configs;
 	std::list<AlgorithmRunner> algorithmRunnerList;
 
 public:
 
 	//C'tor signature
-	Simulator(std::list<House>& h, std::list<AbstractAlgorithm*>& a, map<string, int>& configs);
+	Simulator(const std::string& iniPath, const std::string& housesPath);
 
 	//D'tor signature
 	~Simulator();

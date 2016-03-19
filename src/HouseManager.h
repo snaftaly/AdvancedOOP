@@ -17,7 +17,7 @@ class HouseManager {
 public:
 
 	// HouseManager c'tor signature:
-	HouseManager();
+	HouseManager(const std::string& housesPath);
 
 	// getters
 
