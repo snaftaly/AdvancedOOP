@@ -29,6 +29,10 @@ public:
     // House << operator
     friend std::ostream& operator<<(std::ostream& out, const House& p);
 
+    int calcDirtLevel() const;
+
+    std::tuple<int, int>& getHouseDockPlace() const;
+
     // getters
 	const std::string& getDesc() const {
 		return desc;

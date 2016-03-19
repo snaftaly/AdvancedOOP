@@ -22,6 +22,13 @@ class Simulator {
 	std::list<AbstractAlgorithm*> algorithms;
 	std::list<AlgorithmRunner> algorithmRunnerList;
 
+	// values for curr house run
+	int numAlogsFinished;
+	int lastSuccessfullAlgoRank;
+	int stepsToRun; // TODO: maybe this is not needed
+	int winnerNumSteps;
+
+	void updateOnSuccessfulAlgo(AlgorithmRunner& algorithmRunner);
 public:
 
 	//C'tor signature
@@ -32,11 +39,11 @@ public:
 
 	void createAlgorithmRunnerList();
 
-	//Function to run all algorithms on all houses
-	void runAlgorithmsOnHouses();
-
 	//Function to run actual simulation
 	void runSimulation();
+
+	void printAlgosScores(){};
+
 
 	void setHouseForEachAlgorithmRunner(const House& house) const;
 

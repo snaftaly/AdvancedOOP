@@ -57,6 +57,42 @@ std::string House::getHouseMatrixStr() const
 	return retStr;
 }
 
+int House::calcDirtLevel () const{
+	int dirtLevel = 0;
+	char currPlace;
+	if (houseMatrix == NULL){
+		return -1;
+	}
+	for (int i=0; i<rows; i++){
+		for (int j=0; j<cols; j++){
+			currPlace = houseMatrix[i][j] ;
+			if (currPlace != 'W' && currPlace != ' ' && currPlace != 'D'){
+				dirtLevel += currPlace - '0';
+			}
+		}
+	}
+
+	return dirtLevel;
+}
+
+tuple<int, int>& House::getHouseDockPlace() const {
+	tuple<int, int> dockPlace{-1, -1};
+	if (houseMatrix == NULL){
+		return dockPlace;
+	}
+	for (int i=0; i<rows; i++){
+		for (int j=0; j<cols; j++){
+			if (houseMatrix == 'D'){
+				get<0>(dockPlace) = i;
+				get<1>(dockPlace) = j;
+				return dockPlace;
+			}
+		}
+	}
+	return dockPlace;
+}
+
+
 
 
 
