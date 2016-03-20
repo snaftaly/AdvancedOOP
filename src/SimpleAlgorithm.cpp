@@ -25,23 +25,24 @@ void SimpleAlgorithm::setConfiguration(std::map<std::string, int> config){
 }
 
 
-Direction SimpleAlgorithm::step(){
-	int i = rand() % 5;
-	while (i != 5 && sensor.sense().isWall[i] == true){
-		int i = rand() % 5;
+Direction SimpleAlgorithm::step(){ //TODO: See examples from class.
+	int i;
+	do {
+		i = rand() % 5;
 	}
+	while (i != 4 && sensor.sense().isWall[i] == true);
 	switch (i){
 	case 0:
 		return Direction::East;
 		break;
 	case 1:
-		return Direction::North;
+		return Direction::West;
 		break;
 	case 2:
 		return Direction::South;
 		break;
 	case 3:
-		return Direction::West;
+		return Direction::North;
 		break;
 	case 5:
 		return Direction::Stay;
