@@ -33,7 +33,7 @@ HouseManager::HouseManager(const std::string& housesPath) {
 // for later use
 
 //void HouseManager::getHouses(std::string housesDirPath){
-//
+//	// TODO: don't forget to turn walls into walls if they are not such
 //	struct dirent *entry;
 //	DIR *dp;
 //    dp = opendir(housesDirPath.c_str());

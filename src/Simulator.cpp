@@ -29,8 +29,6 @@ void Simulator::createAlgorithmRunnerList(){
 
 void Simulator::runSimulation(){
 
-
-
 	for (const House& house : houseMgr.getHouses()){
 		numAlogsFinished = 0;
 		lastSuccessfullAlgoRank = -1;
@@ -52,16 +50,19 @@ void Simulator::runSimulation(){
 					updateOnSuccessfulAlgo(algorithmRunner);
 				}
 				else if (algorithmRunner.isBatteryConsumedAndRobotNotInDock()){ // check if no more battery
+					// TODO: need to print something?
 					algorithmRunner.setIsFinished(true);
 					numAlogsFinished++;
 				}
 				else if(algorithmRunner.isNoMoreStepsToRun()){ // check if no more steps to run
+					// TODO: need to print something?
 					algorithmRunner.setIsFinished(true);
 					numAlogsFinished++;
 				}
 				else {
 					bool isMadeLegalMove = algorithmRunner.getStepAndUpdateIfLegal();
 					if (!isMadeLegalMove){
+						// TODO: need to print something?
 						algorithmRunner.setIsFinished(true);
 						numAlogsFinished++;
 					}
@@ -74,10 +75,10 @@ void Simulator::runSimulation(){
 					}
 				}
 			}
+			// end of while for the house - update algos scores
 			for (AlgorithmRunner& algoRunner : algorithmRunnerList){
 				algoRunner.updateCurrHouseScoreInList(winnerNumSteps);
 			}
-			// end of while - update algos scores here?
 		}
 	}
 
@@ -99,13 +100,13 @@ void Simulator::setHouseForEachAlgorithmRunner(const House& house) const{
 	}
 }
 
-void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& algorithmRunner){
-	algorithmRunner.setIsFinished(true);
-	algorithmRunner.setAlgoRankInCompetition(++lastSuccessfullAlgoRank);
+void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner){
+	successAlgorithmRunner.setIsFinished(true);
+	successAlgorithmRunner.setAlgoRankInCompetition(++lastSuccessfullAlgoRank);
 	numAlogsFinished++;
-	if (lastSuccessfullAlgoRank == 1){ // this algo is the first to win fpr the house
+	if (lastSuccessfullAlgoRank == 1){ // this algo is the first to win for the house
 		// update winner num steps
-		winnerNumSteps = winnerNumSteps - algorithmRunner.getStepsRemaining();
+		winnerNumSteps = winnerNumSteps - successAlgorithmRunner.getStepsRemaining();
 
 		// update steps to run TODO: do we need this line?
 		// stepsToRun = confMgr.getConfs()["MaxStepsAfterWinner"] < stepsToRun ? confMgr.getConfs()["MaxStepsAfterWinner"] : stepsToRun;

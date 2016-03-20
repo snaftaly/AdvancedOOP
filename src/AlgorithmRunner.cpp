@@ -3,11 +3,13 @@
 
 AlgorithmRunner::AlgorithmRunner(AbstractAlgorithm* a):
 		stepsRemaining(-1), numSteps (0), dirtCollected(0), isFinished(false),
-		roboti(-1), robotj(-1), batteryConsumed(0), algoRankInCompetition(-2) {
+		roboti(-1), robotj(-1), batteryLevel(0), algoRankInCompetition(-2) {
 
 	algorithm = a;
 	algorithm->setSensor(sensor);
 	sensor.setSensorHouse(&currHouse);
+	sensor.setRobotiPrt(&roboti);
+	sensor.setRobotjPtr(&robotj);
 }
 
 AlgorithmRunner::~AlgorithmRunner() {
@@ -26,17 +28,14 @@ void AlgorithmRunner::resetRunnerForNewHouse(const House& house){
 	// set robot location
 	roboti = AlgorithmRunner::currHouseDocki;
 	robotj = AlgorithmRunner::currHouseDockj;
-	sensor.setRobotLocation(roboti, robotj);
 
-	batteryConsumed = dirtCollected = 0;
-	stepsRemaining = AlgorithmRunner::config["MaxSteps"];
+	dirtCollected = 0;
 	numSteps = 0;
+	stepsRemaining = AlgorithmRunner::config["MaxSteps"];
+	batteryLevel = AlgorithmRunner::config["BatteryCapacity"];
 
 	algoRankInCompetition = -1;
 	isFinished = false;
-
-	// update the sensor with the location - TODO: maybe change robot location in sensor to int *
-	sensor.setRobotLocation(roboti, robotj);
 }
 
 bool AlgorithmRunner::isHouseCleanAndRobotInDock(){
@@ -127,13 +126,13 @@ bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 
 void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps){
 	int positionInCompetition = getPositionInCompetition();
-	// TODO: fix the max!
-	int currHouseScore = max({0,
-			2000,
-			-(positionInCompetition - 1)*50,
-			minus(winnerNumSteps - numSteps)*10,
-			plus(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3,
-			isBackInDocking() ? 50 : -200});
+	int currHouseScore = max(0,
+						max(2000,
+						max(-(positionInCompetition - 1)*50,
+						max(-(winnerNumSteps - numSteps)*10,
+						max(+(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3,
+								isBackInDocking() ? 50 : -200)))));
+
 	housesScore.push_back(currHouseScore);
 }
 

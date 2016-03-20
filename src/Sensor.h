@@ -5,12 +5,12 @@
 
 class Sensor: public AbstractSensor {
 	// private
-	House * sensorHouse;
-	int roboti, robotj;
+	House * sensorHousePtr;
+	int * robotiPrt, * robotjPtr;
 public:
 	// sensor c'tor declarations
 	Sensor();
-	Sensor(House * house, int i, int j); // TODO: might not be needed
+	Sensor(House * house, int * i, int * j); // TODO: might not be needed
 	// empty d'tor
 	~Sensor() {};
 
@@ -21,7 +21,15 @@ public:
 
 	// setters
 	void setSensorHouse(House * sensorHouse) {
-		this->sensorHouse = sensorHouse;
+		this->sensorHousePtr = sensorHouse;
+	}
+
+	void setRobotiPrt(int* robotiPrt) {
+		this->robotiPrt = robotiPrt;
+	}
+
+	void setRobotjPtr(int* robotjPtr) {
+		this->robotjPtr = robotjPtr;
 	}
 };
 

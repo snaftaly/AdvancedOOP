@@ -22,7 +22,7 @@ class AlgorithmRunner {
 	House currHouse;
 	int roboti, robotj;
 
-	int batteryConsumed;
+	int batteryLevel;
 	int stepsRemaining;
 	int numSteps;
 	int dirtCollected;
