@@ -45,8 +45,9 @@ bool AlgorithmRunner::isHouseCleanAndRobotInDock(){
 }
 
 bool AlgorithmRunner::isBatteryConsumedAndRobotNotInDock(){
-	// TODO: handle this
-	return false;
+	bool isBatteryConsumed = (batteryLevel == 0) ? true:false;
+	bool robotNotInDock = (currHouse.getHouseMatrix()[roboti][robotj] != 'D')? true:false;
+	return (isBatteryConsumed && robotNotInDock);
 }
 
 bool AlgorithmRunner::isNoMoreStepsToRun(){
@@ -96,10 +97,10 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     numSteps += 1;
 
     if (movePlaceVal == 'D'){
-    	// TODO: increase battery level (unless fully charged)
+    	batteryLevel = min(batteryLevel+config.find("BatteryRachargeRate"), config.find("BatteryCapacity"));
     }
     else{
-    	// TODO: decrease battery level
+    	batteryLevel = max(0, batteryLevel-config.find("BatteryConsumptionRate"));
     	if (movePlaceVal != ' ' && movePlaceVal != '0'){ // new place is dirty - update dirt
     		currHouse.getHouseMatrix()[stepi][stepj] -= 1;
     		dirtCollected += 1;
