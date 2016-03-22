@@ -10,6 +10,7 @@ class ConfigManager {
 	void processLine(const std::string& line);
 	static std::string trim(std::string& str);
 	static std::vector<std::string> split(const std::string &s, char delim);
+
 public:
 	ConfigManager();
 	ConfigManager(const std::string &path);

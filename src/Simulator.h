@@ -23,9 +23,10 @@ class Simulator {
 	std::list<AlgorithmRunner> algorithmRunnerList;
 
 	// values for curr house run
-	int numAlogsFinished;
-	int lastSuccessfullAlgoRank;
-	int stepsToRun; // TODO: maybe this is not needed
+	int numAlogsRunning;
+	int currSuccessfullAlgoPosition;
+	int numSuccessfulAlgosInRound;
+	int numStepsRemaining;
 	int winnerNumSteps;
 
 	void updateOnSuccessfulAlgo(AlgorithmRunner& algorithmRunner);

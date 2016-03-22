@@ -2,8 +2,8 @@
 #include <tuple>
 
 AlgorithmRunner::AlgorithmRunner(AbstractAlgorithm* a):
-		stepsRemaining(-1), numSteps (0), dirtCollected(0), isFinished(false),
-		roboti(-1), robotj(-1), batteryLevel(0), algoRankInCompetition(-2) {
+		numSteps (0), dirtCollected(0), isFinished(false),
+		isMadeIllegalMove(false), roboti(-1), robotj(-1), batteryLevel(0), algoRankInCompetition(-2) {
 
 	algorithm = a;
 	algorithm->setSensor(sensor);
@@ -31,27 +31,22 @@ void AlgorithmRunner::resetRunnerForNewHouse(const House& house){
 
 	dirtCollected = 0;
 	numSteps = 0;
-	stepsRemaining = AlgorithmRunner::config["MaxSteps"];
 	batteryLevel = AlgorithmRunner::config["BatteryCapacity"];
 
 	algoRankInCompetition = -1;
 	isFinished = false;
+	isMadeIllegalMove = false;
 }
 
 bool AlgorithmRunner::isHouseCleanAndRobotInDock(){
 	return (dirtCollected == AlgorithmRunner::currHouseTotDirt
-			&& AlgorithmRunner::currHouseDocki == roboti
-			&& AlgorithmRunner::currHouseDocki == robotj);
+			&& currHouse.getHouseMatrix()[roboti][robotj] == 'D');
 }
 
 bool AlgorithmRunner::isBatteryConsumedAndRobotNotInDock(){
 	bool isBatteryConsumed = (batteryLevel == 0) ? true:false;
 	bool robotNotInDock = (currHouse.getHouseMatrix()[roboti][robotj] != 'D')? true:false;
 	return (isBatteryConsumed && robotNotInDock);
-}
-
-bool AlgorithmRunner::isNoMoreStepsToRun(){
-	return stepsRemaining == 0;
 }
 
 bool AlgorithmRunner::isBackInDocking(){
@@ -83,6 +78,7 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
 
     // check if the direction is legal
     if (!isLegalStep(stepi, stepj)){
+    	isMadeIllegalMove = true;
     	return false;
     }
 
@@ -91,13 +87,11 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     roboti = stepi, robotj = stepj;
     movePlaceVal = currHouse.getHouseMatrix()[roboti][robotj];
 
-    sensor.setRobotLocation(roboti, robotj);
     // update num steps
-    stepsRemaining -= 1;
     numSteps += 1;
 
     if (movePlaceVal == 'D'){
-    	batteryLevel = min(batteryLevel+config.find("BatteryRachargeRate"), config.find("BatteryCapacity"));
+    	batteryLevel = min(batteryLevel+config["BatteryRachargeRate"], config["BatteryCapacity"]);
     }
     else{
     	batteryLevel = max(0, batteryLevel-config.find("BatteryConsumptionRate"));
@@ -109,31 +103,31 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     return true;
 }
 
-void AlgorithmRunner::updateStepsRemainingOnWinner(){
-	stepsRemaining = min(stepsRemaining, AlgorithmRunner::config["MaxStepsAfterWinner"]);
-	algorithm->aboutToFinish(stepsRemaining);
+void AlgorithmRunner::updateStepsRemainingOnWinner(int numStepsRemaining){
+	algorithm->aboutToFinish(numStepsRemaining);
 }
 
 bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 	char suggestedPlaceVal = currHouse.getHouseMatrix()[stepi][stepj];
-	if (suggestedPlaceVal == 'W' ||
-			stepi < 0 || stepj < 0 ||
-			stepi >= currHouse.getRows() || stepj >= currHouse.getCols()){
-		// step is illegal
-		return false;
-	}
-	return true;
+	return (suggestedPlaceVal != 'W' &&
+			stepi >= 0 && stepj >= 0 &&
+			stepi < currHouse.getRows() && stepj < currHouse.getCols());
 }
 
 void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps){
-	int positionInCompetition = getPositionInCompetition();
-	int currHouseScore = max(0,
-						max(2000,
-						max(-(positionInCompetition - 1)*50,
-						max(-(winnerNumSteps - numSteps)*10,
-						max(+(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3,
-								isBackInDocking() ? 50 : -200)))));
-
+	int currHouseScore;
+	if (isMadeIllegalMove){
+		currHouseScore = 0;
+	}
+	else {
+		int positionInCompetition = getPositionInCompetition();
+		currHouseScore = max(0,
+							max(2000,
+							max(-(positionInCompetition - 1)*50,
+							max(-(winnerNumSteps - numSteps)*10,
+							max(+(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3,
+									isBackInDocking() ? 50 : -200)))));
+	}
 	housesScore.push_back(currHouseScore);
 }
 

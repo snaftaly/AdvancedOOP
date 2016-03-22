@@ -31,8 +31,4 @@ SensorInformation Sensor::sense() const {
 	return sensorInfo;
 }
 
-void Sensor::setRobotLocation(int i, int j){
-	robotiPrt = i;
-	robotjPtr = j;
-}
 

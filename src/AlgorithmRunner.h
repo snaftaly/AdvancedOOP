@@ -23,16 +23,18 @@ class AlgorithmRunner {
 	int roboti, robotj;
 
 	int batteryLevel;
-	int stepsRemaining;
 	int numSteps;
 	int dirtCollected;
 
 	bool isFinished;
+	bool isMadeIllegalMove;
 	int algoRankInCompetition;
 
 	std::list<int> housesScore;
 
 	static map<string, int> config;
+
+	// TODO: check if we can remove these static variables - just put the dirt data in each algo runner
 	static int currHouseTotDirt;
 	static int currHouseDocki;
 	static int currHouseDockj;
@@ -55,13 +57,12 @@ public:
 
 	bool isHouseCleanAndRobotInDock();
 	bool isBatteryConsumedAndRobotNotInDock();
-	bool isNoMoreStepsToRun();
 	bool getStepAndUpdateIfLegal();
 	bool isBackInDocking();
 	int getPositionInCompetition();
 
 
-	void updateStepsRemainingOnWinner();
+	void updateStepsRemainingOnWinner(int numStepsRemaining);
 	void updateCurrHouseScoreInList(int winnerMaxSteps);
 
 	// setters
@@ -83,8 +84,8 @@ public:
 		return housesScore;
 	}
 
-	int getStepsRemaining() const {
-		return stepsRemaining;
+	int getNumSteps() const {
+		return numSteps;
 	}
 
 	// static functions
@@ -93,7 +94,6 @@ public:
 	static void setConfig(const map<string, int>& config) {
 		this->config = config;
 	}
-
 
 };
 
