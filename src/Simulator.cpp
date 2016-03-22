@@ -7,7 +7,7 @@ Simulator::Simulator(const string& iniPath, const string& housesPath ):
 	// TODO insert simple algorithm * to algorithms
 
 	createAlgorithmRunnerList();
-	AlgorithmRunner::setConfig(configs);
+	AlgorithmRunner::setConfig(confMgr.getConfs());
 
 }
 
@@ -30,9 +30,9 @@ void Simulator::createAlgorithmRunnerList(){
 void Simulator::runSimulation(){
 
 	for (const House& house : houseMgr.getHouses()){
-
+		int maxSteps = (*confMgr.getConfs().find("MaxSteps")).second;
 		currSuccessfullAlgoPosition = 0;
-		winnerNumSteps = numStepsRemaining = confMgr.getConfs()["MaxSteps"];
+		winnerNumSteps = numStepsRemaining = maxSteps;
 		numAlogsRunning = algorithmRunnerList.size();
 
 		// set common data about the house for the algorithms
@@ -109,7 +109,8 @@ void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner){
 	successAlgorithmRunner.setAlgoRankInCompetition(currSuccessfullAlgoPosition);
 	numSuccessfulAlgosInRound++;
 	numAlogsRunning--;
-	if (currSuccessfullAlgoPosition == 1){ // this algo is the first to win for the house
+	if (currSuccessfullAlgoPosition == 0){ // TODO: change to a boolean that will track
+		// this algo is the first to win for the house
 		// update winner num steps
 		winnerNumSteps =  successAlgorithmRunner.getNumSteps();
 

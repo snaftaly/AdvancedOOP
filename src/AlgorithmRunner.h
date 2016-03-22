@@ -1,14 +1,9 @@
-/*
- * AlgorithmRunner.h
- *
- *  Created on: Mar 17, 2016
- *      Author: noaleibo1
- */
-
 #ifndef ALGORITHMRUNNER_H_
 #define ALGORITHMRUNNER_H_
+#include "Direction.h"
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
+#include "Sensor.h"
 #include <list>
 #include <tuple>
 #include <map>
@@ -89,10 +84,10 @@ public:
 	}
 
 	// static functions
-	static void AlgorithmRunner::resetCommonDataForNewHouse(const House& house);
+	static void resetCommonDataForNewHouse(const House& house);
 
-	static void setConfig(const map<string, int>& config) {
-		this->config = config;
+	static void setConfig(const map<string, int>& conf) {
+		config = conf;
 	}
 
 };

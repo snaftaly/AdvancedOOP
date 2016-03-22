@@ -19,7 +19,8 @@
 
 class SimpleAlgorithm: public AbstractAlgorithm {
 
-	Sensor sensor; //TODO: Check why can't be AbstractSensor.
+	// need to use AbstractSensor * http://moodle.tau.ac.il/mod/forum/discuss.php?d=44675#p68447
+	const AbstractSensor * sensor;
 	std::map<std::string, int> configs;
 
 public:
@@ -27,7 +28,7 @@ public:
 	SimpleAlgorithm();
 	~SimpleAlgorithm();
 
-	void setSensor(const Sensor& s);
+	void setSensor(const AbstractSensor& sensor);
 	void setConfiguration(std::map<std::string, int> config);
 	Direction step();
 	void aboutToFinish(int stepsTillFinishing);

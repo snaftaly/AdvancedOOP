@@ -1,16 +1,12 @@
-/*
- * Simulator.h
- *
- *  Created on: Mar 11, 2016
- *      Author: noaleibo1
- */
-
 #ifndef SIMULATOR_H_
 #define SIMULATOR_H_
+#include "Direction.h"
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
 #include "House.h"
 #include "AlgorithmRunner.h"
+#include "HouseManager.h"
+#include "ConfigManager.h"
 #include <list>
 #include <map>
 #include <string>
@@ -43,8 +39,7 @@ public:
 	//Function to run actual simulation
 	void runSimulation();
 
-	void printAlgosScores(){};
-
+	void printAlgosScores();
 
 	void setHouseForEachAlgorithmRunner(const House& house) const;
 

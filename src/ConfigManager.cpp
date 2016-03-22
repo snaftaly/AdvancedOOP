@@ -19,6 +19,7 @@ ConfigManager::ConfigManager(const string& path){
 
 void ConfigManager::loadFromFile(const string& iniPath)
  {
+	// TODO: exit on failure
    confs.clear();
    ifstream fin(iniPath.c_str());
    string line;

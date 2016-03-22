@@ -1,13 +1,6 @@
-/*
- * simpleAlgorithm.cpp
- *
- *  Created on: Mar 12, 2016
- *      Author: noaleibo1
- */
-
 #include "SimpleAlgorithm.h"
 
-SimpleAlgorithm::SimpleAlgorithm() {
+SimpleAlgorithm::SimpleAlgorithm() : sensor(NULL) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -16,8 +9,8 @@ SimpleAlgorithm::~SimpleAlgorithm() {
 	// TODO Auto-generated destructor stub
 }
 
-void SimpleAlgorithm::setSensor(const Sensor& s){
-	sensor = s;
+void SimpleAlgorithm::setSensor(const AbstractSensor& sensor){
+	this->sensor = &sensor; // passing the pointer to sensor
 }
 
 void SimpleAlgorithm::setConfiguration(std::map<std::string, int> config){
@@ -30,7 +23,7 @@ Direction SimpleAlgorithm::step(){ //TODO: See examples from class.
 	do {
 		i = rand() % 5;
 	}
-	while (i != 4 && sensor.sense().isWall[i] == true);
+	while (i != 4 && sensor->sense().isWall[i] == true);
 	switch (i){
 	case 0:
 		return Direction::East;
@@ -44,7 +37,7 @@ Direction SimpleAlgorithm::step(){ //TODO: See examples from class.
 	case 3:
 		return Direction::North;
 		break;
-	case 5:
+	case 4:
 		return Direction::Stay;
 	}
 }
