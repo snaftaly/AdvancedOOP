@@ -4,29 +4,38 @@
 using namespace std;
 
 // empty c'tor - puts default values in map
-ConfigManager::ConfigManager() {
-	confs.insert({"MaxSteps", 1200});
-	confs.insert({"MaxStepsAfterWinner", 200});
-	confs.insert({"BatteryCapacity", 400});
-	confs.insert({"BatteryConsumptionRate", 1});
-	confs.insert({"BatteryRachargeRate", 20});
+ConfigManager::ConfigManager(bool useDefault) {
+	if (useDefault){
+		confs.insert({"MaxSteps", 1200});
+		confs.insert({"MaxStepsAfterWinner", 200});
+		confs.insert({"BatteryCapacity", 400});
+		confs.insert({"BatteryConsumptionRate", 1});
+		confs.insert({"BatteryRechargeRate", 20});
+	}
 }
 
-// c'tor that loads values from file
-ConfigManager::ConfigManager(const string& path){
-	loadFromFile(path);
-}
-
-void ConfigManager::loadFromFile(const string& iniPath)
+bool ConfigManager::loadFromFile(const string& iniPath)
  {
+	// loads the confs to the map and returns true if there was no failure reading from the file.
 	// TODO: exit on failure
    confs.clear();
-   ifstream fin(iniPath.c_str());
+   string confFileFullPath = iniPath+"/config.ini";
+   ifstream fin(confFileFullPath.c_str());
+   if (!fin.is_open()){
+	   cout << "Error opening configuration file. Exiting" << endl;
+	   return false;
+   }
    string line;
    while (getline(fin, line))
    {
      processLine(line);
    }
+   if (fin.bad()){
+          cout << "Error while reading file " << iniPath << "/config.ini" << endl;
+          return false;
+   }
+   fin.close();
+   return true;
  }
 
 vector<std::string> ConfigManager::split(const std::string &s, char delim) {
@@ -61,5 +70,5 @@ void ConfigManager::printConfs(){
 	cout << "MaxStepsAfterWinner:" << confs["MaxStepsAfterWinner"] << endl;
 	cout << "BatteryCapacity:" << confs["BatteryCapacity"] << endl;
 	cout << "BatteryConsumptionRate:" << confs["BatteryConsumptionRate"] << endl;
-	cout << "BatteryRachargeRate:" << confs["BatteryRachargeRate"] << endl;
+	cout << "BatteryRechargeRate:" << confs["BatteryRechargeRate"] << endl;
 }

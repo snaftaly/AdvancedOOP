@@ -3,9 +3,6 @@
 #include <cstring>
 #include <list>
 using namespace std;
-#include "House.h"
-#include "ConfigManager.h"
-#include "HouseManager.h"
 
 
 int main(int argc, char* argv[]) {
@@ -20,7 +17,7 @@ int main(int argc, char* argv[]) {
 		cout << "Error: number of arguments" << endl;
 		return 1;
 	}
-	// parse the arguments of the program
+	// parse the arguments of the program and check parameter names
 	for (int i = 1; i < argc; i=i+2){
 		if (!strcmp("-config", argv[i])){
 			configDir = argv[i+1];
@@ -33,11 +30,6 @@ int main(int argc, char* argv[]) {
 			return 1;
 		}
 	}
-
-	// get default confs in conMgr
-	ConfigManager confMgr;
-
-	confMgr.printConfs();
 
 	cout << "Bye" << endl;
 

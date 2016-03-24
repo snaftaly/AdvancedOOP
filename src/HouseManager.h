@@ -21,7 +21,7 @@ public:
 
 	// getters
 
-	const std::list<House>& getHouses() const {
+	const std::list<House>& getHouses() {
 		return houses;
 	}
 };

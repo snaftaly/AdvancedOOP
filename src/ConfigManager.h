@@ -12,9 +12,8 @@ class ConfigManager {
 	static std::vector<std::string> split(const std::string &s, char delim);
 
 public:
-	ConfigManager();
-	ConfigManager(const std::string &path);
-	void loadFromFile(const std::string& iniPath);
+	ConfigManager(bool useDefault);
+	bool loadFromFile(const std::string& iniPath);
 	void printConfs();
 
 	// getters

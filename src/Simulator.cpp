@@ -1,10 +1,17 @@
 #include "Simulator.h"
+#include "SimpleAlgorithm.h"
 
 //C'tor implementation
 Simulator::Simulator(const string& iniPath, const string& housesPath ):
-	confMgr(iniPath), houseMgr(housesPath)
+	houseMgr(housesPath), confMgr(false), initSuccessfull(true)
 {
-	// TODO insert simple algorithm * to algorithms
+	if (!confMgr.loadFromFile(iniPath)){
+		initSuccessfull = false;
+		return;
+	}
+	// insert simple algorithm * to algorithms:
+	AbstractAlgorithm * simpleAlgo = new SimpleAlgorithm();
+	algorithms.emplace_back(simpleAlgo);
 
 	createAlgorithmRunnerList();
 	AlgorithmRunner::setConfig(confMgr.getConfs());
@@ -13,7 +20,9 @@ Simulator::Simulator(const string& iniPath, const string& housesPath ):
 
 //D'tor implementation
 Simulator::~Simulator() {
-	// TODO Auto-generated destructor stub  - maybe move to h file?
+	for (AbstractAlgorithm* algo : algorithms){
+		delete algo;
+	}
 }
 
 
@@ -31,14 +40,13 @@ void Simulator::runSimulation(){
 
 	for (const House& house : houseMgr.getHouses()){
 		int maxSteps = (*confMgr.getConfs().find("MaxSteps")).second;
-		currSuccessfullAlgoPosition = 0;
+		currSuccessfullAlgoPosition = 1;
 		winnerNumSteps = numStepsRemaining = maxSteps;
 		numAlogsRunning = algorithmRunnerList.size();
+		simulationSteps = 0;
+		isThereAWinner = false;
 
-		// set common data about the house for the algorithms
-		AlgorithmRunner::resetCommonDataForNewHouse(house);
-
-		// set the current house for the algorithm runner;
+		// set the current house for the algorithm runners;
 		setHouseForEachAlgorithmRunner(house);
 
 		// run the simulator - for each house run the different algorithms
@@ -57,6 +65,7 @@ void Simulator::runSimulation(){
 				else if (algorithmRunner.isBatteryConsumedAndRobotNotInDock()){ // check if no more battery
 					// TODO: need to print something?
 					algorithmRunner.setIsFinished(true);
+					algorithmRunner.setFinishState(SimulationFinishState::OutOfBattery);
 					numAlogsRunning--;
 				}
 				else {
@@ -65,6 +74,7 @@ void Simulator::runSimulation(){
 						// TODO: how should error messages be printed
 						cout << "Error: algorithm made an illegal step." << endl;
 						algorithmRunner.setIsFinished(true);
+						algorithmRunner.setFinishState(SimulationFinishState::IllegalMove);
 						numAlogsRunning--;
 					}
 					else { // move is legal
@@ -77,12 +87,16 @@ void Simulator::runSimulation(){
 				}
 			}
 			// end of for loop for each algorithm - update step remaining
+			simulationSteps++;
 			numStepsRemaining--;
 			currSuccessfullAlgoPosition += numSuccessfulAlgosInRound;
 		}
 		// end of while for the house - update algos scores
 		for (AlgorithmRunner& algoRunner : algorithmRunnerList){
-			algoRunner.updateCurrHouseScoreInList(winnerNumSteps);
+			if (!isThereAWinner){
+				winnerNumSteps = simulationSteps;
+			}
+			algoRunner.updateCurrHouseScoreInList(winnerNumSteps, simulationSteps);
 		}
 	}
 
@@ -91,31 +105,37 @@ void Simulator::runSimulation(){
 void Simulator::printAlgosScores(){
 	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
 		list<int>::iterator itr = algoRunner.getHousesScore().begin();
-		for (House& house : houseMgr.getHouses()){
+		for (const House& house : houseMgr.getHouses()){
 			cout << '[' << house.getName() << ']' << '\t' << *itr << endl;
 			++itr;
 		}
 	}
-};
+}
 
-void Simulator::setHouseForEachAlgorithmRunner(const House& house) const{
+void Simulator::setHouseForEachAlgorithmRunner(const House& house){
+	// set common data about the house for the algorithms
+	AlgorithmRunner::resetCommonDataForNewHouse(house);
+	int currHouseDocki, currHouseDockj;
+	std::tie(currHouseDocki, currHouseDockj) = house.getHouseDockPlace();
 	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
-		algoRunner.resetRunnerForNewHouse(house);
+		algoRunner.resetRunnerForNewHouse(house, currHouseDocki, currHouseDockj);
 	}
 }
 
 void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner){
 	successAlgorithmRunner.setIsFinished(true);
 	successAlgorithmRunner.setAlgoRankInCompetition(currSuccessfullAlgoPosition);
+	successAlgorithmRunner.setFinishState(SimulationFinishState::Success);
 	numSuccessfulAlgosInRound++;
 	numAlogsRunning--;
-	if (currSuccessfullAlgoPosition == 0){ // TODO: change to a boolean that will track
-		// this algo is the first to win for the house
+	if (!isThereAWinner && currSuccessfullAlgoPosition == 1){ // this algo is the first to win for the house
+		isThereAWinner = true;
+
 		// update winner num steps
 		winnerNumSteps =  successAlgorithmRunner.getNumSteps();
 
 		// update steps to run to the minimum of MaxStepsAfterWinner and numStepsRemaining
-		 numStepsRemaining = confMgr.getConfs()["MaxStepsAfterWinner"] < numStepsRemaining ? confMgr.getConfs()["MaxStepsAfterWinner"] : numStepsRemaining;
+		 numStepsRemaining = min(confMgr.getConfs().find("MaxStepsAfterWinner")->second, numStepsRemaining);
 
 		// update other algos with result
 		for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){

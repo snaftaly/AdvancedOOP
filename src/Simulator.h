@@ -7,6 +7,7 @@
 #include "AlgorithmRunner.h"
 #include "HouseManager.h"
 #include "ConfigManager.h"
+#include "SimulationFinishState.h"
 #include <list>
 #include <map>
 #include <string>
@@ -14,6 +15,7 @@
 class Simulator {
 	HouseManager houseMgr;
 	ConfigManager confMgr;
+	bool initSuccessfull;
 
 	std::list<AbstractAlgorithm*> algorithms;
 	std::list<AlgorithmRunner> algorithmRunnerList;
@@ -23,7 +25,9 @@ class Simulator {
 	int currSuccessfullAlgoPosition;
 	int numSuccessfulAlgosInRound;
 	int numStepsRemaining;
+	int simulationSteps;
 	int winnerNumSteps;
+	bool isThereAWinner;
 
 	void updateOnSuccessfulAlgo(AlgorithmRunner& algorithmRunner);
 public:
@@ -41,9 +45,9 @@ public:
 
 	void printAlgosScores();
 
-	void setHouseForEachAlgorithmRunner(const House& house) const;
+	void setHouseForEachAlgorithmRunner(const House& house);
 
-
+	bool isInitSuccessFull(){ return initSuccessfull; };
 };
 
 #endif /* SIMULATOR_H_ */

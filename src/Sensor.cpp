@@ -4,7 +4,7 @@
 // empty c'tor for the sensor
 Sensor::Sensor() {
 	sensorHousePtr = NULL;
-	robotiPrt = NULL;
+	robotiPtr = NULL;
 	robotjPtr = NULL;
 }
 
@@ -17,17 +17,19 @@ Sensor::Sensor() {
 
 SensorInformation Sensor::sense() const {
 	struct SensorInformation sensorInfo;
-	if (sensorHousePtr->getHouseMatrix()[robotiPrt][robotjPtr] == ' ' || sensorHousePtr->getHouseMatrix()[robotiPrt][robotjPtr] == 'D'){
+	char currPlace = sensorHousePtr->getHouseMatrix()[*robotiPtr][*robotjPtr];
+
+	if (currPlace >= 0 && currPlace <=9 ){
+		sensorInfo.dirtLevel = sensorHousePtr->getHouseMatrix()[*robotiPtr][*robotjPtr] - '0'; // dirt level
+	}
+	else { // currPlace == ' ' or 'W' or any other char that is not '0'-'9' or 'W'
 		sensorInfo.dirtLevel = 0;
 	}
-	else {
-		sensorInfo.dirtLevel = sensorHousePtr->getHouseMatrix()[robotiPrt][robotjPtr] - '0'; // dirt level
-	}
 
-	sensorInfo.isWall[(int)Direction::East] = sensorHousePtr->getHouseMatrix()[robotiPrt][robotjPtr+1] == 'W' ? true : false; // east
-	sensorInfo.isWall[(int)Direction::West] = sensorHousePtr->getHouseMatrix()[robotiPrt][robotjPtr-1] == 'W' ? true : false; // west
-	sensorInfo.isWall[(int)Direction::South] = sensorHousePtr->getHouseMatrix()[robotiPrt+1][robotjPtr] == 'W' ? true : false; // south
-	sensorInfo.isWall[(int)Direction::North] = sensorHousePtr->getHouseMatrix()[robotiPrt-1][robotjPtr] == 'W' ? true : false; // north
+	sensorInfo.isWall[(int)Direction::East] = sensorHousePtr->getHouseMatrix()[*robotiPtr][*robotjPtr+1] == 'W' ? true : false;
+	sensorInfo.isWall[(int)Direction::West] = sensorHousePtr->getHouseMatrix()[*robotiPtr][*robotjPtr-1] == 'W' ? true : false;
+	sensorInfo.isWall[(int)Direction::South] = sensorHousePtr->getHouseMatrix()[*robotiPtr+1][*robotjPtr] == 'W' ? true : false;
+	sensorInfo.isWall[(int)Direction::North] = sensorHousePtr->getHouseMatrix()[*robotiPtr-1][*robotjPtr] == 'W' ? true : false;
 	return sensorInfo;
 }
 

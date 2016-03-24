@@ -4,6 +4,7 @@
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
 #include "Sensor.h"
+#include "SimulationFinishState.h"
 #include <list>
 #include <tuple>
 #include <map>
@@ -22,8 +23,8 @@ class AlgorithmRunner {
 	int dirtCollected;
 
 	bool isFinished;
-	bool isMadeIllegalMove;
-	int algoRankInCompetition;
+	int algoPositionInCompetition;
+	SimulationFinishState finishState;
 
 	std::list<int> housesScore;
 
@@ -31,8 +32,6 @@ class AlgorithmRunner {
 
 	// TODO: check if we can remove these static variables - just put the dirt data in each algo runner
 	static int currHouseTotDirt;
-	static int currHouseDocki;
-	static int currHouseDockj;
 
 	bool isLegalStep(int stepi, int stepj);
 
@@ -48,17 +47,17 @@ public:
 		return sensor;
 	}
 
-	void resetRunnerForNewHouse(const House& house);
+	void resetRunnerForNewHouse(const House& house, int currHouseDocki, int currHouseDockj);
 
 	bool isHouseCleanAndRobotInDock();
 	bool isBatteryConsumedAndRobotNotInDock();
 	bool getStepAndUpdateIfLegal();
-	bool isBackInDocking();
-	int getPositionInCompetition();
+	bool isRobotInDock();
+	int getPositionInCompetitionForScore();
 
 
 	void updateStepsRemainingOnWinner(int numStepsRemaining);
-	void updateCurrHouseScoreInList(int winnerMaxSteps);
+	void updateCurrHouseScoreInList(int winnerMaxSteps, int simulationSteps);
 
 	// setters
 
@@ -67,20 +66,29 @@ public:
 	}
 
 	void setAlgoRankInCompetition(int algoRankInCompetition) {
-		this->algoRankInCompetition = algoRankInCompetition;
+		this->algoPositionInCompetition = algoRankInCompetition;
 	}
+
+	void setFinishState(SimulationFinishState finishState) {
+		this->finishState = finishState;
+	}
+
 	// getters
 
 	bool getIsFinished() const {
 		return isFinished;
 	}
 
-	const std::list<int>& getHousesScore() const {
+	std::list<int>& getHousesScore() {
 		return housesScore;
 	}
 
 	int getNumSteps() const {
 		return numSteps;
+	}
+
+	SimulationFinishState getFinishState() const {
+		return finishState;
 	}
 
 	// static functions

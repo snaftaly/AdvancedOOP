@@ -1,9 +1,14 @@
 #include "AlgorithmRunner.h"
 #include <tuple>
 
+// initialization of static mambers TODO: should it be done here?
+int AlgorithmRunner::currHouseTotDirt = 0;
+map<string, int> AlgorithmRunner::config;
+
 AlgorithmRunner::AlgorithmRunner(AbstractAlgorithm* a):
-		numSteps (0), dirtCollected(0), isFinished(false),
-		isMadeIllegalMove(false), roboti(-1), robotj(-1), batteryLevel(0), algoRankInCompetition(-2) {
+		roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0), dirtCollected(0),
+		isFinished(false), algoPositionInCompetition(-1), finishState(SimulationFinishState::NoMoreSteps)
+{
 
 	algorithm = a;
 	algorithm->setSensor(sensor);
@@ -19,23 +24,22 @@ AlgorithmRunner::~AlgorithmRunner() {
 void AlgorithmRunner::resetCommonDataForNewHouse(const House& house)
 {
 	currHouseTotDirt = house.calcDirtLevel();
-	std::tie(currHouseDocki, currHouseDockj) = house.getHouseDockPlace();
 }
 
-void AlgorithmRunner::resetRunnerForNewHouse(const House& house){
+void AlgorithmRunner::resetRunnerForNewHouse(const House& house, int currHouseDocki, int currHouseDockj){
 	setCurrHouse(house); // copy the house info using the = operator
 
 	// set robot location
-	roboti = AlgorithmRunner::currHouseDocki;
-	robotj = AlgorithmRunner::currHouseDockj;
+	roboti = currHouseDocki;
+	robotj = currHouseDockj;
 
 	dirtCollected = 0;
 	numSteps = 0;
 	batteryLevel = AlgorithmRunner::config["BatteryCapacity"];
 
-	algoRankInCompetition = -1;
+	algoPositionInCompetition = -1;
 	isFinished = false;
-	isMadeIllegalMove = false;
+	finishState = SimulationFinishState::NoMoreSteps;
 }
 
 bool AlgorithmRunner::isHouseCleanAndRobotInDock(){
@@ -45,12 +49,11 @@ bool AlgorithmRunner::isHouseCleanAndRobotInDock(){
 
 bool AlgorithmRunner::isBatteryConsumedAndRobotNotInDock(){
 	bool isBatteryConsumed = (batteryLevel == 0) ? true:false;
-	bool robotNotInDock = (currHouse.getHouseMatrix()[roboti][robotj] != 'D')? true:false;
-	return (isBatteryConsumed && robotNotInDock);
+	return (isBatteryConsumed && !isRobotInDock());
 }
 
-bool AlgorithmRunner::isBackInDocking(){
-	return (AlgorithmRunner::currHouseDocki == roboti && AlgorithmRunner::currHouseDockj == robotj);
+bool AlgorithmRunner::isRobotInDock(){
+	return (currHouse.getHouseMatrix()[roboti][robotj] == 'D');
 }
 
 
@@ -78,7 +81,6 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
 
     // check if the direction is legal
     if (!isLegalStep(stepi, stepj)){
-    	isMadeIllegalMove = true;
     	return false;
     }
 
@@ -91,11 +93,11 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     numSteps += 1;
 
     if (movePlaceVal == 'D'){
-    	batteryLevel = min(batteryLevel+config["BatteryRachargeRate"], config["BatteryCapacity"]);
+    	batteryLevel = min(batteryLevel+config.find("BatteryRechargeRate")->second, config.find("BatteryCapacity")->second);
     }
     else{
-    	batteryLevel = max(0, batteryLevel-config.find("BatteryConsumptionRate"));
-    	if (movePlaceVal != ' ' && movePlaceVal != '0'){ // new place is dirty - update dirt
+    	batteryLevel = max(0, batteryLevel-config.find("BatteryConsumptionRate")->second);
+    	if (movePlaceVal > '0' && movePlaceVal <= '9'){ // new place is dirty - update dirt
     		currHouse.getHouseMatrix()[stepi][stepj] -= 1;
     		dirtCollected += 1;
     	}
@@ -114,26 +116,29 @@ bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 			stepi < currHouse.getRows() && stepj < currHouse.getCols());
 }
 
-void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps){
+void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const int simulationSteps){
 	int currHouseScore;
-	if (isMadeIllegalMove){
+	if (finishState == SimulationFinishState::IllegalMove){
 		currHouseScore = 0;
 	}
 	else {
-		int positionInCompetition = getPositionInCompetition();
+		int positionInCompetition = getPositionInCompetitionForScore();
+		if (finishState == SimulationFinishState::OutOfBattery){
+			numSteps = simulationSteps;
+		}
 		currHouseScore = max(0,
 							max(2000,
 							max(-(positionInCompetition - 1)*50,
-							max(-(winnerNumSteps - numSteps)*10,
-							max(+(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3,
-									isBackInDocking() ? 50 : -200)))));
+							max((winnerNumSteps - numSteps)*10,
+							max(-(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3,
+									isRobotInDock() ? 50 : -200)))));
 	}
 	housesScore.push_back(currHouseScore);
 }
 
-int AlgorithmRunner::getPositionInCompetition(){
-	if (algoRankInCompetition == -1){
+int AlgorithmRunner::getPositionInCompetitionForScore(){
+	if (!(finishState == SimulationFinishState::Success)){
 		return 10;
 	}
-	return min(algoRankInCompetition, 4);
+	return min(algoPositionInCompetition, 4);
 }

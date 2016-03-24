@@ -31,7 +31,7 @@ public:
 
     int calcDirtLevel() const;
 
-    std::tuple<int, int>& getHouseDockPlace() const;
+    std::tuple<int, int> getHouseDockPlace() const;
 
     // getters
 	const std::string& getDesc() const {
