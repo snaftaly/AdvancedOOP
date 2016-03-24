@@ -32,6 +32,7 @@ public:
 	void setConfiguration(std::map<std::string, int> config);
 	Direction step();
 	void aboutToFinish(int stepsTillFinishing);
+	std::list<int> getPossibleSteps()
 
 
 };
