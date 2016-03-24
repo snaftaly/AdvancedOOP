@@ -1,20 +1,18 @@
 #include <iostream>
-#include <fstream>
 #include <cstring>
-#include <list>
+#include "Simulator.h"
 using namespace std;
 
 
 int main(int argc, char* argv[]) {
 
-	// TODO: what should be done in case the arguments are not correct?
 	// default location of files
 	string housesDir = ".";
 	string configDir = ".";
 
 	// check number of arguments
 	if (argc != 1 && argc != 3 && argc != 5){
-		cout << "Error: number of arguments" << endl;
+		cout << "Error: number of arguments is incorrect. Quitting." << endl;
 		return 1;
 	}
 	// parse the arguments of the program and check parameter names
@@ -26,11 +24,23 @@ int main(int argc, char* argv[]) {
 			housesDir = argv[i+1];
 		}
 		else {
-			cout << "Error: wrong parameter name" << endl;
+			cout << "Error: wrong parameter name. Quitting." << endl;
 			return 1;
 		}
 	}
 
-	cout << "Bye" << endl;
+	Simulator simulator(configDir, housesDir);
 
+	if (simulator.isInitSuccessFull()){
+		cout << "InitSuccessFull :)))" << endl;
+
+	}
+	else {
+		// initialization of config file was insucessfull
+		return 1;
+	}
+
+
+	cout << "Bye :)))" << endl;
+	return 0;
 }

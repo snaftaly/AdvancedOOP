@@ -2,10 +2,10 @@
 #include "SimpleAlgorithm.h"
 
 //C'tor implementation
-Simulator::Simulator(const string& iniPath, const string& housesPath ):
+Simulator::Simulator(const string& configPath, const string& housesPath ):
 	houseMgr(housesPath), confMgr(false), initSuccessfull(true)
 {
-	if (!confMgr.loadFromFile(iniPath)){
+	if (!confMgr.loadFromFile(configPath)){
 		initSuccessfull = false;
 		return;
 	}

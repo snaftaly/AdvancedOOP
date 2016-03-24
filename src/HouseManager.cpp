@@ -14,7 +14,6 @@ HouseManager::HouseManager(const std::string& housesPath) {
 
 	House& lastInsertedHouse = houses.back();
 	lastInsertedHouse.setName("Simple1");
-	cout << lastInsertedHouse.getName() << endl;
 	lastInsertedHouse.setDesc("2 Bedrooms + Kitchen Isle");
 	lastInsertedHouse.setRows(8);
 	lastInsertedHouse.setCols(10);

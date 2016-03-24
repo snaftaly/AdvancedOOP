@@ -22,7 +22,7 @@ bool ConfigManager::loadFromFile(const string& iniPath)
    string confFileFullPath = iniPath+"/config.ini";
    ifstream fin(confFileFullPath.c_str());
    if (!fin.is_open()){
-	   cout << "Error opening configuration file. Exiting" << endl;
+	   cout << "Error opening configuration file. Quitting." << endl;
 	   return false;
    }
    string line;

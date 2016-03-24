@@ -33,7 +33,7 @@ class Simulator {
 public:
 
 	//C'tor signature
-	Simulator(const std::string& iniPath, const std::string& housesPath);
+	Simulator(const std::string& configPath, const std::string& housesPath);
 
 	//D'tor signature
 	~Simulator();
@@ -47,7 +47,14 @@ public:
 
 	void setHouseForEachAlgorithmRunner(const House& house);
 
-	bool isInitSuccessFull(){ return initSuccessfull; };
+	bool isInitSuccessFull() {
+		return initSuccessfull;
+	}
+
+	// getters
+	bool isInitSuccessfull() const {
+		return initSuccessfull;
+	}
 };
 
 #endif /* SIMULATOR_H_ */

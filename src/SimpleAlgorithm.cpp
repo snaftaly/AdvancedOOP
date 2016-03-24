@@ -51,9 +51,8 @@ std::list<int> SimpleAlgorithm::getPossibleSteps(){
 	std::list<int> possibleSteps;
 	possibleSteps.emplace_back(0);
 	int i;
-	bool isWallArray = sensor->sense().isWall;
 	for (i=0; i<4; i++){
-		if (isWallArray[i] == false){
+		if (sensor->sense().isWall[i] == false){
 			possibleSteps.emplace_back(i);
 		}
 	}

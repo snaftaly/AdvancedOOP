@@ -8,7 +8,7 @@ clean:
 simulator: main.o Simulator.o AlgorithmRunner.o Sensor.o SimpleAlgorithm.o ConfigManager.o HouseManager.o House.o 
 	g++ $(CFLAGS) main.o Simulator.o AlgorithmRunner.o Sensor.o SimpleAlgorithm.o ConfigManager.o HouseManager.o House.o -o simulator
 
-main.o: main.cpp House.h ConfigManager.h HouseManager.h Sensor.h AbstractSensor.h
+main.o: main.cpp Simulator.h
 	g++ $(CFLAGS) -c main.cpp
 
 Simulator.o: Simulator.cpp Simulator.h AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h SimpleAlgorithm.h House.h ConfigManager.h HouseManager.h SimulationFinishState.h
