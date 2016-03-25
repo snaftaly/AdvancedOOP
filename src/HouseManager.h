@@ -8,7 +8,7 @@
 
 // in the next exercises this class will get the houses from files and keep them in a list.
 class HouseManager {
-
+	int numValidHouses;
 	std::list<House> houses;
 	// private function - TODO: for later use
 //	static bool hasHouseExtension(char * filename);
@@ -23,6 +23,10 @@ public:
 
 	const std::list<House>& getHouses() {
 		return houses;
+	}
+
+	int getNumValidHouses() const {
+		return numValidHouses;
 	}
 };
 

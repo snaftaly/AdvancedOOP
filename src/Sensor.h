@@ -2,6 +2,7 @@
 #define SENSOR_H_
 #include "AbstractSensor.h"
 #include "House.h"
+#include <iostream>
 
 class Sensor: public AbstractSensor {
 	// private
@@ -10,7 +11,6 @@ class Sensor: public AbstractSensor {
 public:
 	// sensor c'tor declarations
 	Sensor();
-	Sensor(House * house, int * i, int * j); // TODO: might not be needed
 	// empty d'tor
 	~Sensor() {};
 

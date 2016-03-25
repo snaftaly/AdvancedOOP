@@ -1,5 +1,7 @@
 #include "Sensor.h"
 #include "Direction.h"
+#include <iostream>
+using namespace std;
 
 // empty c'tor for the sensor
 Sensor::Sensor() {
@@ -8,12 +10,6 @@ Sensor::Sensor() {
 	robotjPtr = NULL;
 }
 
-// c'tor for the sensor - TODO: might not be needed
-//Sensor::Sensor(House * house, int * i, int * j) {
-//	sensorHousePtr = house;
-//	robotiPrt = i;
-//	robotjPtr = j;
-//}
 
 SensorInformation Sensor::sense() const {
 	struct SensorInformation sensorInfo;

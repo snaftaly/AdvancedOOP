@@ -15,38 +15,38 @@ ConfigManager::ConfigManager(bool useDefault) {
 }
 
 bool ConfigManager::loadFromFile(const string& iniPath)
- {
+{
 	// loads the confs to the map and returns true if there was no failure reading from the file.
 	// TODO: exit on failure
-   confs.clear();
-   string confFileFullPath = iniPath+"/config.ini";
-   ifstream fin(confFileFullPath.c_str());
-   if (!fin.is_open()){
-	   cout << "Error opening configuration file. Quitting." << endl;
-	   return false;
-   }
-   string line;
-   while (getline(fin, line))
-   {
-     processLine(line);
-   }
-   if (fin.bad()){
-          cout << "Error while reading file " << iniPath << "/config.ini" << endl;
-          return false;
-   }
-   fin.close();
-   return true;
- }
+	confs.clear();
+	string confFileFullPath = iniPath+"/config.ini";
+	ifstream fin(confFileFullPath.c_str());
+	if (!fin.is_open()){
+		cout << "Error opening configuration file. Quitting." << endl;
+		return false;
+	}
+	string line;
+	while (getline(fin, line))
+	{
+		processLine(line);
+	}
+	if (fin.bad()){
+		cout << "Error while reading file " << iniPath << "/config.ini" << endl;
+		return false;
+	}
+	fin.close();
+	return true;
+}
 
 vector<std::string> ConfigManager::split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
-  }
+	std::vector<std::string> elems;
+	std::stringstream ss(s);
+	std::string item;
+	while (std::getline(ss, item, delim)) {
+		elems.push_back(item);
+	}
+	return elems;
+}
 
 string ConfigManager::trim(std::string& str)
 {
@@ -65,7 +65,8 @@ void ConfigManager::processLine(const string& line)
 	confs[trim(tokens[0])] = stoi(tokens[1]);
 }
 
-void ConfigManager::printConfs(){
+void ConfigManager::printConfs()
+{
 	cout << "MaxSteps:" << confs["MaxSteps"] << endl;
 	cout << "MaxStepsAfterWinner:" << confs["MaxStepsAfterWinner"] << endl;
 	cout << "BatteryCapacity:" << confs["BatteryCapacity"] << endl;

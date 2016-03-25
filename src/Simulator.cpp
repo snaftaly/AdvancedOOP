@@ -9,6 +9,13 @@ Simulator::Simulator(const string& configPath, const string& housesPath ):
 		initSuccessfull = false;
 		return;
 	}
+	// check if there are valid houses
+	if (houseMgr.getNumValidHouses() == 0){
+		cout << "Error: no valid house to run simulation. Quitting" << endl;
+		initSuccessfull = false;
+		return;
+	}
+
 	// insert simple algorithm * to algorithms:
 	AbstractAlgorithm * simpleAlgo = new SimpleAlgorithm();
 	algorithms.emplace_back(simpleAlgo);
@@ -16,10 +23,19 @@ Simulator::Simulator(const string& configPath, const string& housesPath ):
 	createAlgorithmRunnerList();
 	AlgorithmRunner::setConfig(confMgr.getConfs());
 
+	// TEST!!! remove when done testing
+//	for (const House& house : houseMgr.getHouses()){
+//		cout << house << endl;
+//	}
+//	cout << "*** print stuff from algorithm runner list ***" << endl;
+//	for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){
+//		cout << algorithmRunner.getNumSteps() << endl;
+//	}
 }
 
 //D'tor implementation
 Simulator::~Simulator() {
+	// TODO : make sure this is what has to be done
 	for (AbstractAlgorithm* algo : algorithms){
 		delete algo;
 	}
@@ -34,12 +50,16 @@ void Simulator::createAlgorithmRunnerList(){
 		// put the algorithm in the algoRunner list
 		algorithmRunnerList.emplace_back(AlgorithmRunner(algo));
 	}
+	for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){
+		algorithmRunner.setSensorForAlgorithm();
+	}
 }
 
 void Simulator::runSimulation(){
 
 	for (const House& house : houseMgr.getHouses()){
-		int maxSteps = (*confMgr.getConfs().find("MaxSteps")).second;
+
+		int maxSteps = confMgr.getConfs().find("MaxSteps")->second;
 		currSuccessfullAlgoPosition = 1;
 		winnerNumSteps = numStepsRemaining = maxSteps;
 		numAlogsRunning = algorithmRunnerList.size();
@@ -82,7 +102,6 @@ void Simulator::runSimulation(){
 						if (algorithmRunner.isHouseCleanAndRobotInDock()){
 							updateOnSuccessfulAlgo(algorithmRunner);
 						}
-
 					}
 				}
 			}
@@ -104,11 +123,14 @@ void Simulator::runSimulation(){
 
 void Simulator::printAlgosScores(){
 	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
-		list<int>::iterator itr = algoRunner.getHousesScore().begin();
-		for (const House& house : houseMgr.getHouses()){
-			cout << '[' << house.getName() << ']' << '\t' << *itr << endl;
-			++itr;
+		for (list<int>::iterator housesScoreitr = algoRunner.getHousesScore().begin();
+				housesScoreitr != algoRunner.getHousesScore().end(); housesScoreitr++){
+			cout << *housesScoreitr << endl;
 		}
+		// This will be used when we will have different houses
+		//		for (const House& house : houseMgr.getHouses()){
+		////			cout << '[' << house.getName() << ']' << '\t' << *itr << endl;
+		//			++housesScoreitr;
 	}
 }
 

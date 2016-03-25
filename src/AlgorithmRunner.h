@@ -34,8 +34,8 @@ class AlgorithmRunner {
 	static int currHouseTotDirt;
 
 	bool isLegalStep(int stepi, int stepj);
-
 public:
+
 	AlgorithmRunner(AbstractAlgorithm* a);
 	virtual ~AlgorithmRunner();
 
@@ -48,6 +48,7 @@ public:
 	}
 
 	void resetRunnerForNewHouse(const House& house, int currHouseDocki, int currHouseDockj);
+	void setSensorForAlgorithm();
 
 	bool isHouseCleanAndRobotInDock();
 	bool isBatteryConsumedAndRobotNotInDock();

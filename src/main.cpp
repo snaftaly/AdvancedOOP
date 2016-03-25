@@ -32,13 +32,15 @@ int main(int argc, char* argv[]) {
 	Simulator simulator(configDir, housesDir);
 
 	if (simulator.isInitSuccessFull()){
-		cout << "InitSuccessFull :)))" << endl;
+		cout << "InitSuccessFull :)))" << endl; // TODO remove this
 
 	}
 	else {
-		// initialization of config file was insucessfull
+		// initialization of config file was not successful
 		return 1;
 	}
+	simulator.runSimulation();
+	simulator.printAlgosScores();
 
 
 	cout << "Bye :)))" << endl;

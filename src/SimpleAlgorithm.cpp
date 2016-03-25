@@ -1,5 +1,5 @@
 #include "SimpleAlgorithm.h"
-#include <list>
+#include <vector>
 
 SimpleAlgorithm::SimpleAlgorithm() : sensor(NULL) {
 	// TODO Auto-generated constructor stub
@@ -10,8 +10,8 @@ SimpleAlgorithm::~SimpleAlgorithm() {
 	// TODO Auto-generated destructor stub
 }
 
-void SimpleAlgorithm::setSensor(const AbstractSensor& sensor){
-	this->sensor = &sensor; // passing the pointer to sensor
+void SimpleAlgorithm::setSensor(const AbstractSensor& s){
+	this->sensor = &s; // passing the pointer to sensor
 }
 
 void SimpleAlgorithm::setConfiguration(std::map<std::string, int> config){
@@ -20,10 +20,11 @@ void SimpleAlgorithm::setConfiguration(std::map<std::string, int> config){
 
 
 Direction SimpleAlgorithm::step(){ //TODO: See examples from class.
-	int i;
-	std::list<int> possibleSteps = getPossibleSteps();
+	int i = 0;
+	std::vector<Direction> possibleSteps = getPossibleSteps();
 	i = rand() % possibleSteps.size();
-	return (Direction)i;
+	return possibleSteps[i];
+
 //	do {
 //		i = rand() % 5;
 //	}
@@ -47,13 +48,14 @@ Direction SimpleAlgorithm::step(){ //TODO: See examples from class.
 //	}
 }
 
-std::list<int> SimpleAlgorithm::getPossibleSteps(){
-	std::list<int> possibleSteps;
-	possibleSteps.emplace_back(0);
+std::vector<Direction> SimpleAlgorithm::getPossibleSteps(){
+	std::vector<Direction> possibleSteps;
+	possibleSteps.push_back(Direction::Stay);
 	int i;
+
 	for (i=0; i<4; i++){
-		if (sensor->sense().isWall[i] == false){
-			possibleSteps.emplace_back(i);
+		if (!sensor->sense().isWall[i]){
+			possibleSteps.push_back((Direction)i);
 		}
 	}
 	return possibleSteps;

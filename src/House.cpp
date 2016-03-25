@@ -94,8 +94,33 @@ tuple<int, int> House::getHouseDockPlace() const {
 	return dockPlace;
 }
 
+void House::fixWalls(){
+	// fix walls in first row and last row
+	for (int j=0; j < cols; j++){
+		houseMatrix[0][j] = 'W';
+		houseMatrix[rows-1][j] = 'W';
+	}
+	// fix walls in first column and last column
+	for (int i=0; i<rows; i++){
+		houseMatrix[i][0] = 'W';
+		houseMatrix[i][cols-1] = 'W';
+	}
 
+}
 
-
+bool House::isHouseValidWithWallsFixed(){
+	fixWalls();
+	int numDocksInHouse = 0;
+	char currPlace;
+	for (int i=0; i<rows; i++){
+		for (int j=0; j<cols; j++){
+			currPlace = houseMatrix[i][j];
+			if (currPlace == 'D'){
+				numDocksInHouse++;
+			}
+		}
+	}
+	return (numDocksInHouse == 1);
+}
 
 

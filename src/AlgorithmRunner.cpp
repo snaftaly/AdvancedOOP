@@ -1,5 +1,7 @@
 #include "AlgorithmRunner.h"
 #include <tuple>
+#include <iostream>
+using namespace std;
 
 // initialization of static mambers TODO: should it be done here?
 int AlgorithmRunner::currHouseTotDirt = 0;
@@ -9,12 +11,7 @@ AlgorithmRunner::AlgorithmRunner(AbstractAlgorithm* a):
 		roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0), dirtCollected(0),
 		isFinished(false), algoPositionInCompetition(-1), finishState(SimulationFinishState::NoMoreSteps)
 {
-
 	algorithm = a;
-	algorithm->setSensor(sensor);
-	sensor.setSensorHouse(&currHouse);
-	sensor.setRobotiPrt(&roboti);
-	sensor.setRobotjPtr(&robotj);
 }
 
 AlgorithmRunner::~AlgorithmRunner() {
@@ -61,7 +58,9 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
 	int stepi = roboti, stepj = robotj;
 	char movePlaceVal;
 	// get the direction from the algorithm
-	Direction direction = algorithm->step();
+	cout << "curr location i: " << roboti  <<" curr location j: " << robotj << endl;
+	Direction direction = algorithm->step(); // TODO: fix problematic line
+
     switch(direction) {
 		case Direction::East:
 			stepj += 1;
@@ -111,6 +110,8 @@ void AlgorithmRunner::updateStepsRemainingOnWinner(int numStepsRemaining){
 
 bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 	char suggestedPlaceVal = currHouse.getHouseMatrix()[stepi][stepj];
+	cout << "step i: " << stepi << " stepj: " << stepj << endl;
+	cout << "suggested place val: " <<  suggestedPlaceVal << endl;
 	return (suggestedPlaceVal != 'W' &&
 			stepi >= 0 && stepj >= 0 &&
 			stepi < currHouse.getRows() && stepj < currHouse.getCols());
@@ -141,4 +142,11 @@ int AlgorithmRunner::getPositionInCompetitionForScore(){
 		return 10;
 	}
 	return min(algoPositionInCompetition, 4);
+}
+
+void AlgorithmRunner::setSensorForAlgorithm(){
+	algorithm->setSensor(sensor);
+	sensor.setSensorHouse(&currHouse);
+	sensor.setRobotiPrt(&roboti);
+	sensor.setRobotjPtr(&robotj);
 }

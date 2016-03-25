@@ -7,10 +7,10 @@ using namespace std;
 #define HOUSE_EXT ".house"
 #define HOUSE_EXT_SIZE 6
 
-HouseManager::HouseManager(const std::string& housesPath) {
+HouseManager::HouseManager(const std::string& housesPath): numValidHouses(0){
 
 	// fill the house with hard coded data - houses path not yet used
-	houses.emplace_back(House()); // TODO: should we use emplace?
+	houses.emplace_back(House());
 
 	House& lastInsertedHouse = houses.back();
 	lastInsertedHouse.setName("Simple1");
@@ -26,7 +26,19 @@ HouseManager::HouseManager(const std::string& housesPath) {
 	matrix[5] = "W78W  W  W";
 	matrix[6] = "W99W  W  W";
 	matrix[7] = "WWWWWWWWWW";
+//	matrix[0] = "WWWWWWWWWW";
+//	matrix[1] = "W        W";
+//	matrix[2] = "W 1      W";
+//	matrix[3] = "W        W";
+//	matrix[4] = "W   D    W";
+//	matrix[5] = "W        W";
+//	matrix[6] = "W        W";
+//	matrix[7] = "WWWWWWWWWW";
 	lastInsertedHouse.setHouseMatrix(matrix);
+
+	if (lastInsertedHouse.isHouseValidWithWallsFixed()){
+		numValidHouses++;
+	}
 }
 
 // for later use
