@@ -58,7 +58,7 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
 	int stepi = roboti, stepj = robotj;
 	char movePlaceVal;
 	// get the direction from the algorithm
-	cout << "curr location i: " << roboti  <<" curr location j: " << robotj << endl;
+//	cout << "curr location i: " << roboti  <<" curr location j: " << robotj << endl;
 	Direction direction = algorithm->step(); // TODO: fix problematic line
 
     switch(direction) {
@@ -110,8 +110,8 @@ void AlgorithmRunner::updateStepsRemainingOnWinner(int numStepsRemaining){
 
 bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 	char suggestedPlaceVal = currHouse.getHouseMatrix()[stepi][stepj];
-	cout << "step i: " << stepi << " stepj: " << stepj << endl;
-	cout << "suggested place val: " <<  suggestedPlaceVal << endl;
+//	cout << "step i: " << stepi << " stepj: " << stepj << endl;
+//	cout << "suggested place val: " <<  suggestedPlaceVal << endl;
 	return (suggestedPlaceVal != 'W' &&
 			stepi >= 0 && stepj >= 0 &&
 			stepi < currHouse.getRows() && stepj < currHouse.getCols());
@@ -124,6 +124,12 @@ void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const
 	}
 	else {
 		int positionInCompetition = getPositionInCompetitionForScore();
+//		cout << "positionInCompetition " << positionInCompetition << endl;
+//		cout << "winnerNumSteps " << winnerNumSteps << endl;
+//		cout << "numSteps " << numSteps << endl;
+//		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
+//		cout << "dirtCollected" << dirtCollected << endl;
+//		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
 		if (finishState == SimulationFinishState::OutOfBattery){
 			numSteps = simulationSteps;
 		}
@@ -134,6 +140,7 @@ void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const
 							max(-(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3,
 									isRobotInDock() ? 50 : -200)))));
 	}
+//	cout << "currhousescore" << currHouseScore << endl;
 	housesScore.push_back(currHouseScore);
 }
 

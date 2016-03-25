@@ -18,25 +18,27 @@ HouseManager::HouseManager(const std::string& housesPath): numValidHouses(0){
 	lastInsertedHouse.setRows(8);
 	lastInsertedHouse.setCols(10);
 	string * matrix = new string[lastInsertedHouse.getRows()];
-	matrix[0] = "WWWWWWWWWW";
-	matrix[1] = "W22  DW59W";
-	matrix[2] = "W  W 1119W";
-	matrix[3] = "W WWW3WW W";
-	matrix[4] = "W6   3W  W";
-	matrix[5] = "W78W  W  W";
-	matrix[6] = "W99W  W  W";
-	matrix[7] = "WWWWWWWWWW";
 //	matrix[0] = "WWWWWWWWWW";
-//	matrix[1] = "W        W";
-//	matrix[2] = "W 1      W";
-//	matrix[3] = "W        W";
-//	matrix[4] = "W   D    W";
-//	matrix[5] = "W        W";
-//	matrix[6] = "W        W";
+//	matrix[1] = "W22  DW59W";
+//	matrix[2] = "W  W 1119W";
+//	matrix[3] = "W WWW3WW W";
+//	matrix[4] = "W6   3W  W";
+//	matrix[5] = "W78W  W  W";
+//	matrix[6] = "W99W  W  W";
 //	matrix[7] = "WWWWWWWWWW";
+	matrix[0] = "WWWWWWWWWW";
+	matrix[1] = "W     W";
+	matrix[2] = "W        W";
+	matrix[3] = "W        W";
+	matrix[4] = "W    D   W";
+	matrix[5] = "W    1   W";
+	matrix[6] = "WWWWWWWWWW";
 	lastInsertedHouse.setHouseMatrix(matrix);
+//	cout << lastInsertedHouse << endl;
 
-	if (lastInsertedHouse.isHouseValidWithWallsFixed()){
+	lastInsertedHouse.fixHouse();
+//	cout << lastInsertedHouse << endl;
+	if (lastInsertedHouse.isHouseValid()){
 		numValidHouses++;
 	}
 }

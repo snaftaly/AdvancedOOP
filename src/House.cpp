@@ -3,7 +3,9 @@
 using namespace std;
 
 // House c'tor - only initialized the matrix to NULL in the init list
-House::House(): name(""), desc(""), rows(0), cols(0), houseMatrix(NULL) { }
+House::House(): name(""), desc(""), rows(0), cols(0), houseMatrix(NULL) {
+
+}
 
 // House d'tor implementation
 House::~House()
@@ -30,9 +32,14 @@ House& House::operator=(const House& house)
 		desc = house.desc;
 		rows = house.rows;
 		cols = house.cols;
-		houseMatrix = new string[rows];
-		for (int i = 0; i < rows; i++){
-			houseMatrix[i] = house.houseMatrix[i];
+		if (house.houseMatrix == NULL){
+			houseMatrix = NULL;
+		}
+		else {
+			houseMatrix = new string[rows];
+			for (int i = 0; i < rows; i++){
+				houseMatrix[i] = house.houseMatrix[i];
+			}
 		}
     }
     return *this;
@@ -94,6 +101,23 @@ tuple<int, int> House::getHouseDockPlace() const {
 	return dockPlace;
 }
 
+void House::fixHouse(){
+	fixMissingRowsAndCols();
+	fixWalls();
+}
+
+void House::fixMissingRowsAndCols(){
+	// This functions assumes that the matrix itself is in the correct size
+	// fix rows that are too short
+	for (int i = 0; i < rows; i++){
+		int rowSize = houseMatrix[i].size();
+		if (rowSize < cols){
+			houseMatrix[i].insert(rowSize, cols - rowSize, ' ');
+		}
+	}
+
+}
+
 void House::fixWalls(){
 	// fix walls in first row and last row
 	for (int j=0; j < cols; j++){
@@ -108,8 +132,7 @@ void House::fixWalls(){
 
 }
 
-bool House::isHouseValidWithWallsFixed(){
-	fixWalls();
+bool House::isHouseValid(){
 	int numDocksInHouse = 0;
 	char currPlace;
 	for (int i=0; i<rows; i++){

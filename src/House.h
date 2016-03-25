@@ -56,9 +56,13 @@ public:
 
 	std::string getHouseMatrixStr() const;
 
+	void fixHouse();
+
+	void fixMissingRowsAndCols();
+
 	void fixWalls();
 
-	bool isHouseValidWithWallsFixed();
+	bool isHouseValid();
 
 	// setters
 
