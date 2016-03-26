@@ -33,6 +33,8 @@ public:
 
     std::tuple<int, int> getHouseDockPlace() const;
 
+    bool readFromFile(std::string fileName);
+
     // getters
 	const std::string& getDesc() const {
 		return desc;

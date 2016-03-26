@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "House.h"
 using namespace std;
 
@@ -146,4 +147,31 @@ bool House::isHouseValid(){
 	return (numDocksInHouse == 1);
 }
 
-
+bool House::readFromFile(string fileName)
+{
+	ifstream fin(fileName.c_str());
+	if (!fin.is_open()){
+		cout << "Error opening house file: " <<  fileName << ". Quitting." << endl;
+		return false;
+	}
+	getline(fin, name);
+	getline(fin, desc);
+	fin >> rows;
+	fin >> cols;
+	fin.ignore(); //skip newline and go to the beginning of matrix
+	if (houseMatrix != NULL){
+		delete [] houseMatrix;
+	}
+	houseMatrix = new string[rows];
+	for (int i =0; i < rows; ++i)
+	{
+	    std::getline(fin,houseMatrix[i]);
+	}
+	if (fin.bad()){
+		cout << "Error while reading house file " << fileName << ". Quitting." << endl;
+		fin.close();
+		return false;
+	}
+	fin.close();
+	return true;
+}

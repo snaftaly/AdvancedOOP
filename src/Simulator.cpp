@@ -11,7 +11,6 @@ Simulator::Simulator(const string& configPath, const string& housesPath ):
 	}
 	// check if there are valid houses
 	if (houseMgr.getNumValidHouses() == 0){
-		cout << "Error: no valid house to run simulation. Quitting" << endl;
 		initSuccessfull = false;
 		return;
 	}

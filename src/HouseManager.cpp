@@ -13,11 +13,11 @@ HouseManager::HouseManager(const std::string& housesPath): numValidHouses(0){
 	houses.emplace_back(House());
 
 	House& lastInsertedHouse = houses.back();
-	lastInsertedHouse.setName("Simple1");
-	lastInsertedHouse.setDesc("2 Bedrooms + Kitchen Isle");
-	lastInsertedHouse.setRows(8);
-	lastInsertedHouse.setCols(10);
-	string * matrix = new string[lastInsertedHouse.getRows()];
+//	lastInsertedHouse.setName("Simple1");
+//	lastInsertedHouse.setDesc("2 Bedrooms + Kitchen Isle");
+//	lastInsertedHouse.setRows(8);
+//	lastInsertedHouse.setCols(10);
+//	string * matrix = new string[lastInsertedHouse.getRows()];
 //	matrix[0] = "WWWWWWWWWW";
 //	matrix[1] = "W22  DW59W";
 //	matrix[2] = "W  W 1119W";
@@ -26,20 +26,27 @@ HouseManager::HouseManager(const std::string& housesPath): numValidHouses(0){
 //	matrix[5] = "W78W  W  W";
 //	matrix[6] = "W99W  W  W";
 //	matrix[7] = "WWWWWWWWWW";
-	matrix[0] = "WWWWWWWWWW";
-	matrix[1] = "W     W";
-	matrix[2] = "W        W";
-	matrix[3] = "W        W";
-	matrix[4] = "W    D   W";
-	matrix[5] = "W    1   W";
-	matrix[6] = "WWWWWWWWWW";
-	lastInsertedHouse.setHouseMatrix(matrix);
+//	matrix[0] = "WWWWWWWWWW";
+//	matrix[1] = "W     W";
+//	matrix[2] = "W        W";
+//	matrix[3] = "W        W";
+//	matrix[4] = "W    D   W";
+//	matrix[5] = "W    1   W";
+//	matrix[6] = "WWWWWWWWWW";
+//	lastInsertedHouse.setHouseMatrix(matrix);
 //	cout << lastInsertedHouse << endl;
-
+	bool isHouseReadSuccessful = lastInsertedHouse.readFromFile(housesPath + "/simple1.house");
+	if (!isHouseReadSuccessful){
+		// returning with numValidHouses = 0;
+		return;
+	}
 	lastInsertedHouse.fixHouse();
-//	cout << lastInsertedHouse << endl;
+	cout << lastInsertedHouse << endl;
 	if (lastInsertedHouse.isHouseValid()){
 		numValidHouses++;
+	}
+	if (numValidHouses == 0){
+		cout << "Error: no valid house to run simulation. Quitting" << endl;
 	}
 }
 
