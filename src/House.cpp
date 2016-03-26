@@ -165,7 +165,7 @@ bool House::readFromFile(string fileName)
 	houseMatrix = new string[rows];
 	for (int i =0; i < rows; ++i)
 	{
-	    std::getline(fin,houseMatrix[i]);
+	    std::getline(fin, houseMatrix[i]);
 	}
 	if (fin.bad()){
 		cout << "Error while reading house file " << fileName << ". Quitting." << endl;

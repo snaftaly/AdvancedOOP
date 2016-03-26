@@ -32,6 +32,7 @@ bool ConfigManager::loadFromFile(const string& iniPath)
 	}
 	if (fin.bad()){
 		cout << "Error while reading file " << iniPath << "/config.ini" << endl;
+		fin.close();
 		return false;
 	}
 	fin.close();
