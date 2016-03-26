@@ -1,6 +1,7 @@
 #include "AlgorithmRunner.h"
 #include <tuple>
 #include <iostream>
+#include <unistd.h> // TODO: remove this;
 using namespace std;
 
 // initialization of static mambers TODO: should it be done here?
@@ -101,6 +102,7 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     		dirtCollected += 1;
     	}
     }
+    printSimulation(stepi, stepj); // TODO: remove this line!
     return true;
 }
 
@@ -156,4 +158,17 @@ void AlgorithmRunner::setSensorForAlgorithm(){
 	sensor.setSensorHouse(&currHouse);
 	sensor.setRobotiPrt(&roboti);
 	sensor.setRobotjPtr(&robotj);
+}
+
+void AlgorithmRunner::printSimulation(int stepi, int stepj){
+    // only for tests
+    char currChar = currHouse.getHouseMatrix()[stepi][stepj];
+    cout << "\033[2J\033[1;1H"; // clear screen
+    currHouse.getHouseMatrix()[roboti][robotj] = 'B';
+    cout << currHouse << endl;
+    cout << "num steps: " << numSteps  << "/" << config.find("MaxSteps")->second << endl;
+    cout << "Battery: " << batteryLevel << endl;
+    cout << "dirt collected: " << dirtCollected << "/" <<  AlgorithmRunner::currHouseTotDirt << endl;
+    usleep(500000);
+    currHouse.getHouseMatrix()[roboti][robotj] = currChar;
 }

@@ -34,6 +34,8 @@ class AlgorithmRunner {
 	static int currHouseTotDirt;
 
 	bool isLegalStep(int stepi, int stepj);
+
+	void printSimulation(int stepi, int stepj);
 public:
 
 	AlgorithmRunner(AbstractAlgorithm* a);
