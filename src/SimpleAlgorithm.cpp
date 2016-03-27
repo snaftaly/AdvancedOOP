@@ -23,7 +23,7 @@ Direction SimpleAlgorithm::step(){ //TODO: See examples from class.
 	int i = 0;
 	std::vector<Direction> possibleSteps = getPossibleSteps();
 	i = rand() % possibleSteps.size();
-	return possibleSteps[i];
+	return possibleSteps[i]; //Direction::East;
 
 //	do {
 //		i = rand() % 5;

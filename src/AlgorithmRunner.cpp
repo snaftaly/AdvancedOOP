@@ -64,18 +64,23 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
 
     switch(direction) {
 		case Direction::East:
+			cout << "east" << endl;
 			stepj += 1;
 			break;
 		case Direction::West:
+			cout << "west" << endl;
 			stepj -= 1;
 			break;
 		case Direction::South:
+			cout << "south" << endl;
 			stepi += 1;
 			break;
 		case Direction::North:
+			cout << "north" << endl;
 			stepi -= 1;
 			break;
 		case Direction::Stay:
+			cout << "stay" << endl;
 			break;
 		}
 
@@ -126,12 +131,12 @@ void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const
 	}
 	else {
 		int positionInCompetition = getPositionInCompetitionForScore();
-//		cout << "positionInCompetition " << positionInCompetition << endl;
-//		cout << "winnerNumSteps " << winnerNumSteps << endl;
-//		cout << "numSteps " << numSteps << endl;
-//		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
-//		cout << "dirtCollected" << dirtCollected << endl;
-//		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
+		cout << "positionInCompetition " << positionInCompetition << endl;
+		cout << "winnerNumSteps " << winnerNumSteps << endl;
+		cout << "numSteps " << numSteps << endl;
+		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
+		cout << "dirtCollected" << dirtCollected << endl;
+		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
 		if (finishState == SimulationFinishState::OutOfBattery){
 			numSteps = simulationSteps;
 		}
@@ -169,6 +174,6 @@ void AlgorithmRunner::printSimulation(int stepi, int stepj){
     cout << "num steps: " << numSteps  << "/" << config.find("MaxSteps")->second << endl;
     cout << "Battery: " << batteryLevel << endl;
     cout << "dirt collected: " << dirtCollected << "/" <<  AlgorithmRunner::currHouseTotDirt << endl;
-    usleep(500000);
+    usleep(5000);
     currHouse.getHouseMatrix()[roboti][robotj] = currChar;
 }
