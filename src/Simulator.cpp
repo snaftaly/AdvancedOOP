@@ -16,11 +16,11 @@ Simulator::Simulator(const string& configPath, const string& housesPath ):
 	}
 
 	// insert simple algorithm * to algorithms:
-	AbstractAlgorithm * simpleAlgo = new SimpleAlgorithm();
-	algorithms.emplace_back(simpleAlgo);
+	algorithms.emplace_back(new SimpleAlgorithm());
 
-	createAlgorithmRunnerList();
 	AlgorithmRunner::setConfig(confMgr.getConfs());
+	createAlgorithmRunnerList();
+
 
 	// TEST!!! remove when done testing
 //	for (const House& house : houseMgr.getHouses()){
