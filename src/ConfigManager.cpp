@@ -36,7 +36,7 @@ bool ConfigManager::loadFromFile(const string& iniPath)
 	}
 	fin.close();
 	// reading of file succeeded, now check that alll values are in the dict
-	checkParameters();
+	addMissingParameters();
 	return true;
 }
 
@@ -76,7 +76,7 @@ void ConfigManager::printConfs()
 	cout << "BatteryRechargeRate:" << confs["BatteryRechargeRate"] << endl;
 }
 
-void ConfigManager::checkParameters(){
+void ConfigManager::addMissingParameters(){
 	// check if the conf is found in confs and if not add default value
 	if ( confs.find("MaxSteps") == confs.end() ){
 		confs.insert({"MaxSteps", 1200});

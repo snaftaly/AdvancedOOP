@@ -97,7 +97,7 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     		dirtCollected += 1;
     	}
     }
-    //printSimulation(stepi, stepj); // TODO: remove this line!
+    //printSimulation(stepi, stepj); // print for tests
     return true;
 }
 
@@ -124,18 +124,14 @@ void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const
 		if (finishState == SimulationFinishState::OutOfBattery){
 			numSteps = simulationSteps;
 		}
-		cout << "positionInCompetition " << positionInCompetition << endl;
-		cout << "winnerNumSteps " << winnerNumSteps << endl;
-		cout << "numSteps " << numSteps << endl;
-		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
-		cout << "dirtCollected" << dirtCollected << endl;
-		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
-//		currHouseScore = max(0,
-//							max(2000,
-//							max(-(positionInCompetition - 1)*50,
-//							max((winnerNumSteps - numSteps)*10,
-//							max(-(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3,
-//									isRobotInDock() ? 50 : -200)))));
+		//print for tests
+//		cout << "positionInCompetition " << positionInCompetition << endl;
+//		cout << "winnerNumSteps " << winnerNumSteps << endl;
+//		cout << "numSteps " << numSteps << endl;
+//		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
+//		cout << "dirtCollected" << dirtCollected << endl;
+//		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
+
 		currHouseScore = max(0,
 				2000
 				- (positionInCompetition - 1)*50
@@ -145,7 +141,6 @@ void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const
 				);
 	}
 
-//	cout << "currhousescore" << currHouseScore << endl;
 	housesScore.push_back(currHouseScore);
 }
 

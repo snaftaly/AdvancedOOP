@@ -5,19 +5,20 @@
 Simulator::Simulator(const string& configPath, const string& housesPath ):
 	houseMgr(housesPath), confMgr(false), initSuccessfull(true)
 {
-	if (!confMgr.loadFromFile(configPath)){
-		initSuccessfull = false;
-		return;
-	}
-	confMgr.printConfs();
 	// check if there are valid houses
 	if (houseMgr.getNumValidHouses() == 0){
 		initSuccessfull = false;
 		return;
 	}
 
+	// get configurations from file
+	if (!confMgr.loadFromFile(configPath)){
+		initSuccessfull = false;
+		return;
+	}
+
 	// insert simple algorithm * to algorithms:
-	algorithms.emplace_back(new SimpleAlgorithm());
+	fillAlgorithmList();
 
 	AlgorithmRunner::setConfig(confMgr.getConfs());
 	createAlgorithmRunnerList();
@@ -153,6 +154,8 @@ void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner){
 	}
 }
 
-
+void Simulator::fillAlgorithmList(){
+	algorithms.emplace_back(new SimpleAlgorithm());
+}
 
 

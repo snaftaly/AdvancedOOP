@@ -30,6 +30,7 @@ class Simulator {
 	bool isThereAWinner;
 
 	void updateOnSuccessfulAlgo(AlgorithmRunner& algorithmRunner);
+	void fillAlgorithmList();
 public:
 
 	//C'tor signature
@@ -46,10 +47,6 @@ public:
 	void printAlgosScores();
 
 	void setHouseForEachAlgorithmRunner(const House& house);
-
-	bool isInitSuccessFull() {
-		return initSuccessfull;
-	}
 
 	// getters
 	bool isInitSuccessfull() const {
