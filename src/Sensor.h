@@ -17,8 +17,6 @@ public:
 	SensorInformation sense() const;
 	void setRobotLocation(int i, int j);
 
-	// getters
-
 	// setters
 	void setSensorHouse(House * sensorHouse) {
 		this->sensorHousePtr = sensorHouse;

@@ -1,7 +1,7 @@
 #ifndef HOUSE_H
 #define HOUSE_H
 
-#include <string> // TODO: should we use string or cstring?
+#include <string>
 #include <iostream>
 #include <tuple>
 

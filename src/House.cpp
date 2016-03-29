@@ -74,7 +74,7 @@ int House::calcDirtLevel () const{
 	for (int i=0; i<rows; i++){
 		for (int j=0; j<cols; j++){
 			currPlace = houseMatrix[i][j] ;
-			if (currPlace != 'W' && currPlace != ' ' && currPlace != 'D'){
+			if (currPlace > '0' && currPlace <= '9'){
 				dirtLevel += currPlace - '0';
 			}
 		}

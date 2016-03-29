@@ -1,10 +1,10 @@
 #include "AlgorithmRunner.h"
 #include <tuple>
 #include <iostream>
-#include <unistd.h> // TODO: remove this;
+#include <unistd.h> // for usleep
 using namespace std;
 
-// initialization of static mambers TODO: should it be done here?
+// initialization of static members
 int AlgorithmRunner::currHouseTotDirt = 0;
 map<string, int> AlgorithmRunner::config;
 
@@ -13,10 +13,6 @@ AlgorithmRunner::AlgorithmRunner(AbstractAlgorithm* a):
 		isFinished(false), algoPositionInCompetition(-1), finishState(SimulationFinishState::NoMoreSteps)
 {
 	algorithm = a;
-}
-
-AlgorithmRunner::~AlgorithmRunner() {
-	// TODO Auto-generated destructor stub
 }
 
 void AlgorithmRunner::resetCommonDataForNewHouse(const House& house)
@@ -59,28 +55,22 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
 	int stepi = roboti, stepj = robotj;
 	char movePlaceVal;
 	// get the direction from the algorithm
-//	cout << "curr location i: " << roboti  <<" curr location j: " << robotj << endl;
-	Direction direction = algorithm->step(); // TODO: fix problematic line
+	Direction direction = algorithm->step();
 
     switch(direction) {
 		case Direction::East:
-			cout << "east" << endl;
 			stepj += 1;
 			break;
 		case Direction::West:
-			cout << "west" << endl;
 			stepj -= 1;
 			break;
 		case Direction::South:
-			cout << "south" << endl;
 			stepi += 1;
 			break;
 		case Direction::North:
-			cout << "north" << endl;
 			stepi -= 1;
 			break;
 		case Direction::Stay:
-			cout << "stay" << endl;
 			break;
 		}
 
@@ -107,7 +97,7 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     		dirtCollected += 1;
     	}
     }
-    printSimulation(stepi, stepj); // TODO: remove this line!
+    //printSimulation(stepi, stepj); // TODO: remove this line!
     return true;
 }
 
@@ -131,22 +121,30 @@ void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const
 	}
 	else {
 		int positionInCompetition = getPositionInCompetitionForScore();
+		if (finishState == SimulationFinishState::OutOfBattery){
+			numSteps = simulationSteps;
+		}
 		cout << "positionInCompetition " << positionInCompetition << endl;
 		cout << "winnerNumSteps " << winnerNumSteps << endl;
 		cout << "numSteps " << numSteps << endl;
 		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
 		cout << "dirtCollected" << dirtCollected << endl;
 		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
-		if (finishState == SimulationFinishState::OutOfBattery){
-			numSteps = simulationSteps;
-		}
+//		currHouseScore = max(0,
+//							max(2000,
+//							max(-(positionInCompetition - 1)*50,
+//							max((winnerNumSteps - numSteps)*10,
+//							max(-(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3,
+//									isRobotInDock() ? 50 : -200)))));
 		currHouseScore = max(0,
-							max(2000,
-							max(-(positionInCompetition - 1)*50,
-							max((winnerNumSteps - numSteps)*10,
-							max(-(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3,
-									isRobotInDock() ? 50 : -200)))));
+				2000
+				- (positionInCompetition - 1)*50
+				+ (winnerNumSteps - numSteps)*10
+				-(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3
+				+ (isRobotInDock() ? 50 : -200)
+				);
 	}
+
 //	cout << "currhousescore" << currHouseScore << endl;
 	housesScore.push_back(currHouseScore);
 }

@@ -10,7 +10,6 @@ Sensor::Sensor() {
 	robotjPtr = NULL;
 }
 
-
 SensorInformation Sensor::sense() const {
 	struct SensorInformation sensorInfo;
 	char currPlace = sensorHousePtr->getHouseMatrix()[*robotiPtr][*robotjPtr];

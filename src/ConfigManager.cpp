@@ -17,7 +17,6 @@ ConfigManager::ConfigManager(bool useDefault) {
 bool ConfigManager::loadFromFile(const string& iniPath)
 {
 	// loads the confs to the map and returns true if there was no failure reading from the file.
-	// TODO: exit on failure
 	confs.clear();
 	string confFileFullPath = iniPath+"/config.ini";
 	ifstream fin(confFileFullPath.c_str());
@@ -36,6 +35,8 @@ bool ConfigManager::loadFromFile(const string& iniPath)
 		return false;
 	}
 	fin.close();
+	// reading of file succeeded, now check that alll values are in the dict
+	checkParameters();
 	return true;
 }
 
@@ -74,3 +75,23 @@ void ConfigManager::printConfs()
 	cout << "BatteryConsumptionRate:" << confs["BatteryConsumptionRate"] << endl;
 	cout << "BatteryRechargeRate:" << confs["BatteryRechargeRate"] << endl;
 }
+
+void ConfigManager::checkParameters(){
+	// check if the conf is found in confs and if not add default value
+	if ( confs.find("MaxSteps") == confs.end() ){
+		confs.insert({"MaxSteps", 1200});
+	}
+	if ( confs.find("MaxStepsAfterWinner") == confs.end() ){
+		confs.insert({"MaxStepsAfterWinner", 200});
+	}
+	if ( confs.find("BatteryCapacity") == confs.end() ){
+		confs.insert({"BatteryCapacity", 400});
+	}
+	if ( confs.find("BatteryConsumptionRate") == confs.end() ){
+		confs.insert({"BatteryConsumptionRate", 1});
+	}
+	if ( confs.find("BatteryRechargeRate") == confs.end() ){
+		confs.insert({"BatteryRechargeRate", 20});
+	}
+}
+

@@ -9,6 +9,7 @@ Simulator::Simulator(const string& configPath, const string& housesPath ):
 		initSuccessfull = false;
 		return;
 	}
+	confMgr.printConfs();
 	// check if there are valid houses
 	if (houseMgr.getNumValidHouses() == 0){
 		initSuccessfull = false;
@@ -20,21 +21,11 @@ Simulator::Simulator(const string& configPath, const string& housesPath ):
 
 	AlgorithmRunner::setConfig(confMgr.getConfs());
 	createAlgorithmRunnerList();
-
-
-	// TEST!!! remove when done testing
-//	for (const House& house : houseMgr.getHouses()){
-//		cout << house << endl;
-//	}
-//	cout << "*** print stuff from algorithm runner list ***" << endl;
-//	for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){
-//		cout << algorithmRunner.getNumSteps() << endl;
-//	}
 }
 
 //D'tor implementation
 Simulator::~Simulator() {
-	// TODO : make sure this is what has to be done
+	// delete from memory all the dynamically created algorithms
 	for (AbstractAlgorithm* algo : algorithms){
 		delete algo;
 	}
@@ -77,12 +68,10 @@ void Simulator::runSimulation(){
 				}
 				// check if the algorithm has finished
 				if (algorithmRunner.isHouseCleanAndRobotInDock()){
-					// TODO: think about it - maybe it's enough to update it here, maybe not
 					// this part is done in case the house is already clean before making any step
 					updateOnSuccessfulAlgo(algorithmRunner);
 				}
 				else if (algorithmRunner.isBatteryConsumedAndRobotNotInDock()){ // check if no more battery
-					// TODO: need to print something?
 					algorithmRunner.setIsFinished(true);
 					algorithmRunner.setFinishState(SimulationFinishState::OutOfBattery);
 					numAlogsRunning--;
@@ -90,14 +79,12 @@ void Simulator::runSimulation(){
 				else {
 					bool isMadeLegalMove = algorithmRunner.getStepAndUpdateIfLegal();
 					if (!isMadeLegalMove){
-						// TODO: how should error messages be printed
 						cout << "Error: algorithm made an illegal step." << endl;
 						algorithmRunner.setIsFinished(true);
 						algorithmRunner.setFinishState(SimulationFinishState::IllegalMove);
 						numAlogsRunning--;
 					}
 					else { // move is legal
-						// TODO: check if finished successfully also here?
 						if (algorithmRunner.isHouseCleanAndRobotInDock()){
 							updateOnSuccessfulAlgo(algorithmRunner);
 						}

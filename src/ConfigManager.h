@@ -10,7 +10,7 @@ class ConfigManager {
 	void processLine(const std::string& line);
 	static std::string trim(std::string& str);
 	static std::vector<std::string> split(const std::string &s, char delim);
-
+	void checkParameters();
 public:
 	ConfigManager(bool useDefault);
 	bool loadFromFile(const std::string& iniPath);

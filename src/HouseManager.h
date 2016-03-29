@@ -10,10 +10,6 @@
 class HouseManager {
 	int numValidHouses;
 	std::list<House> houses;
-	// private function - TODO: for later use
-//	static bool hasHouseExtension(char * filename);
-//	static void houseInput(House& house, std::string fileName);
-//	void getHouses(std::string housesDir);
 public:
 
 	// HouseManager c'tor signature:

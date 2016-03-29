@@ -30,7 +30,6 @@ class AlgorithmRunner {
 
 	static map<string, int> config;
 
-	// TODO: check if we can remove these static variables - just put the dirt data in each algo runner
 	static int currHouseTotDirt;
 
 	bool isLegalStep(int stepi, int stepj);
@@ -39,7 +38,6 @@ class AlgorithmRunner {
 public:
 
 	AlgorithmRunner(AbstractAlgorithm* a);
-	virtual ~AlgorithmRunner();
 
 	void setCurrHouse(const House& currHouse) {
 		this->currHouse = currHouse;
