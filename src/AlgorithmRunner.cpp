@@ -107,8 +107,6 @@ void AlgorithmRunner::updateStepsRemainingOnWinner(int numStepsRemaining){
 
 bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 	char suggestedPlaceVal = currHouse.getHouseMatrix()[stepi][stepj];
-//	cout << "step i: " << stepi << " stepj: " << stepj << endl;
-//	cout << "suggested place val: " <<  suggestedPlaceVal << endl;
 	return (suggestedPlaceVal != 'W' &&
 			stepi >= 0 && stepj >= 0 &&
 			stepi < currHouse.getRows() && stepj < currHouse.getCols());

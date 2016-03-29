@@ -13,6 +13,7 @@ int main(int argc, char* argv[]) {
 	// check number of arguments
 	if (argc != 1 && argc != 3 && argc != 5){
 		cout << "Error: number of arguments is incorrect. Quitting." << endl;
+		cout << "Usage: ./simulator [-config <config_dir>] [-house_path <house_path_dir>]" << endl;
 		return 1;
 	}
 	// parse the arguments of the program and check parameter names
@@ -25,6 +26,7 @@ int main(int argc, char* argv[]) {
 		}
 		else {
 			cout << "Error: wrong parameter name. Quitting." << endl;
+			cout << "Usage: ./simulator [-config <config_dir>] [-house_path <house_path_dir>]" << endl;
 			return 1;
 		}
 	}
