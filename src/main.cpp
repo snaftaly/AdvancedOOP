@@ -1,19 +1,25 @@
 #include <iostream>
 #include <cstring>
 #include "Simulator.h"
+#include "ErrorPrinter.h"
 using namespace std;
 
+void fixPath(string& pathStr){ // TODO: maybe move it somewhere else
+	if (pathStr.back() != '/'){
+		pathStr += '/';
+	}
+}
 
 int main(int argc, char* argv[]) {
 
 	// default location of files
-	string housesDir = ".";
 	string configDir = ".";
+	string housesDir = ".";
+	string algorithmsDir = ".";
 
 	// check number of arguments
-	if (argc != 1 && argc != 3 && argc != 5){
-		cout << "Error: number of arguments is incorrect. Quitting." << endl;
-		cout << "Usage: ./simulator [-config <config_dir>] [-house_path <house_path_dir>]" << endl;
+	if (argc != 1 && argc != 3 && argc != 5 && argc != 7){
+		ErrorPrinter::printUsage();
 		return 1;
 	}
 	// parse the arguments of the program and check parameter names
@@ -24,14 +30,21 @@ int main(int argc, char* argv[]) {
 		else if (!strcmp("-house_path", argv[i])){
 			housesDir = argv[i+1];
 		}
+		else if (!strcmp("algorithm_path", argv[i])){
+			algorithmsDir = argv[i+1];
+		}
 		else {
-			cout << "Error: wrong parameter name. Quitting." << endl;
-			cout << "Usage: ./simulator [-config <config_dir>] [-house_path <house_path_dir>]" << endl;
+			ErrorPrinter::printUsage();
 			return 1;
 		}
 	}
 
-	Simulator simulator(configDir, housesDir);
+	// add trailing '/' if it's missing // TODO: maybe move it somewhere else?
+	fixPath(configDir);
+	fixPath(housesDir);
+	fixPath(algorithmsDir);
+
+	Simulator simulator(configDir, housesDir, algorithmsDir);
 
 	if (!simulator.isInitSuccessfull()){
 		// initialization of config file and house was not successful

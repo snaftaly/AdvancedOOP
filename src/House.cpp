@@ -4,7 +4,7 @@
 using namespace std;
 
 // House c'tor - only initialized the matrix to NULL in the init list
-House::House(): name(""), desc(""), rows(0), cols(0), houseMatrix(NULL) {
+House::House(): name(""), maxSteps(0), rows(0), cols(0), houseMatrix(NULL) {
 
 }
 
@@ -30,7 +30,7 @@ House& House::operator=(const House& house)
     		delete [] houseMatrix;
     	}
 		name = house.name;
-		desc = house.desc;
+		maxSteps = house.maxSteps;
 		rows = house.rows;
 		cols = house.cols;
 		if (house.houseMatrix == NULL){
@@ -49,8 +49,8 @@ House& House::operator=(const House& house)
 std::ostream& operator<<(std::ostream& out, const House& house)
 {
 	return out << "Name: " << house.getName() << endl
-			   << "Desc: " << house.getDesc() << endl
-			   << "Matrix: " << endl << house.getHouseMatrixStr();
+			<< "maxSteps: " << house.getName() << endl
+			<< "Matrix: " << endl << house.getHouseMatrixStr();
 }
 
 std::string House::getHouseMatrixStr() const
@@ -155,7 +155,7 @@ bool House::readFromFile(string fileName)
 		return false;
 	}
 	getline(fin, name);
-	getline(fin, desc);
+	fin >> maxSteps;
 	fin >> rows;
 	fin >> cols;
 	fin.ignore(); //skip newline and go to the beginning of matrix

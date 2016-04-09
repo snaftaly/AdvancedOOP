@@ -2,17 +2,18 @@
 #include "SimpleAlgorithm.h"
 
 //C'tor implementation
-Simulator::Simulator(const string& configPath, const string& housesPath ):
-	houseMgr(housesPath), confMgr(false), initSuccessfull(true)
+Simulator::Simulator(const string& configPath, const string& housesPath, const string& algorithmsPath):
+	houseMgr(housesPath), confMgr(configPath), initSuccessfull(true)
 {
-	// check if there are valid houses
-	if (houseMgr.getNumValidHouses() == 0){
+
+	// get configurations from file
+	if (!confMgr.loadFromFile()){
 		initSuccessfull = false;
 		return;
 	}
 
-	// get configurations from file
-	if (!confMgr.loadFromFile(configPath)){
+	// check if there are valid houses
+	if (houseMgr.getNumValidHouses() == 0){
 		initSuccessfull = false;
 		return;
 	}
@@ -39,18 +40,19 @@ void Simulator::createAlgorithmRunnerList(){
 		algo->setConfiguration(confMgr.getConfs());
 
 		// put the algorithm in the algoRunner list
-		algorithmRunnerList.emplace_back(AlgorithmRunner(algo));
+		algorithmRunnerList.emplace_back(AlgorithmRunner(algo)); // TODO use emplace the right way
 	}
 	for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){
-		algorithmRunner.setSensorForAlgorithm();
+		algorithmRunner.setSensorForAlgorithm(); // TODO: move this to algorunner init (line above)
 	}
 }
+
 
 void Simulator::runSimulation(){
 
 	for (const House& house : houseMgr.getHouses()){
 
-		int maxSteps = confMgr.getConfs().find("MaxSteps")->second;
+		int maxSteps = house.getMaxSteps();
 		currSuccessfullAlgoPosition = 1;
 		winnerNumSteps = numStepsRemaining = maxSteps;
 		numAlogsRunning = algorithmRunnerList.size();
@@ -155,7 +157,7 @@ void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner){
 }
 
 void Simulator::fillAlgorithmList(){
-	algorithms.emplace_back(new SimpleAlgorithm());
+	algorithms.emplace_back(new SimpleAlgorithm()); // TODO: change this to push_back!
 }
 
 

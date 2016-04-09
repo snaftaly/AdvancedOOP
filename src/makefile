@@ -7,10 +7,10 @@ all: simulator
 clean:
 	rm *.o simulator
 
-simulator: main.o Simulator.o AlgorithmRunner.o Sensor.o SimpleAlgorithm.o ConfigManager.o HouseManager.o House.o 
+simulator: main.o Simulator.o AlgorithmRunner.o Sensor.o SimpleAlgorithm.o ConfigManager.o HouseManager.o House.o ErrorPrinter.o 
 	g++ -o $@ $^ $(CPP_FLAGS)
 
-main.o: main.cpp Simulator.h
+main.o: main.cpp Simulator.h ErrorPrinter.h
 	g++ $(CPP_FLAGS) -c main.cpp
 
 Simulator.o: Simulator.cpp Simulator.h AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h SimpleAlgorithm.h House.h ConfigManager.h HouseManager.h SimulationFinishState.h
@@ -25,11 +25,14 @@ SimpleAlgorithm.o: SimpleAlgorithm.cpp SimpleAlgorithm.h AbstractAlgorithm.h Abs
 Sensor.o: Sensor.cpp Sensor.h AbstractSensor.h House.h Direction.h SensorInformation.h  
 	g++ $(CPP_FLAGS) -c Sensor.cpp
 
-HouseManager.o: HouseManager.cpp HouseManager.h House.h
+HouseManager.o: HouseManager.cpp HouseManager.h House.h ErrorPrinter.h
 	g++ $(CPP_FLAGS) -c HouseManager.cpp
 
-ConfigManager.o: ConfigManager.cpp ConfigManager.h
+ConfigManager.o: ConfigManager.cpp ConfigManager.h ErrorPrinter.h
 	g++ $(CPP_FLAGS) -c ConfigManager.cpp
 
 House.o: House.cpp House.h
 	g++ $(CPP_FLAGS) -c House.cpp
+
+ErrorPrinter.o: ErrorPrinter.cpp ErrorPrinter.h
+	g++ $(CPP_FLAGS) -c ErrorPrinter.cpp

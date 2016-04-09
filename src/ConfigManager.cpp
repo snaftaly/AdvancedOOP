@@ -1,27 +1,28 @@
 #include "ConfigManager.h"
+#include "ErrorPrinter.h"
+//#include <boost/filesystem.hpp>
 #include <fstream>
 #include <sstream>
 using namespace std;
 
-// empty c'tor - puts default values in map
-ConfigManager::ConfigManager(bool useDefault) {
-	if (useDefault){
-		confs.insert({"MaxSteps", 1200});
-		confs.insert({"MaxStepsAfterWinner", 200});
-		confs.insert({"BatteryCapacity", 400});
-		confs.insert({"BatteryConsumptionRate", 1});
-		confs.insert({"BatteryRechargeRate", 20});
-	}
-}
 
-bool ConfigManager::loadFromFile(const string& iniPath)
+bool ConfigManager::loadFromFile()
 {
 	// loads the confs to the map and returns true if there was no failure reading from the file.
 	confs.clear();
-	string confFileFullPath = iniPath+"/config.ini";
+	string confFileFullPath = confPath + "config.ini"; // TODO change to real full path
+
+	// first check if file exists, otherwise print usage // TODO: understand what needs to be in the makfile
+//	if ( !boost::filesystem::exists(confFileFullPath) )
+//	{
+//		// file doesn't exist
+//		ErrorPrinter::printUsage();
+//		return false;
+//	}
+
 	ifstream fin(confFileFullPath.c_str());
-	if (!fin.is_open()){
-		cout << "Error opening configuration file. Quitting." << endl;
+	if (!fin.is_open()){ // error opening file
+		cout << "config.ini exists in '"<< confFileFullPath << "' but cannot be opened" << endl;
 		return false;
 	}
 	string line;
@@ -29,14 +30,13 @@ bool ConfigManager::loadFromFile(const string& iniPath)
 	{
 		processLine(line);
 	}
-	if (fin.bad()){
-		cout << "Error while reading file " << iniPath << "/config.ini" << endl;
-		fin.close();
+	fin.close();
+	// now check that all values are in the dict
+	if (isMissingParams())
+	{
+		printMissingParams();
 		return false;
 	}
-	fin.close();
-	// reading of file succeeded, now check that alll values are in the dict
-	addMissingParameters();
 	return true;
 }
 
@@ -76,22 +76,32 @@ void ConfigManager::printConfs()
 	cout << "BatteryRechargeRate:" << confs["BatteryRechargeRate"] << endl;
 }
 
-void ConfigManager::addMissingParameters(){
-	// check if the conf is found in confs and if not add default value
-	if ( confs.find("MaxSteps") == confs.end() ){
-		confs.insert({"MaxSteps", 1200});
-	}
+bool ConfigManager::isMissingParams(){
+	// check if there are missing confs, and if so print error
 	if ( confs.find("MaxStepsAfterWinner") == confs.end() ){
-		confs.insert({"MaxStepsAfterWinner", 200});
+		missingParams.emplace_back("MaxStepsAfterWinner");
 	}
 	if ( confs.find("BatteryCapacity") == confs.end() ){
-		confs.insert({"BatteryCapacity", 400});
+		missingParams.emplace_back("BatteryCapacity");
 	}
 	if ( confs.find("BatteryConsumptionRate") == confs.end() ){
-		confs.insert({"BatteryConsumptionRate", 1});
+		missingParams.emplace_back("BatteryConsumptionRate");
 	}
 	if ( confs.find("BatteryRechargeRate") == confs.end() ){
-		confs.insert({"BatteryRechargeRate", 20});
+		missingParams.emplace_back("BatteryRechargeRate");
 	}
+	if (!missingParams.empty()){
+		return true;
+	}
+	return false;
 }
 
+void ConfigManager::printMissingParams()
+{
+	cout << "config.ini missing " << missingParams.size() << " parameter(s): ";
+	for (auto iter = missingParams.begin(); iter != missingParams.end(); ++iter) {
+		if (iter != missingParams.begin()) cout << ", ";
+		cout << *iter;
+	}
+	cout << endl;
+}

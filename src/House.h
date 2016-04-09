@@ -8,7 +8,7 @@
 class House
 {
 	std::string name;
-	std::string desc;
+	int maxSteps;
 	int rows;
 	int cols;
 	std::string * houseMatrix;
@@ -36,12 +36,13 @@ public:
     bool readFromFile(std::string fileName);
 
     // getters
-	const std::string& getDesc() const {
-		return desc;
-	}
 
 	const std::string& getName() const {
 		return name;
+	}
+
+	int getMaxSteps() const {
+		return maxSteps;
 	}
 
 	int getRows() const {
@@ -68,12 +69,12 @@ public:
 
 	// setters
 
-	void setDesc(const std::string& desc) {
-		this->desc = desc;
-	}
-
 	void setName(const std::string& name) {
 		this->name = name;
+	}
+
+	void setMaxSteps(int maxSteps) {
+		this->maxSteps = maxSteps;
 	}
 
 	void setRows(int rows) {
@@ -87,6 +88,7 @@ public:
 	void setHouseMatrix(std::string* houseMatrix) {
 		this->houseMatrix = houseMatrix;
 	}
+
 };
 
 #endif

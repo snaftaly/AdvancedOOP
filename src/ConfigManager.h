@@ -2,18 +2,25 @@
 #define CONFIGMANAGER_H_
 #include <iostream>
 #include <string>
+#include <list>
 #include <map>
 #include <vector>
 
 class ConfigManager {
+	std::string confPath;
 	std::map<std::string, int> confs;
+	std::list<std::string> missingParams;
+
 	void processLine(const std::string& line);
 	static std::string trim(std::string& str);
 	static std::vector<std::string> split(const std::string &s, char delim);
-	void addMissingParameters();
+	bool isMissingParams();
+	void printMissingParams();
 public:
-	ConfigManager(bool useDefault);
-	bool loadFromFile(const std::string& iniPath);
+	// c'tor for conf manager
+	ConfigManager(std::string path): confPath(path){ };
+
+	bool loadFromFile();
 	void printConfs();
 
 	// getters
