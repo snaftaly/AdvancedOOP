@@ -4,9 +4,7 @@
 using namespace std;
 
 // House c'tor - only initialized the matrix to NULL in the init list
-House::House(): name(""), maxSteps(0), rows(0), cols(0), houseMatrix(NULL) {
-
-}
+House::House(): name(""), maxSteps(0), rows(0), cols(0), houseMatrix(NULL), fileName(""), errStr("") { }
 
 // House d'tor implementation
 House::~House()
@@ -22,7 +20,14 @@ House::House(const House& house): rows(0), cols(0), houseMatrix(NULL){
 	*this = house;
 }
 
-// House assignment operator implementation
+// house Move c'tor implementation
+House::House(House&& house): name(house.name), maxSteps(house.maxSteps),
+		rows(house.rows), cols(house.cols), houseMatrix(NULL),
+		fileName(house.fileName), errStr(house.errStr){
+	std::swap(houseMatrix, house.houseMatrix); // the swap trick
+}
+
+// House copy assignment operator implementation
 House& House::operator=(const House& house)
 {
     if(this != &house) {
@@ -33,6 +38,8 @@ House& House::operator=(const House& house)
 		maxSteps = house.maxSteps;
 		rows = house.rows;
 		cols = house.cols;
+		fileName = house.fileName;
+		errStr = house.errStr;
 		if (house.houseMatrix == NULL){
 			houseMatrix = NULL;
 		}
@@ -44,6 +51,22 @@ House& House::operator=(const House& house)
 		}
     }
     return *this;
+}
+
+// House move assignment operator implementation
+House& House::operator=(House&& house){
+
+	if (houseMatrix != NULL){
+		delete [] houseMatrix;
+	}
+	name = house.name;
+	maxSteps = house.maxSteps;
+	rows = house.rows;
+	cols = house.cols;
+	fileName = house.fileName;
+	errStr = house.errStr;
+	std::swap(houseMatrix, house.houseMatrix); // the swap trick
+	return *this;
 }
 
 std::ostream& operator<<(std::ostream& out, const House& house)
@@ -79,7 +102,6 @@ int House::calcDirtLevel () const{
 			}
 		}
 	}
-
 	return dirtLevel;
 }
 
@@ -144,21 +166,38 @@ bool House::isHouseValid(){
 			}
 		}
 	}
+	if (numDocksInHouse < 1){
+		errStr = "missing docking station (no D in house)";
+	}
+	else if(numDocksInHouse > 1){
+		errStr = "too many docking stations (more than one D in house)";
+	}
 	return (numDocksInHouse == 1);
 }
 
 bool House::readFromFile(string fileName)
 {
+	this->fileName = fileName;
+
+	// attemp to open file
 	ifstream fin(fileName.c_str());
 	if (!fin.is_open()){
-		cout << "Error opening house file: " <<  fileName << ". Quitting." << endl;
+		errStr = "cannot open file";
 		return false;
 	}
 	getline(fin, name);
-	fin >> maxSteps;
-	fin >> rows;
-	fin >> cols;
-	fin.ignore(); //skip newline and go to the beginning of matrix
+	string tempLine;
+
+	// get the maxSteps Line and attempt to turn it into an integer
+	getline(fin, tempLine); // TODO: should max steps be a positive number or >=0?
+	if (!checkNumberInLine(2, &maxSteps, tempLine)) return false;
+
+	getline(fin, tempLine);
+	if (!checkNumberInLine(3, &rows, tempLine)) return false;
+
+	getline(fin, tempLine);
+	if (!checkNumberInLine(4, &cols, tempLine)) return false;
+
 	if (houseMatrix != NULL){
 		delete [] houseMatrix;
 	}
@@ -167,11 +206,26 @@ bool House::readFromFile(string fileName)
 	{
 	    std::getline(fin, houseMatrix[i]);
 	}
-	if (fin.bad()){
-		cout << "Error while reading house file " << fileName << ". Quitting." << endl;
-		fin.close();
-		return false;
-	}
 	fin.close();
 	return true;
+}
+
+bool House::checkNumberInLine(int lineNumber, int * paramName, const string & lineStr){
+	bool isLineOK = true;
+	try{
+		*paramName = stoi(lineStr.c_str());
+	}
+	catch (...){
+		isLineOK = false;
+	}
+	if (*paramName <= 0){
+		isLineOK = false;
+	}
+	if (!isLineOK){
+		errStr = "line number "	+
+				to_string(lineNumber) +
+				" in house file shall be a positive number, found: " +
+				lineStr;
+	}
+	return isLineOK;
 }

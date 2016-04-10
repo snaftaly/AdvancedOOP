@@ -46,6 +46,8 @@ public:
 
 	void printAlgosScores();
 
+	void printErrors();
+
 	void setHouseForEachAlgorithmRunner(const House& house);
 
 	// getters

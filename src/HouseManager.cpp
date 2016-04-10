@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include "HouseManager.h"
 #include "ErrorPrinter.h"
+#include "FileUtils.h"
 using namespace std;
 
 #define HOUSE_EXT ".house"
@@ -13,35 +14,66 @@ using namespace std;
  */
 bool HouseManager::readHousesFiles(){
 	// first, get a list of houses files, sorted alphabetically (full path)
-	housesPathsLst.emplace_back(housesPath + "simple1.house"); // TODO: change this to reading paths from dir
+	housesFileNamesLst = FileUtils::getSortedFileNamesListBySuffix(housesPath, ".house");
 
 	// if list is empty (error opening folder or no houses files in it) - print usage
-	if (housesPathsLst.empty()){
+	if (housesFileNamesLst.empty()){
 		ErrorPrinter::printUsage();
 		return false;
 	}
 
-	// for each path in the list - create a house and if it's ok, put it in the list oh houses
-	// if it's not ok - put the error in the error map TODO: do it
+	// for each house name in the list - create a house and if it's ok, put it in the list oh houses
+	// if it's not ok - put the error in the error map
+	for (string& houseFileName : housesFileNamesLst){
+		House tempHouse;
+		tempHouse.readFromFile(housesPath + houseFileName);
+		if (!(tempHouse.readFromFile(housesPath + houseFileName))){
+			// there was an error reading from house from file, continue to next file
+			housesErrors[houseFileName] = tempHouse.getErrStr();
+			continue;
+		}
+		tempHouse.fixHouse(); // fix the number of columns+rows and walls
+		if (!tempHouse.isHouseValid()){
+			housesErrors[houseFileName] = tempHouse.getErrStr();
+			continue;
+		}
+		// push the valid house to houses list using move ctor
+		houses.push_back(std::move(tempHouse)); // TODO: check if move ctor/= operator works
 
+	}
 
-	// fill the house with hard coded data - houses path not yet used
-	houses.emplace_back();
-
-	House& lastInsertedHouse = houses.back();
-
-	bool isHouseReadSuccessful = lastInsertedHouse.readFromFile(housesPath + "simple1.house");
-	if (!isHouseReadSuccessful){
-		// returning with numValidHouses = 0;
+	if (houses.empty()){
+		printHousesErrors(true);
 		return false;
 	}
-	lastInsertedHouse.fixHouse();
-
-	if (lastInsertedHouse.isHouseValid()){
-		numValidHouses++;
-	}
-	if (numValidHouses == 0){
-		cout << "Error: no valid house to run simulation. Quitting" << endl;
-	}
+//	// fill the house with hard coded data - houses path not yet used
+//	houses.emplace_back();
+//
+//	House& lastInsertedHouse = houses.back();
+//
+//	bool isHouseReadSuccessful = lastInsertedHouse.readFromFile(housesPath + "simple1.house");
+//	if (!isHouseReadSuccessful){
+//		// returning with numValidHouses = 0;
+//		return false;
+//	}
+//	lastInsertedHouse.fixHouse();
+//
+//	if (lastInsertedHouse.isHouseValid()){
+//		numValidHouses++;
+//	}
+//	if (numValidHouses == 0){
+//		cout << "Error: no valid house to run simulation. Quitting" << endl;
+//	}
 	return true;
+}
+
+void HouseManager::printHousesErrors(bool all){
+	if (all){
+		cout << "All house files in target folder '"
+				<< housesPath
+				<< "' cannot be opened or are invalid:" << endl;
+	}
+	for(const pair<string, string>& houseErrPair : housesErrors) {
+		cout << houseErrPair.first << ": " << houseErrPair.second << endl;
+	}
 }

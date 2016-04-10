@@ -13,7 +13,7 @@ Simulator::Simulator(const string& configPath, const string& housesPath, const s
 	}
 
 	// check if there are valid houses
-	if (houseMgr.getNumValidHouses() == 0){
+	if (!houseMgr.readHousesFiles()){
 		initSuccessfull = false;
 		return;
 	}
@@ -40,7 +40,7 @@ void Simulator::createAlgorithmRunnerList(){
 		algo->setConfiguration(confMgr.getConfs());
 
 		// put the algorithm in the algoRunner list
-		algorithmRunnerList.emplace_back(AlgorithmRunner(algo)); // TODO use emplace the right way
+		algorithmRunnerList.emplace_back(algo); // TODO use emplace the right way
 	}
 	for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){
 		algorithmRunner.setSensorForAlgorithm(); // TODO: move this to algorunner init (line above)
@@ -49,7 +49,6 @@ void Simulator::createAlgorithmRunnerList(){
 
 
 void Simulator::runSimulation(){
-
 	for (const House& house : houseMgr.getHouses()){
 
 		int maxSteps = house.getMaxSteps();
@@ -110,19 +109,6 @@ void Simulator::runSimulation(){
 
 }
 
-void Simulator::printAlgosScores(){
-	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
-		for (list<int>::iterator housesScoreitr = algoRunner.getHousesScore().begin();
-				housesScoreitr != algoRunner.getHousesScore().end(); housesScoreitr++){
-			cout << *housesScoreitr << endl;
-		}
-		// This will be used when we will have different houses
-		//		for (const House& house : houseMgr.getHouses()){
-		////			cout << '[' << house.getName() << ']' << '\t' << *itr << endl;
-		//			++housesScoreitr;
-	}
-}
-
 void Simulator::setHouseForEachAlgorithmRunner(const House& house){
 	// set common data about the house for the algorithms
 	AlgorithmRunner::resetCommonDataForNewHouse(house);
@@ -160,4 +146,23 @@ void Simulator::fillAlgorithmList(){
 	algorithms.emplace_back(new SimpleAlgorithm()); // TODO: change this to push_back!
 }
 
+void Simulator::printAlgosScores(){
+	int numHouses = houseMgr.getHouses().size();
+	int tableWidth = 15 + 11* numHouses; //TODO: use macros
 
+
+	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
+		for (list<int>::iterator housesScoreitr = algoRunner.getHousesScore().begin();
+				housesScoreitr != algoRunner.getHousesScore().end(); housesScoreitr++){
+			cout << *housesScoreitr << endl;
+		}
+		// This will be used when we will have different houses
+		//		for (const House& house : houseMgr.getHouses()){
+		////			cout << '[' << house.getName() << ']' << '\t' << *itr << endl;
+		//			++housesScoreitr;
+	}
+}
+
+void Simulator::printErrors(){
+
+}

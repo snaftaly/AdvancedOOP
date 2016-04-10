@@ -3,6 +3,7 @@
 //#include <boost/filesystem.hpp>
 #include <fstream>
 #include <sstream>
+#include <unistd.h>
 using namespace std;
 
 
@@ -11,14 +12,14 @@ bool ConfigManager::loadFromFile()
 	// loads the confs to the map and returns true if there was no failure reading from the file.
 	confs.clear();
 	string confFileFullPath = confPath + "config.ini"; // TODO change to real full path
+//	boost::filesystem::path confFilePath(confFileStr);
+//	boost::filesystem::path confFileFullPath = boost::filesystem::complete(confFilePath);
 
-	// first check if file exists, otherwise print usage // TODO: understand what needs to be in the makfile
-//	if ( !boost::filesystem::exists(confFileFullPath) )
-//	{
-//		// file doesn't exist
-//		ErrorPrinter::printUsage();
-//		return false;
-//	}
+	// first check if file exists, otherwise print usage
+	if (( access( confFileFullPath.c_str(), F_OK ) == -1 )){
+		ErrorPrinter::printUsage();
+		return false;
+	}
 
 	ifstream fin(confFileFullPath.c_str());
 	if (!fin.is_open()){ // error opening file
@@ -69,11 +70,9 @@ void ConfigManager::processLine(const string& line)
 
 void ConfigManager::printConfs()
 {
-	cout << "MaxSteps:" << confs["MaxSteps"] << endl;
-	cout << "MaxStepsAfterWinner:" << confs["MaxStepsAfterWinner"] << endl;
-	cout << "BatteryCapacity:" << confs["BatteryCapacity"] << endl;
-	cout << "BatteryConsumptionRate:" << confs["BatteryConsumptionRate"] << endl;
-	cout << "BatteryRechargeRate:" << confs["BatteryRechargeRate"] << endl;
+	for(const pair<string, int>& confValPair : confs) {
+		cout << confValPair.first << ": " << confValPair.second << endl;
+	}
 }
 
 bool ConfigManager::isMissingParams(){

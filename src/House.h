@@ -12,6 +12,8 @@ class House
 	int rows;
 	int cols;
 	std::string * houseMatrix;
+	std::string fileName;
+	std::string errStr;
 public:
 
 	// House c'tor signature
@@ -20,11 +22,17 @@ public:
 	// House d'tor signature
 	~House();
 
-	// House copy c'tor
+	// House copy c'tor signature
     House(const House& house);
 
-	// House assignment operator
+    // House move c'tor signature
+    House(House&& house);
+
+	// House copy assignment operator
     House& operator=(const House& house);
+
+	// House move assignment operator
+    House& operator=(House&& house);
 
     // House << operator
     friend std::ostream& operator<<(std::ostream& out, const House& p);
@@ -34,6 +42,8 @@ public:
     std::tuple<int, int> getHouseDockPlace() const;
 
     bool readFromFile(std::string fileName);
+
+    bool checkNumberInLine(int lineNumber, int * paramName, const std::string & lineStr);
 
     // getters
 
@@ -55,6 +65,10 @@ public:
 
 	std::string* getHouseMatrix() const {
 		return houseMatrix;
+	}
+
+	const std::string getErrStr() const {
+		return errStr;
 	}
 
 	std::string getHouseMatrixStr() const;

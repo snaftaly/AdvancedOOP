@@ -10,14 +10,15 @@
 class HouseManager {
 	std::string housesPath;
 	int numValidHouses;
-	std::list<std::string> housesPathsLst;
+	std::list<std::string> housesFileNamesLst;
 	std::list<House> houses;
-	std::map<std::string, std::string> houseOpenErrors;
+	std::map<std::string, std::string> housesErrors;
 public:
 
 	// HouseManager c'tor signature:
 	HouseManager(const std::string& housesPath): housesPath(housesPath), numValidHouses(0){ }
 	bool readHousesFiles();
+	void printHousesErrors(bool all);
 
 	// getters
 

@@ -13,6 +13,7 @@
 class AlgorithmRunner {
 	AbstractAlgorithm* algorithm;
 	Sensor sensor;
+	std::string algoName;
 
 	// current house info:
 	House currHouse;

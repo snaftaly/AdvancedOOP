@@ -9,9 +9,10 @@ int AlgorithmRunner::currHouseTotDirt = 0;
 map<string, int> AlgorithmRunner::config;
 
 AlgorithmRunner::AlgorithmRunner(AbstractAlgorithm* a):
-		roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0), dirtCollected(0),
+		algoName("300689775_A_"), roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0), dirtCollected(0),
 		isFinished(false), algoPositionInCompetition(-1), finishState(SimulationFinishState::NoMoreSteps)
 {
+	// TODO: get the algo name from the file!
 	algorithm = a;
 }
 
