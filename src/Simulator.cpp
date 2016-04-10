@@ -149,8 +149,9 @@ void Simulator::fillAlgorithmList(){
 void Simulator::printAlgosScores(){
 	int numHouses = houseMgr.getHouses().size();
 	int tableWidth = 15 + 11* numHouses; //TODO: use macros
-
-
+	string rowSeparator = "";
+	rowSeparator.insert(0, tableWidth, '-');
+	cout << rowSeparator << endl;
 	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
 		for (list<int>::iterator housesScoreitr = algoRunner.getHousesScore().begin();
 				housesScoreitr != algoRunner.getHousesScore().end(); housesScoreitr++){
