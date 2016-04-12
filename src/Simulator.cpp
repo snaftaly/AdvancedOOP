@@ -1,5 +1,10 @@
+#include <iomanip>
+#include <iostream>
+#include <sstream>
 #include "Simulator.h"
 #include "SimpleAlgorithm.h"
+#include "FileUtils.h"
+using namespace std;
 
 //C'tor implementation
 Simulator::Simulator(const string& configPath, const string& housesPath, const string& algorithmsPath):
@@ -143,27 +148,63 @@ void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner){
 }
 
 void Simulator::fillAlgorithmList(){
-	algorithms.emplace_back(new SimpleAlgorithm()); // TODO: change this to push_back!
+	algorithms.push_back(new SimpleAlgorithm()); // TODO: change this to push_back!
 }
+
+void Simulator::printTableHeader(const string & rowSeparator){
+	//print row separator
+		cout << rowSeparator << endl;
+		// print houses names
+		cout << "|             |";
+		for (const House& house : houseMgr.getHouses()){
+			string name =  FileUtils::getFileNameNoExt(house.getFileName());
+			name.resize(9, ' ');
+			cout << name << " |";
+		}
+		cout << "AVG       |" << endl;
+		//print row separator
+		cout << rowSeparator << endl;
+}
+
 
 void Simulator::printAlgosScores(){
 	int numHouses = houseMgr.getHouses().size();
-	int tableWidth = 15 + 11* numHouses; //TODO: use macros
+	int tableWidth = 15 + 11*(numHouses+1); //TODO: use macros
+
+	// create the row separator
 	string rowSeparator = "";
 	rowSeparator.insert(0, tableWidth, '-');
-	cout << rowSeparator << endl;
+
+	printTableHeader(rowSeparator);
+
 	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
+		cout << "|" << algoRunner.getAlgoName() << " |";
+		int scoreSumForAlgo = 0;
 		for (list<int>::iterator housesScoreitr = algoRunner.getHousesScore().begin();
 				housesScoreitr != algoRunner.getHousesScore().end(); housesScoreitr++){
-			cout << *housesScoreitr << endl;
+			scoreSumForAlgo += *housesScoreitr;
+			string scoreStr = std::to_string(*housesScoreitr);
+			string scoreSpace = "";
+			scoreSpace.insert(0, 10 - scoreStr.size(), ' ');
+			cout << scoreSpace << scoreStr << "|";
 		}
-		// This will be used when we will have different houses
-		//		for (const House& house : houseMgr.getHouses()){
-		////			cout << '[' << house.getName() << ']' << '\t' << *itr << endl;
-		//			++housesScoreitr;
+		float avgForAlgo = (float) scoreSumForAlgo/numHouses;
+		stringstream stream;
+		stream << fixed << setprecision(2) << avgForAlgo;
+		string avgStr = stream.str();
+		string avgSpace = "";
+		avgSpace.insert(0, 10 - avgStr.size(), ' ');
+		cout << avgSpace << avgStr << "|" << endl;
+		//print row separator
+		cout << rowSeparator << endl;
 	}
 }
 
 void Simulator::printErrors(){
-
+	if (houseMgr.getHousesErrors().empty()){ // TODO: add here handling of algorithm errors (with &&
+		return;
+	}
+	cout << "Errors:" << endl;
+	houseMgr.printHousesErrors(false);
+	// TODO: print algos errors
 }

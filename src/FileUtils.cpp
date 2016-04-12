@@ -1,6 +1,7 @@
 #include "FileUtils.h"
 #include <algorithm>
 #include <dirent.h>
+#include <iostream>
 using namespace std;
 
 void FileUtils::addTrailingSlash(string& pathStr){
@@ -31,4 +32,23 @@ list<string> FileUtils::getSortedFileNamesListBySuffix(const string & path, cons
 	closedir(dir);
 	fileNamesList.sort();
 	return fileNamesList;
+}
+
+string FileUtils::getFileNameFromPath(const std::string& filePath)
+{
+	int found = filePath.find_last_of("/");
+	if (found < 0){
+		return filePath;
+	}
+	return filePath.substr(found+1);
+}
+
+string FileUtils::getFileNameNoExt(const std::string& filePath)
+{
+	string fileName = getFileNameFromPath(filePath);
+	int found = filePath.find_last_of(".");
+	if  (found < 0 -1){
+		return fileName;
+	}
+	return fileName.substr(0, found);
 }

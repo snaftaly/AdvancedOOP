@@ -93,13 +93,17 @@ public:
 		return finishState;
 	}
 
+	const std::string& getAlgoName() const {
+		return algoName;
+	}
+
+
 	// static functions
 	static void resetCommonDataForNewHouse(const House& house);
 
 	static void setConfig(const map<string, int>& conf) {
 		config = conf;
 	}
-
 };
 
 #endif /* ALGORITHMRUNNER_H_ */

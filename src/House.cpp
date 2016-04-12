@@ -1,10 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include "House.h"
+#include "FileUtils.h"
 using namespace std;
 
 // House c'tor - only initialized the matrix to NULL in the init list
-House::House(): name(""), maxSteps(0), rows(0), cols(0), houseMatrix(NULL), fileName(""), errStr("") { }
+House::House(): name(""), maxSteps(0), rows(0), cols(0), houseMatrix(NULL), filePath(""), errStr("") { }
 
 // House d'tor implementation
 House::~House()
@@ -23,7 +24,7 @@ House::House(const House& house): rows(0), cols(0), houseMatrix(NULL){
 // house Move c'tor implementation
 House::House(House&& house): name(house.name), maxSteps(house.maxSteps),
 		rows(house.rows), cols(house.cols), houseMatrix(NULL),
-		fileName(house.fileName), errStr(house.errStr){
+		filePath(house.filePath), errStr(house.errStr){
 	std::swap(houseMatrix, house.houseMatrix); // the swap trick
 }
 
@@ -38,7 +39,7 @@ House& House::operator=(const House& house)
 		maxSteps = house.maxSteps;
 		rows = house.rows;
 		cols = house.cols;
-		fileName = house.fileName;
+		filePath = house.filePath;
 		errStr = house.errStr;
 		if (house.houseMatrix == NULL){
 			houseMatrix = NULL;
@@ -63,7 +64,7 @@ House& House::operator=(House&& house){
 	maxSteps = house.maxSteps;
 	rows = house.rows;
 	cols = house.cols;
-	fileName = house.fileName;
+	filePath = house.filePath;
 	errStr = house.errStr;
 	std::swap(houseMatrix, house.houseMatrix); // the swap trick
 	return *this;
@@ -175,12 +176,12 @@ bool House::isHouseValid(){
 	return (numDocksInHouse == 1);
 }
 
-bool House::readFromFile(string fileName)
+bool House::readFromFile(string filePath)
 {
-	this->fileName = fileName;
+	this->filePath = filePath;
 
 	// attemp to open file
-	ifstream fin(fileName.c_str());
+	ifstream fin(filePath.c_str());
 	if (!fin.is_open()){
 		errStr = "cannot open file";
 		return false;

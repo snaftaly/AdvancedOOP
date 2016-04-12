@@ -12,7 +12,7 @@ class House
 	int rows;
 	int cols;
 	std::string * houseMatrix;
-	std::string fileName;
+	std::string filePath;
 	std::string errStr;
 public:
 
@@ -45,9 +45,17 @@ public:
 
     bool checkNumberInLine(int lineNumber, int * paramName, const std::string & lineStr);
 
+	void fixHouse();
+
+	void fixMissingRowsAndCols();
+
+	void fixWalls();
+
+	bool isHouseValid();
+
     // getters
 
-	const std::string& getName() const {
+	const std::string getName() const {
 		return name;
 	}
 
@@ -63,6 +71,10 @@ public:
 		return cols;
 	}
 
+	const std::string& getFileName() const {
+		return filePath;
+	}
+
 	std::string* getHouseMatrix() const {
 		return houseMatrix;
 	}
@@ -72,14 +84,6 @@ public:
 	}
 
 	std::string getHouseMatrixStr() const;
-
-	void fixHouse();
-
-	void fixMissingRowsAndCols();
-
-	void fixWalls();
-
-	bool isHouseValid();
 
 	// setters
 

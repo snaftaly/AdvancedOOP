@@ -45,6 +45,7 @@ public:
 	void runSimulation();
 
 	void printAlgosScores();
+	void printTableHeader(const string & rowseparator);
 
 	void printErrors();
 

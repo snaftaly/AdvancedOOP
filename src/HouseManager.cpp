@@ -26,7 +26,6 @@ bool HouseManager::readHousesFiles(){
 	// if it's not ok - put the error in the error map
 	for (string& houseFileName : housesFileNamesLst){
 		House tempHouse;
-		tempHouse.readFromFile(housesPath + houseFileName);
 		if (!(tempHouse.readFromFile(housesPath + houseFileName))){
 			// there was an error reading from house from file, continue to next file
 			housesErrors[houseFileName] = tempHouse.getErrStr();
@@ -46,24 +45,6 @@ bool HouseManager::readHousesFiles(){
 		printHousesErrors(true);
 		return false;
 	}
-//	// fill the house with hard coded data - houses path not yet used
-//	houses.emplace_back();
-//
-//	House& lastInsertedHouse = houses.back();
-//
-//	bool isHouseReadSuccessful = lastInsertedHouse.readFromFile(housesPath + "simple1.house");
-//	if (!isHouseReadSuccessful){
-//		// returning with numValidHouses = 0;
-//		return false;
-//	}
-//	lastInsertedHouse.fixHouse();
-//
-//	if (lastInsertedHouse.isHouseValid()){
-//		numValidHouses++;
-//	}
-//	if (numValidHouses == 0){
-//		cout << "Error: no valid house to run simulation. Quitting" << endl;
-//	}
 	return true;
 }
 

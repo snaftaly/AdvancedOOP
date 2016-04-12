@@ -13,7 +13,7 @@ simulator: main.o Simulator.o AlgorithmRunner.o Sensor.o SimpleAlgorithm.o Confi
 main.o: main.cpp Simulator.h ErrorPrinter.h FileUtils.h
 	g++ $(CPP_FLAGS) -c main.cpp
 
-Simulator.o: Simulator.cpp Simulator.h AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h SimpleAlgorithm.h House.h ConfigManager.h HouseManager.h SimulationFinishState.h
+Simulator.o: Simulator.cpp Simulator.h AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h SimpleAlgorithm.h House.h ConfigManager.h HouseManager.h SimulationFinishState.h FileUtils.h
 	g++ $(CPP_FLAGS) -c Simulator.cpp
 
 AlgorithmRunner.o: AlgorithmRunner.cpp AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h Sensor.h House.h SensorInformation.h Direction.h SimulationFinishState.h 
@@ -31,7 +31,7 @@ HouseManager.o: HouseManager.cpp HouseManager.h House.h ErrorPrinter.h FileUtils
 ConfigManager.o: ConfigManager.cpp ConfigManager.h ErrorPrinter.h
 	g++ $(CPP_FLAGS) -c ConfigManager.cpp
 
-House.o: House.cpp House.h
+House.o: House.cpp House.h FileUtils.h
 	g++ $(CPP_FLAGS) -c House.cpp
 
 ErrorPrinter.o: ErrorPrinter.cpp ErrorPrinter.h

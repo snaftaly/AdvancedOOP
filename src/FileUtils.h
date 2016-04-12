@@ -9,6 +9,8 @@ public:
 	static bool endsWith(const std::string & str, const std::string & suffix);
 	static std::list<std::string> getSortedFileNamesListBySuffix(const std::string & path, const std::string & suffix);
 	static void addTrailingSlash(std::string& pathStr);
+	static std::string getFileNameFromPath(const std::string& filePath);
+	static std::string getFileNameNoExt(const std::string& fileName);
 };
 
 #endif /* FILEUTILS_H_ */

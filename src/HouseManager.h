@@ -26,8 +26,12 @@ public:
 		return houses;
 	}
 
-	int getNumValidHouses() const {
+	int getNumValidHouses() const { // TODO: we don't use it??
 		return numValidHouses;
+	}
+
+	const std::map<std::string, std::string>& getHousesErrors() const {
+		return housesErrors;
 	}
 };
 
