@@ -9,14 +9,13 @@
 // in the next exercises this class will get the houses from files and keep them in a list.
 class HouseManager {
 	std::string housesPath;
-	int numValidHouses;
 	std::list<std::string> housesFileNamesLst;
 	std::list<House> houses;
 	std::map<std::string, std::string> housesErrors;
 public:
 
-	// HouseManager c'tor signature:
-	HouseManager(const std::string& housesPath): housesPath(housesPath), numValidHouses(0){ }
+	// HouseManager c'tor:
+	HouseManager(const std::string& _housesPath): housesPath(_housesPath){ }
 	bool readHousesFiles();
 	void printHousesErrors(bool all);
 
@@ -24,10 +23,6 @@ public:
 
 	const std::list<House>& getHouses() {
 		return houses;
-	}
-
-	int getNumValidHouses() const { // TODO: we don't use it??
-		return numValidHouses;
 	}
 
 	const std::map<std::string, std::string>& getHousesErrors() const {

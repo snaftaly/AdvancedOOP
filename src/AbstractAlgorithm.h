@@ -26,4 +26,11 @@ public:
     virtual void aboutToFinish(int stepsTillFinishing) = 0; 
 };
 
+// TODO: we can't use this - how can we solve it???
+// typedef to make it easier to set up our factory
+typedef AbstractAlgorithm * maker_t();
+// our global factory
+extern std::map<std::string, maker_t *, std::less<std::string> > factory;
+
+
 #endif //__ABSTRACT_ALGORITHM__H_

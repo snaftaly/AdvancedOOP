@@ -13,8 +13,9 @@
 #include <string>
 
 class Simulator {
-	HouseManager houseMgr;
 	ConfigManager confMgr;
+	AlgorithmManager algoMgr;
+	HouseManager houseMgr;
 	bool initSuccessfull;
 
 	std::list<AbstractAlgorithm*> algorithms;
@@ -36,7 +37,7 @@ class Simulator {
 public:
 
 	//C'tor signature
-	Simulator(const std::string& configPath, const std::string& housesPath, const std::string& algorithmsPath);
+	Simulator(const std::string& configPath,  const std::string& algorithmsPath, const std::string& housesPath,);
 
 	//D'tor signature
 	~Simulator();

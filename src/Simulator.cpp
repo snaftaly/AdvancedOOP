@@ -12,8 +12,8 @@
 using namespace std;
 
 //C'tor implementation
-Simulator::Simulator(const string& configPath, const string& housesPath, const string& algorithmsPath):
-	houseMgr(housesPath), confMgr(configPath), initSuccessfull(true)
+Simulator::Simulator(const string& configPath, const string & algorithmsPath, const string& housesPath):
+	confMgr(configPath), algoMgr(algorithmsPath), houseMgr(housesPath), initSuccessfull(true)
 {
 
 	// get configurations from file
@@ -22,7 +22,10 @@ Simulator::Simulator(const string& configPath, const string& housesPath, const s
 		return;
 	}
 
-	// check if there are valid houses
+	// get algorithms
+
+
+	// get houses
 	if (!houseMgr.readHousesFiles()){
 		initSuccessfull = false;
 		return;

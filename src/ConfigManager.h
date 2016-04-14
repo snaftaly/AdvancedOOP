@@ -18,7 +18,7 @@ class ConfigManager {
 	void printMissingParams();
 public:
 	// c'tor for conf manager
-	ConfigManager(std::string path): confPath(path){ };
+	ConfigManager(std::string _confPath): confPath(_confPath){ };
 
 	bool loadFromFile();
 	void printConfs();

@@ -7,14 +7,14 @@
 using namespace std;
 
 #define HOUSE_EXT ".house"
-#define HOUSE_EXT_SIZE 6
 
 /**
  * Read houses from path and return false on error
  */
+// TODO: maybe split this function into two
 bool HouseManager::readHousesFiles(){
 	// first, get a list of houses files, sorted alphabetically (full path)
-	housesFileNamesLst = FileUtils::getSortedFileNamesListBySuffix(housesPath, ".house");
+	housesFileNamesLst = FileUtils::getSortedFileNamesListBySuffix(housesPath, HOUSE_EXT);
 
 	// if list is empty (error opening folder or no houses files in it) - print usage
 	if (housesFileNamesLst.empty()){
@@ -37,7 +37,7 @@ bool HouseManager::readHousesFiles(){
 			continue;
 		}
 		// push the valid house to houses list using move ctor
-		houses.push_back(std::move(tempHouse)); // TODO: check if move ctor/= operator works
+		houses.push_back(std::move(tempHouse)); // push good tempHouse using move ctor
 
 	}
 
