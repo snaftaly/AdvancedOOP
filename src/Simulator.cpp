@@ -4,6 +4,11 @@
 #include "Simulator.h"
 #include "SimpleAlgorithm.h"
 #include "FileUtils.h"
+
+#define HOUSE_NAME_MAX 9
+#define FIRST_COLUMN_WIDTH 13
+#define OTHER_COLUMN_WIDTH 10
+
 using namespace std;
 
 //C'tor implementation
@@ -45,29 +50,35 @@ void Simulator::createAlgorithmRunnerList(){
 		algo->setConfiguration(confMgr.getConfs());
 
 		// put the algorithm in the algoRunner list
-		algorithmRunnerList.emplace_back(algo); // TODO use emplace the right way
+		algorithmRunnerList.emplace_back(algo);
 	}
 	for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){
 		algorithmRunner.setSensorForAlgorithm(); // TODO: move this to algorunner init (line above)
 	}
 }
 
+// TODO: change when about to finish is called
 
 void Simulator::runSimulation(){
 	for (const House& house : houseMgr.getHouses()){
-
 		int maxSteps = house.getMaxSteps();
+		int maxStepsAfterWinner = confMgr.getConfs().find("MaxStepsAfterWinner")->second;
 		currSuccessfullAlgoPosition = 1;
 		winnerNumSteps = numStepsRemaining = maxSteps;
 		numAlogsRunning = algorithmRunnerList.size();
 		simulationSteps = 0;
 		isThereAWinner = false;
+		isUpdatedAboutToFinish = false;
 
 		// set the current house for the algorithm runners;
 		setHouseForEachAlgorithmRunner(house);
 
 		// run the simulator - for each house run the different algorithms
 		while (numAlogsRunning > 0 && numStepsRemaining > 0){
+			// check if stepsRemaining == maxStepsAfterWinner
+			if (!isUpdatedAboutToFinish && simulationSteps == (maxSteps - maxStepsAfterWinner)){
+				updateAboutToFinish();
+			}
 			numSuccessfulAlgosInRound = 0;
 			for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){
 				if (algorithmRunner.getIsFinished()){
@@ -130,20 +141,30 @@ void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner){
 	successAlgorithmRunner.setFinishState(SimulationFinishState::Success);
 	numSuccessfulAlgosInRound++;
 	numAlogsRunning--;
-	if (!isThereAWinner && currSuccessfullAlgoPosition == 1){ // this algo is the first to win for the house
+	if (!isThereAWinner){ // && currSuccessfullAlgoPosition == 1){ //TODO: do we need the second check?
+		// this algo is the first to win for the house - so update that there was a winner
 		isThereAWinner = true;
 
 		// update winner num steps
 		winnerNumSteps =  successAlgorithmRunner.getNumSteps();
 
-		// update steps to run to the minimum of MaxStepsAfterWinner and numStepsRemaining
-		 numStepsRemaining = min(confMgr.getConfs().find("MaxStepsAfterWinner")->second, numStepsRemaining);
-
-		// update other algos with result
-		for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){
-			algorithmRunner.updateStepsRemainingOnWinner(numStepsRemaining);
+		if (!isUpdatedAboutToFinish){
+			// update other algos with result
+			updateAboutToFinish();
 		}
 
+	}
+}
+
+void Simulator::updateAboutToFinish(){
+
+	isUpdatedAboutToFinish = true;
+	int MaxStepsAfterWinner = confMgr.getConfs().find("MaxStepsAfterWinner")->second;
+	// update steps remaining for simulator
+	numStepsRemaining = MaxStepsAfterWinner;
+	// update steps remaining for each algorithm
+	for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){
+		algorithmRunner.updateStepsRemainingOnWinner(MaxStepsAfterWinner);
 	}
 }
 
@@ -158,7 +179,7 @@ void Simulator::printTableHeader(const string & rowSeparator){
 		cout << "|             |";
 		for (const House& house : houseMgr.getHouses()){
 			string name =  FileUtils::getFileNameNoExt(house.getFileName());
-			name.resize(9, ' ');
+			name.resize(HOUSE_NAME_MAX, ' ');
 			cout << name << " |";
 		}
 		cout << "AVG       |" << endl;
@@ -169,7 +190,7 @@ void Simulator::printTableHeader(const string & rowSeparator){
 
 void Simulator::printAlgosScores(){
 	int numHouses = houseMgr.getHouses().size();
-	int tableWidth = 15 + 11*(numHouses+1); //TODO: use macros
+	int tableWidth = FIRST_COLUMN_WIDTH + 2 + (OTHER_COLUMN_WIDTH + 1)*(numHouses+1); //TODO: use macros
 
 	// create the row separator
 	string rowSeparator = "";
@@ -178,22 +199,24 @@ void Simulator::printAlgosScores(){
 	printTableHeader(rowSeparator);
 
 	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
-		cout << "|" << algoRunner.getAlgoName() << " |";
+		cout << "|" << algoRunner.getAlgoName() << " |"; // TODO: will probably need to change
 		int scoreSumForAlgo = 0;
+		// print each house score // TODO: we assume here that the houses score is a list and not a map
 		for (list<int>::iterator housesScoreitr = algoRunner.getHousesScore().begin();
 				housesScoreitr != algoRunner.getHousesScore().end(); housesScoreitr++){
 			scoreSumForAlgo += *housesScoreitr;
 			string scoreStr = std::to_string(*housesScoreitr);
 			string scoreSpace = "";
-			scoreSpace.insert(0, 10 - scoreStr.size(), ' ');
+			scoreSpace.insert(0, OTHER_COLUMN_WIDTH - scoreStr.size(), ' ');
 			cout << scoreSpace << scoreStr << "|";
 		}
+		// print average
 		float avgForAlgo = (float) scoreSumForAlgo/numHouses;
 		stringstream stream;
 		stream << fixed << setprecision(2) << avgForAlgo;
 		string avgStr = stream.str();
 		string avgSpace = "";
-		avgSpace.insert(0, 10 - avgStr.size(), ' ');
+		avgSpace.insert(0, OTHER_COLUMN_WIDTH - avgStr.size(), ' ');
 		cout << avgSpace << avgStr << "|" << endl;
 		//print row separator
 		cout << rowSeparator << endl;

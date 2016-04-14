@@ -46,8 +46,8 @@ string FileUtils::getFileNameFromPath(const std::string& filePath)
 string FileUtils::getFileNameNoExt(const std::string& filePath)
 {
 	string fileName = getFileNameFromPath(filePath);
-	int found = filePath.find_last_of(".");
-	if  (found < 0 -1){
+	int found = fileName.find_last_of(".");
+	if  (found < 0){
 		return fileName;
 	}
 	return fileName.substr(0, found);

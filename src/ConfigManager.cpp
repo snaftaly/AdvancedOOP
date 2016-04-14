@@ -4,6 +4,8 @@
 #include <fstream>
 #include <sstream>
 #include <unistd.h>
+#include <stdlib.h>
+
 using namespace std;
 
 
@@ -11,9 +13,7 @@ bool ConfigManager::loadFromFile()
 {
 	// loads the confs to the map and returns true if there was no failure reading from the file.
 	confs.clear();
-	string confFileFullPath = confPath + "config.ini"; // TODO change to real full path
-//	boost::filesystem::path confFilePath(confFileStr);
-//	boost::filesystem::path confFileFullPath = boost::filesystem::complete(confFilePath);
+	string confFileFullPath = confPath + "config.ini";
 
 	// first check if file exists, otherwise print usage
 	if (( access( confFileFullPath.c_str(), F_OK ) == -1 )){
@@ -21,8 +21,8 @@ bool ConfigManager::loadFromFile()
 		return false;
 	}
 
-	ifstream fin(confFileFullPath.c_str());
-	if (!fin.is_open()){ // error opening file
+	ifstream fin(confFileFullPath);
+	if (!fin.is_open()){ // error opening file // TODO: print full path
 		cout << "config.ini exists in '"<< confFileFullPath << "' but cannot be opened" << endl;
 		return false;
 	}

@@ -28,8 +28,10 @@ class Simulator {
 	int simulationSteps;
 	int winnerNumSteps;
 	bool isThereAWinner;
+	bool isUpdatedAboutToFinish;
 
 	void updateOnSuccessfulAlgo(AlgorithmRunner& algorithmRunner);
+	void updateAboutToFinish();
 	void fillAlgorithmList();
 public:
 

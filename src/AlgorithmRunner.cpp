@@ -28,6 +28,8 @@ void AlgorithmRunner::resetRunnerForNewHouse(const House& house, int currHouseDo
 	roboti = currHouseDocki;
 	robotj = currHouseDockj;
 
+	algorithm->setSensor(sensor);//call set sensor again - reset of algo will be handled by algo
+
 	dirtCollected = 0;
 	numSteps = 0;
 	batteryLevel = AlgorithmRunner::config["BatteryCapacity"];
@@ -130,7 +132,7 @@ void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const
 //		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
 //		cout << "dirtCollected" << dirtCollected << endl;
 //		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
-
+//		cout << currHouse <<endl;
 		currHouseScore = max(0,
 				2000
 				- (positionInCompetition - 1)*50
