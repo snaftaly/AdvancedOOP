@@ -23,7 +23,6 @@ class _305220980_A: public AbstractAlgorithm {
 	const AbstractSensor * sensor;
 	std::map<std::string, int> configs;
 	std::stack<Direction> previousSteps;
-	bool isAboutToFinish;
 	int stepsUntillFinishing;
 
 public:

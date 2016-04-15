@@ -7,7 +7,7 @@
 
 #include "_305220980_A.h"
 
-_305220980_A::_305220980_A(): sensor(NULL), isAboutToFinish(false), stepsUntillFinishing(-1) {
+_305220980_A::_305220980_A(): sensor(NULL), stepsUntillFinishing(-1) {
 	// TODO Auto-generated constructor stub
 }
 
@@ -19,10 +19,9 @@ void _305220980_A::setSensor(const AbstractSensor& s){
 	this->sensor = &s; // passing the pointer to sensor
 
 	//Reset previous knowledge.
-	isAboutToFinish = false;
 	stepsUntillFinishing = -1;
 
-	//Empty stack of previous steps
+	//Empty stack of previous steps - TODO-Check.
 	std::stack<Direction> empty;
 	std::swap(previousSteps, empty);
 }
@@ -33,7 +32,6 @@ void _305220980_A::setConfiguration(std::map<std::string, int> config){
 
 
 Direction _305220980_A::step(){
-	int i = 0;
 	Direction nextStep = getStep();
 	return nextStep; //Direction::East;
 }
@@ -43,9 +41,10 @@ Direction _305220980_A::getStep(){
 	Direction nextStep;
 
 	//The robot is heading back to the docking station.
-	if(isAboutToFinish){
+	if(stepsUntillFinishing != -1){
 		if (!previousSteps.empty()){
-			nextStep = previousSteps.pop();
+			nextStep = previousSteps.top();
+			previousSteps.pop();
 		}
 		else{
 			nextStep = Direction::Stay;
@@ -53,17 +52,23 @@ Direction _305220980_A::getStep(){
 		return nextStep;
 	}
 
-	if (sensor->sense().dirtLevel > 0){
+//	cout << "!!!!!!!dirtLevel!!!!!" << endl;
+//	cout << sensor->sense().dirtLevel << endl; TODO
+
+	int dirtLevel = sensor->sense().dirtLevel;
+	if (dirtLevel > 0){
 		nextStep = Direction::Stay;
 	}
 
 	else{
 		//East, West, South, North, Stay
-		int currDirection = 0;
-		while (currDirection < 4 && sensor->sense().isWall[currDirection]){
-			++currDirection;
+		std::vector<Direction> possibleMoves {Direction::East,Direction::North,Direction::South,Direction::West,Direction::Stay};
+		Direction currDirection;
+		int i = 0;
+		while ((currDirection = possibleMoves[i]) != Direction::Stay && sensor->sense().isWall[(int)currDirection]){
+			i++;
 		}
-		nextStep = (Direction)currDirection;
+		nextStep = currDirection;
 	}
 
 	//Adds only steps that are not 'stay'
@@ -92,6 +97,5 @@ Direction _305220980_A::getStep(){
 }
 
 void _305220980_A::aboutToFinish(int stepsTillFinishing){
-	isAboutToFinish = true;
 	stepsUntillFinishing = stepsTillFinishing;
 }
