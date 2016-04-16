@@ -9,10 +9,11 @@
 #include "Direction.h"
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
+#include "AlgosCommon.h"
 
 class SimpleAlgorithm: public AbstractAlgorithm {
 
-	// need to use AbstractSensor * http://moodle.tau.ac.il/mod/forum/discuss.php?d=44675#p68447
+	// need to use AbstractSensor *
 	const AbstractSensor * sensor;
 	std::map<std::string, int> configs;
 

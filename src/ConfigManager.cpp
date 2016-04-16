@@ -1,10 +1,9 @@
 #include "ConfigManager.h"
 #include "ErrorPrinter.h"
-//#include <boost/filesystem.hpp>
+#include "FileUtils.h"
 #include <fstream>
 #include <sstream>
 #include <unistd.h>
-#include <stdlib.h>
 
 using namespace std;
 
@@ -13,17 +12,17 @@ bool ConfigManager::loadFromFile()
 {
 	// loads the confs to the map and returns true if there was no failure reading from the file.
 	confs.clear();
-	string confFileFullPath = confPath + "config.ini";
+	string confFilePath = confPath + "config.ini";
 
 	// first check if file exists, otherwise print usage
-	if (( access( confFileFullPath.c_str(), F_OK ) == -1 )){
+	if (( access( confFilePath.c_str(), F_OK ) == -1 )){
 		ErrorPrinter::printUsage();
 		return false;
 	}
 
-	ifstream fin(confFileFullPath);
+	ifstream fin(confFilePath);
 	if (!fin.is_open()){ // error opening file // TODO: print full path
-		cout << "config.ini exists in '"<< confFileFullPath << "' but cannot be opened" << endl;
+		cout << "config.ini exists in '"<< FileUtils::getFullPath(confFilePath) << "' but cannot be opened" << endl;
 		return false;
 	}
 	string line;

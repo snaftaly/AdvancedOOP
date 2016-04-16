@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <dirent.h>
 #include <iostream>
+#include <stdlib.h>
+
 using namespace std;
 
 void FileUtils::addTrailingSlash(string& pathStr){
@@ -51,4 +53,14 @@ string FileUtils::getFileNameNoExt(const std::string& filePath)
 		return fileName;
 	}
 	return fileName.substr(0, found);
+}
+
+string FileUtils::getFullPath(const std::string& path){
+	char *fullPath = realpath(path.c_str(), NULL);
+	if (fullPath == NULL){
+		return path;
+	}
+	string fullPathStr(fullPath);
+	free(fullPath);
+	return fullPathStr;
 }

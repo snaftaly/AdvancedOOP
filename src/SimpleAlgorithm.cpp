@@ -40,3 +40,18 @@ std::vector<Direction> SimpleAlgorithm::getPossibleSteps(){
 void SimpleAlgorithm::aboutToFinish(int stepsTillFinishing){
 
 }
+
+extern "C" {
+AbstractAlgorithm *maker(){
+   return new SimpleAlgorithm;
+}
+class proxy {
+public:
+   proxy(){
+      // register the maker with the factory
+      factory["SimpleAlgorithm"] = maker;
+   }
+};
+// our one instance of the proxy
+proxy p;
+}

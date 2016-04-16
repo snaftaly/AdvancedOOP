@@ -48,10 +48,10 @@ bool HouseManager::readHousesFiles(){
 	return true;
 }
 
-void HouseManager::printHousesErrors(bool all){
+void HouseManager::printHousesErrors(bool all){ // TODO: get full path
 	if (all){
 		cout << "All house files in target folder '"
-				<< housesPath
+				<< FileUtils::getFullPath(housesPath)
 				<< "' cannot be opened or are invalid:" << endl;
 	}
 	for(const pair<string, string>& houseErrPair : housesErrors) {

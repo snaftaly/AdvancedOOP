@@ -1,13 +1,12 @@
 #ifndef SIMULATOR_H_
 #define SIMULATOR_H_
-#include "Direction.h"
-#include "AbstractAlgorithm.h"
-#include "AbstractSensor.h"
+
 #include "House.h"
 #include "AlgorithmRunner.h"
+#include "AlgorithmManager.h"
 #include "HouseManager.h"
 #include "ConfigManager.h"
-#include "SimulationFinishState.h"
+#include "SimulationState.h"
 #include <list>
 #include <map>
 #include <string>
@@ -17,9 +16,6 @@ class Simulator {
 	AlgorithmManager algoMgr;
 	HouseManager houseMgr;
 	bool initSuccessfull;
-
-	std::list<AbstractAlgorithm*> algorithms;
-	std::list<AlgorithmRunner> algorithmRunnerList;
 
 	// values for curr house run
 	int numAlogsRunning;
@@ -37,7 +33,7 @@ class Simulator {
 public:
 
 	//C'tor signature
-	Simulator(const std::string& configPath,  const std::string& algorithmsPath, const std::string& housesPath,);
+	Simulator(const std::string& configPath,  const std::string& algorithmsPath, const std::string& housesPath);
 
 	//D'tor signature
 	~Simulator();

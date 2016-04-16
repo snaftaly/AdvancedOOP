@@ -4,7 +4,7 @@
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
 #include "Sensor.h"
-#include "SimulationFinishState.h"
+#include "SimulationState.h"
 #include <list>
 #include <tuple>
 #include <map>
@@ -23,9 +23,8 @@ class AlgorithmRunner {
 	int numSteps;
 	int dirtCollected;
 
-	bool isFinished;
 	int algoPositionInCompetition;
-	SimulationFinishState finishState;
+	SimulationState simulationState;
 
 	std::list<int> housesScore;
 
@@ -38,7 +37,7 @@ class AlgorithmRunner {
 	void printSimulation(int stepi, int stepj);
 public:
 
-	AlgorithmRunner(AbstractAlgorithm* a);
+	AlgorithmRunner(AbstractAlgorithm* a, string algoName);
 
 	void setCurrHouse(const House& currHouse) {
 		this->currHouse = currHouse;
@@ -63,22 +62,19 @@ public:
 
 	// setters
 
-	void setIsFinished(bool isFinished) {
-		this->isFinished = isFinished;
-	}
 
 	void setAlgoRankInCompetition(int algoRankInCompetition) {
 		this->algoPositionInCompetition = algoRankInCompetition;
 	}
 
-	void setFinishState(SimulationFinishState finishState) {
-		this->finishState = finishState;
+	void setSimulationState(SimulationState SimState) {
+		this->simulationState = SimState;
 	}
 
 	// getters
 
 	bool getIsFinished() const {
-		return isFinished;
+		return (this->simulationState != SimulationState::Running);
 	}
 
 	std::list<int>& getHousesScore() {
@@ -89,14 +85,17 @@ public:
 		return numSteps;
 	}
 
-	SimulationFinishState getFinishState() const {
-		return finishState;
+	SimulationState getFinishState() const {
+		return simulationState;
 	}
 
 	const std::string& getAlgoName() const {
 		return algoName;
 	}
 
+	const AbstractAlgorithm* getAlgorithm() const {
+		return algorithm;
+	}
 
 	// static functions
 	static void resetCommonDataForNewHouse(const House& house);

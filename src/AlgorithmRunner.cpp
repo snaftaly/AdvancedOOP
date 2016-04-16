@@ -8,12 +8,11 @@ using namespace std;
 int AlgorithmRunner::currHouseTotDirt = 0;
 map<string, int> AlgorithmRunner::config;
 
-AlgorithmRunner::AlgorithmRunner(AbstractAlgorithm* a):
-		algoName("300689775_A_"), roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0), dirtCollected(0),
-		isFinished(false), algoPositionInCompetition(-1), finishState(SimulationFinishState::NoMoreSteps)
+AlgorithmRunner::AlgorithmRunner(AbstractAlgorithm* _algorithm, string algoName):
+		algorithm(_algorithm), algoName(algoName), roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0),
+		dirtCollected(0), algoPositionInCompetition(-1), simulationState(SimulationState::Running)
 {
-	// TODO: get the algo name from the file!
-	algorithm = a;
+	setSensorForAlgorithm();
 }
 
 void AlgorithmRunner::resetCommonDataForNewHouse(const House& house)
@@ -35,8 +34,7 @@ void AlgorithmRunner::resetRunnerForNewHouse(const House& house, int currHouseDo
 	batteryLevel = AlgorithmRunner::config["BatteryCapacity"];
 
 	algoPositionInCompetition = -1;
-	isFinished = false;
-	finishState = SimulationFinishState::NoMoreSteps;
+	simulationState = SimulationState::Running;
 }
 
 bool AlgorithmRunner::isHouseCleanAndRobotInDock(){
@@ -100,7 +98,7 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     		dirtCollected += 1;
     	}
     }
-    //printSimulation(stepi, stepj); // print for tests
+    //printSimulatemplace_backion(stepi, stepj); // print for tests
     return true;
 }
 
@@ -117,12 +115,12 @@ bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 
 void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const int simulationSteps){
 	int currHouseScore;
-	if (finishState == SimulationFinishState::IllegalMove){
+	if (simulationState == SimulationState::IllegalMove){
 		currHouseScore = 0;
 	}
 	else {
 		int positionInCompetition = getPositionInCompetitionForScore();
-		if (finishState == SimulationFinishState::OutOfBattery){
+		if (simulationState == SimulationState::OutOfBattery){
 			numSteps = simulationSteps;
 		}
 		//print for tests
@@ -146,7 +144,7 @@ void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const
 }
 
 int AlgorithmRunner::getPositionInCompetitionForScore(){
-	if (!(finishState == SimulationFinishState::Success)){
+	if (!(simulationState == SimulationState::Success)){
 		return 10;
 	}
 	return min(algoPositionInCompetition, 4);

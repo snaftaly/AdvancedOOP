@@ -8,6 +8,8 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
+	cout << "bye" << endl; return 0;
+
 	// default location of files
 	string configDir = ".";
 	string housesDir = ".";
@@ -54,7 +56,7 @@ int main(int argc, char* argv[]) {
 	FileUtils::addTrailingSlash(housesDir);
 	FileUtils::addTrailingSlash(algorithmsDir);
 
-	Simulator simulator(configDir, housesDir, algorithmsDir);
+	Simulator simulator(configDir, algorithmsDir, housesDir);
 
 	if (!simulator.isInitSuccessfull()){
 		// initialization of config file and house was not successful
