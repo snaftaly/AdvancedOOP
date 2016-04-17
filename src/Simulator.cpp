@@ -1,10 +1,12 @@
 #include <iomanip>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include "Simulator.h"
 #include "FileUtils.h"
 
 #define HOUSE_NAME_MAX 9
+#define ALGO_NAME_MAX 12
 #define FIRST_COLUMN_WIDTH 13
 #define OTHER_COLUMN_WIDTH 10
 
@@ -88,7 +90,14 @@ void Simulator::runSimulation(){
 				else {
 					bool isMadeLegalMove = algorithmRunner.getStepAndUpdateIfLegal();
 					if (!isMadeLegalMove){
-						cout << "Error: algorithm made an illegal step." << endl;
+//						cout << "Error: algorithm made an illegal step." << endl;
+						string error = "Algorithm "
+								+ algorithmRunner.getAlgoName()
+								+ " when running on House " +
+								+ FileUtils::getFileNameNoExt(house.getFileName())
+								+ " went on a wall in step "
+								+ simulationSteps
+								+ '\n';
 						algorithmRunner.setSimulationState(SimulationState::IllegalMove);
 						numAlogsRunning--;
 					}
@@ -154,23 +163,23 @@ void Simulator::updateAboutToFinish(){
 	}
 }
 
-//void Simulator::fillAlgorithmList(){ // TODO: this is not needed
-//	algorithms.push_back(new SimpleAlgorithm());
-//}
+void Simulator::printRowSeparator(const int tableWidth){
+	cout << setw(tableWidth) << setfill('-') << "" << endl << setfill(' ');;
+}
 
-void Simulator::printTableHeader(const string & rowSeparator){
+void Simulator::printTableHeader(const int tableWidth){
 	//print row separator
-		cout << rowSeparator << endl;
-		// print houses names
-		cout << "|             |";
-		for (const House& house : houseMgr.getHouses()){
-			string name =  FileUtils::getFileNameNoExt(house.getFileName());
-			name.resize(HOUSE_NAME_MAX, ' ');
-			cout << name << " |";
-		}
-		cout << "AVG       |" << endl;
-		//print row separator
-		cout << rowSeparator << endl;
+	printRowSeparator(tableWidth);
+	// print houses names
+	cout << "|             |";
+	for (const House& house : houseMgr.getHouses()){
+		string name =  FileUtils::getFileNameNoExt(house.getFileName());
+		name.resize(HOUSE_NAME_MAX, ' ');
+		cout << name << " |";
+	}
+	cout << std::left << std::setw(10) << "AVG" << "|" << endl;
+	//print row separator
+	printRowSeparator(tableWidth);
 }
 
 
@@ -178,34 +187,24 @@ void Simulator::printAlgosScores(){
 	int numHouses = houseMgr.getHouses().size();
 	int tableWidth = FIRST_COLUMN_WIDTH + 2 + (OTHER_COLUMN_WIDTH + 1)*(numHouses+1);
 
-	// create the row separator
-	string rowSeparator = "";
-	rowSeparator.insert(0, tableWidth, '-');
-
-	printTableHeader(rowSeparator);
+	printTableHeader(tableWidth);
 
 	for (AlgorithmRunner& algoRunner : algoMgr.getAlgorithmRunnerList()){
-		cout << "|" << algoRunner.getAlgoName() << " |";
+		string algoNameTrimmed = algoRunner.getAlgoName();
+		algoNameTrimmed.resize(ALGO_NAME_MAX, ' ');
+		cout << "|" << algoNameTrimmed << " |";
 		int scoreSumForAlgo = 0;
 		// print each house score // TODO: we assume here that the houses score is a list and not a map, maybe we should use a map
 		for (list<int>::iterator housesScoreitr = algoRunner.getHousesScore().begin();
 				housesScoreitr != algoRunner.getHousesScore().end(); housesScoreitr++){
 			scoreSumForAlgo += *housesScoreitr;
-			string scoreStr = std::to_string(*housesScoreitr);
-			string scoreSpace = "";
-			scoreSpace.insert(0, OTHER_COLUMN_WIDTH - scoreStr.size(), ' ');
-			cout << scoreSpace << scoreStr << "|";
+			cout <<  right <<  setw(10) << *housesScoreitr << "|";
 		}
 		// print average
 		float avgForAlgo = (float) scoreSumForAlgo/numHouses;
-		stringstream stream;
-		stream << fixed << setprecision(2) << avgForAlgo;
-		string avgStr = stream.str();
-		string avgSpace = "";
-		avgSpace.insert(0, OTHER_COLUMN_WIDTH - avgStr.size(), ' ');
-		cout << avgSpace << avgStr << "|" << endl;
 		//print row separator
-		cout << rowSeparator << endl;
+		cout << fixed << setprecision(2) << right<< setw(10) << avgForAlgo  << "|" << endl;
+		printRowSeparator(tableWidth);
 	}
 }
 

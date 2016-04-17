@@ -52,13 +52,13 @@ bool AlgorithmManager::readAlgoFiles(){
 		dlib = dlopen(algoPath.c_str(), RTLD_NOW);
 		if(dlib == NULL){
 			cout << algoPath << " so is null" << endl;
-			algorithmsErrors[algoFileName] = "file cannot be loaded or is not a valid .so";
+			algorithmsLoadErrors[algoFileName] = "file cannot be loaded or is not a valid .so";
 			continue;
 		}
 		dl_list.insert(dl_list.end(), dlib); // for later free of memory // TODO: maybe we can free it here?
 		newFactoryMapSize = factory.size();
 		if (currFactoryMapSize == newFactoryMapSize){
-			algorithmsErrors[algoFileName] = "valid .so but no algorithm was registered after loading it";
+			algorithmsLoadErrors[algoFileName] = "valid .so but no algorithm was registered after loading it";
 		}
 	}
 
@@ -77,16 +77,6 @@ void AlgorithmManager::createAlgorithmRunnerList(ConfigManager& confMgr){
 		cout << algo << ": "<< algorithmMakerPair.first << endl;
 		algorithmRunnerList.emplace_back(algo, algorithmMakerPair.first);
 	}
-//	for (AbstractAlgorithm* algo : algorithms){
-//		// set the configurations for the algorithm
-//		algo->setConfiguration(confMgr.getConfs());
-//
-//		// put the algorithm in the algoRunner list
-//		algorithmRunnerList.emplace_back(algo);
-//	}
-//	for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){
-//		algorithmRunner.setSensorForAlgorithm(); // TODO: move this to algorunner init (line above)
-//	}
 }
 
 
@@ -96,7 +86,9 @@ void AlgorithmManager::printAlgorithmsErrors(bool all){ // TODO: get full path
 				<< FileUtils::getFullPath(algorithmsPath)
 				<< "' cannot be opened or are invalid:" << endl;
 	}
-	for(const pair<string, string>& algorithmErrPair : algorithmsErrors) {
+	for(const pair<string, string>& algorithmErrPair : algorithmsLoadErrors) {
 		cout << algorithmErrPair.first << ": " << algorithmErrPair.second << endl;
 	}
 }
+
+AlgorithmManager::addAlgoRunError();

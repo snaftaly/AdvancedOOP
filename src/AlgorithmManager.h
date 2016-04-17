@@ -10,7 +10,8 @@ class AlgorithmManager {
 	std::string algorithmsPath;
 	std::list<std::string> algorithmsFileNamesLst;
 	std::list<AbstractAlgorithm *> algorithmsList;
-	std::map<std::string, std::string> algorithmsErrors;
+	std::map<std::string, std::string> algorithmsLoadErrors;
+	std::list<std::string> algorithmsRunErrors;
 	std::list<AlgorithmRunner> algorithmRunnerList;
 	list<void *> dl_list; // list to hold handles for dynamic libs
 public:
@@ -26,7 +27,7 @@ public:
 	// getters
 
 	const std::map<std::string, std::string>& getAlgorithmsErrors() const {
-		return algorithmsErrors;
+		return algorithmsLoadErrors;
 	}
 
 	std::list<AlgorithmRunner>& getAlgorithmRunnerList() {

@@ -16,7 +16,6 @@ void SimpleAlgorithm::setConfiguration(std::map<std::string, int> config){
 	configs = config;
 }
 
-
 Direction SimpleAlgorithm::step(){
 	int i = 0;
 	std::vector<Direction> possibleSteps = getPossibleSteps();

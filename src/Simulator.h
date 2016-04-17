@@ -30,7 +30,6 @@ class Simulator {
 
 	void updateOnSuccessfulAlgo(AlgorithmRunner& algorithmRunner);
 	void updateAboutToFinish();
-	void fillAlgorithmList();
 public:
 
 	//C'tor signature
@@ -45,7 +44,8 @@ public:
 	void runSimulation();
 
 	void printAlgosScores();
-	void printTableHeader(const string & rowseparator);
+	void printTableHeader(const int tableWidth);
+	void printRowSeparator(const int tableWidth);
 
 	void printErrors();
 
