@@ -1,15 +1,16 @@
 #ifndef SIMULATOR_H_
 #define SIMULATOR_H_
 
+#include <list>
+#include <map>
+#include <string>
 #include "House.h"
 #include "AlgorithmRunner.h"
 #include "AlgorithmManager.h"
 #include "HouseManager.h"
 #include "ConfigManager.h"
 #include "SimulationState.h"
-#include <list>
-#include <map>
-#include <string>
+
 
 class Simulator {
 	ConfigManager confMgr;
@@ -18,11 +19,11 @@ class Simulator {
 	bool initSuccessfull;
 
 	// values for curr house run
+	int numStepsRemaining;
+	int simulationSteps;
 	int numAlogsRunning;
 	int currSuccessfullAlgoPosition;
 	int numSuccessfulAlgosInRound;
-	int numStepsRemaining;
-	int simulationSteps;
 	int winnerNumSteps;
 	bool isThereAWinner;
 	bool isUpdatedAboutToFinish;

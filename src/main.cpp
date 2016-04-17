@@ -8,23 +8,19 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-	cout << "bye" << endl; return 0;
 
 	// default location of files
-	string configDir = ".";
-	string housesDir = ".";
-	string algorithmsDir = ".";
+	string configDir = "./";
+	string housesDir = "./";
+	string algorithmsDir = "./";
 
-	// check number of arguments
-	if (argc != 1 && argc != 3 && argc != 5 && argc != 7){
-		ErrorPrinter::printUsage();
-		return 1;
-	}
+
 	// parse the arguments of the program and check parameter names
-	for (int i = 1; i < argc; i=i+2){
+	for (int i = 1; i < argc; ){
 		if (!strcmp("-config", argv[i])){
 			if (i < argc - 1){
 				configDir = argv[i+1];
+				i+=2;
 			}
 			else {
 				ErrorPrinter::printUsage();
@@ -34,27 +30,33 @@ int main(int argc, char* argv[]) {
 		else if (!strcmp("-house_path", argv[i])){
 			if (i < argc - 1){
 				housesDir = argv[i+1];
+				i+=2;
 			}
 			else {
 				ErrorPrinter::printUsage();
 				return 1;
 			}
 		}
-		else if (!strcmp("algorithm_path", argv[i])){
+		else if (!strcmp("-algorithm_path", argv[i])){
 			if (i < argc - 1){
 				algorithmsDir = argv[i+1];
+				i+=2;
 			}
 			else {
 				ErrorPrinter::printUsage();
 				return 1;
 			}
+		}
+		else {
+			i++;
 		}
 	}
 
 	// add trailing '/' if it's missing // TODO: maybe move it somewhere else?
-	FileUtils::addTrailingSlash(configDir);
-	FileUtils::addTrailingSlash(housesDir);
-	FileUtils::addTrailingSlash(algorithmsDir);
+	FileUtils::fixTrailingSlash(configDir);
+	FileUtils::fixTrailingSlash(housesDir);
+	FileUtils::fixTrailingSlash(algorithmsDir);
+	cout << configDir << ", " << housesDir << ", " << algorithmsDir << ", " << endl;
 
 	Simulator simulator(configDir, algorithmsDir, housesDir);
 
@@ -63,6 +65,7 @@ int main(int argc, char* argv[]) {
 		cout << "init not successful. Bye" << endl;
 		return 1;
 	}
+
 	simulator.runSimulation();
 	simulator.printAlgosScores();
 	simulator.printErrors();

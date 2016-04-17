@@ -21,11 +21,6 @@ Simulator::Simulator(const string& configPath, const string & algorithmsPath, co
 		return;
 	}
 
-	//TODO: remove this
-//	confMgr.printConfs();
-//	initSuccessfull = false;
-//	return;
-
 	// get algorithms
 	if (!algoMgr.readAlgoFiles()){
 		initSuccessfull = false;
@@ -38,9 +33,7 @@ Simulator::Simulator(const string& configPath, const string & algorithmsPath, co
 		return;
 	}
 
-	// insert simple algorithm * to algorithms:
-
-	// put confs in algorithm runner
+	// put confs in algorithm runner staticaly
 	AlgorithmRunner::setConfig(confMgr.getConfs());
 
 	// create algo runner list
@@ -70,9 +63,15 @@ void Simulator::runSimulation(){
 		while (numAlogsRunning > 0 && numStepsRemaining > 0){
 			// check if stepsRemaining == maxStepsAfterWinner
 			if (!isUpdatedAboutToFinish && simulationSteps == (maxSteps - maxStepsAfterWinner)){
+				cout << "simulationSteps == (maxSteps - maxStepsAfterWinner)" << endl;
 				updateAboutToFinish();
 			}
+			// reset number of successful algorithms in round (step)
 			numSuccessfulAlgosInRound = 0;
+
+			// update simulations steps and steps remaining
+			simulationSteps++;
+			numStepsRemaining--;
 			for (AlgorithmRunner& algorithmRunner : algoMgr.getAlgorithmRunnerList()){
 				if (algorithmRunner.getIsFinished()){ // if algorithm already finished - move to next one
 					continue;
@@ -100,10 +99,7 @@ void Simulator::runSimulation(){
 					}
 				}
 			}
-			// end of for loop for each algorithm - update step remaining
-			// TODO: should we move it to be before going over each algo?
-			simulationSteps++;
-			numStepsRemaining--;
+			// end of for loop for each algorithm - update the next successful algo position
 			currSuccessfullAlgoPosition += numSuccessfulAlgosInRound;
 		}
 		// end of while for the house - update algos scores
@@ -191,7 +187,7 @@ void Simulator::printAlgosScores(){
 	for (AlgorithmRunner& algoRunner : algoMgr.getAlgorithmRunnerList()){
 		cout << "|" << algoRunner.getAlgoName() << " |";
 		int scoreSumForAlgo = 0;
-		// print each house score // TODO: we assume here that the houses score is a list and not a map
+		// print each house score // TODO: we assume here that the houses score is a list and not a map, maybe we should use a map
 		for (list<int>::iterator housesScoreitr = algoRunner.getHousesScore().begin();
 				housesScoreitr != algoRunner.getHousesScore().end(); housesScoreitr++){
 			scoreSumForAlgo += *housesScoreitr;
@@ -220,4 +216,5 @@ void Simulator::printErrors(){
 	cout << "Errors:" << endl;
 	houseMgr.printHousesErrors(false);
 	algoMgr.printAlgorithmsErrors(false);
+	// TODO: add printing of failed algorithms
 }

@@ -1,4 +1,4 @@
-#include "SimpleAlgorithm.h"
+#include "SimpleAlgorithm_.h"
 #include <vector>
 
 SimpleAlgorithm::SimpleAlgorithm() : sensor(NULL) {
@@ -49,7 +49,7 @@ class proxy {
 public:
    proxy(){
       // register the maker with the factory
-      factory["SimpleAlgorithm"] = maker;
+      factory["SimpleAlgorithm_"] = maker;
    }
 };
 // our one instance of the proxy

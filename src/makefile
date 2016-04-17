@@ -3,7 +3,7 @@
 CPP_FLAGS=-std=c++11 -O2 -Wall -pedantic -pthread
 LIBS = -ldl
 
-all: SimpleAlgorithm.so simulator 
+all: SimpleAlgorithm_.so SimpleAlgorithmCP_.so simulator 
 
 clean:
 	rm *.so *.o simulator
@@ -11,8 +11,17 @@ clean:
 simulator: main.o Simulator.o AlgorithmRunner.o Sensor.o AlgorithmManager.o ConfigManager.o HouseManager.o House.o ErrorPrinter.o FileUtils.o $(LIBS)
 	g++ -rdynamic -o $@ $^ $(CPP_FLAGS)
 
-SimpleAlgorithm.so: SimpleAlgorithm.o
-	g++ -shared -Wl,-soname,SimpleAlgorithm.so -o SimpleAlgorithm.so SimpleAlgorithm.o
+SimpleAlgorithm_.so: SimpleAlgorithm_.o
+	g++ -shared -Wl,-soname,SimpleAlgorithm_.so -o SimpleAlgorithm_.so SimpleAlgorithm_.o
+
+SimpleAlgorithmCP_.so: SimpleAlgorithmCP_.o
+	g++ -shared -Wl,-soname,SimpleAlgorithmCP_.so -o SimpleAlgorithmCP_.so SimpleAlgorithmCP_.o	
+
+SimpleAlgorithm_.o: SimpleAlgorithm_.cpp SimpleAlgorithm_.h AbstractAlgorithm.h AbstractSensor.h
+	g++ $(CPP_FLAGS) -c SimpleAlgorithm_.cpp
+
+SimpleAlgorithmCP_.o: SimpleAlgorithmCP_.cpp SimpleAlgorithmCP_.h AbstractAlgorithm.h AbstractSensor.h
+	g++ $(CPP_FLAGS) -c SimpleAlgorithmCP_.cpp
 
 main.o: main.cpp Simulator.h ErrorPrinter.h FileUtils.h
 	g++ $(CPP_FLAGS) -c main.cpp
@@ -25,9 +34,6 @@ AlgorithmManager.o: AlgorithmManager.cpp AlgorithmManager.h AlgorithmRunner.h Co
 
 AlgorithmRunner.o: AlgorithmRunner.cpp AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h Sensor.h House.h SensorInformation.h Direction.h SimulationState.h 
 	g++ $(CPP_FLAGS) -c AlgorithmRunner.cpp
-
-SimpleAlgorithm.o: SimpleAlgorithm.cpp SimpleAlgorithm.h AbstractAlgorithm.h AbstractSensor.h
-	g++ $(CPP_FLAGS) -c SimpleAlgorithm.cpp
 
 Sensor.o: Sensor.cpp Sensor.h AbstractSensor.h House.h Direction.h SensorInformation.h  
 	g++ $(CPP_FLAGS) -c Sensor.cpp

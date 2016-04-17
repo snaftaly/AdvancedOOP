@@ -22,14 +22,18 @@ using namespace std;
 map<string, maker_t *, less<string> > factory;
 
 AlgorithmManager::~AlgorithmManager(){
+	// delete from memory all the dynamically created algorithms
+	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
+		delete algoRunner.getAlgorithm();
+		cout << algoRunner.getAlgorithm() << endl;
+	}
+
+	// now delete the so that was registered
 	for(auto itr = dl_list.begin(); itr!=dl_list.end(); itr++){
 		dlclose(*itr);
 	}
 
-	// delete from memory all the dynamically created algorithms
-	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
-		delete algoRunner.getAlgorithm();
-	}
+
 }
 
 bool AlgorithmManager::readAlgoFiles(){
@@ -44,10 +48,12 @@ bool AlgorithmManager::readAlgoFiles(){
 	int currFactoryMapSize, newFactoryMapSize;
 	for (string& algoFileName : algorithmsFileNamesLst){
 		currFactoryMapSize = factory.size();
-		string algoFullPath = algorithmsPath + algoFileName;
-		dlib = dlopen(algoFullPath.c_str(), RTLD_NOW);
+		string algoPath = algorithmsPath + algoFileName;
+		dlib = dlopen(algoPath.c_str(), RTLD_NOW);
 		if(dlib == NULL){
+			cout << algoPath << " so is null" << endl;
 			algorithmsErrors[algoFileName] = "file cannot be loaded or is not a valid .so";
+			continue;
 		}
 		dl_list.insert(dl_list.end(), dlib); // for later free of memory // TODO: maybe we can free it here?
 		newFactoryMapSize = factory.size();
@@ -68,6 +74,7 @@ void AlgorithmManager::createAlgorithmRunnerList(ConfigManager& confMgr){
 	for (auto const & algorithmMakerPair : factory){
 		AbstractAlgorithm * algo = algorithmMakerPair.second();
 		algo->setConfiguration(confMgr.getConfs());
+		cout << algo << ": "<< algorithmMakerPair.first << endl;
 		algorithmRunnerList.emplace_back(algo, algorithmMakerPair.first);
 	}
 //	for (AbstractAlgorithm* algo : algorithms){

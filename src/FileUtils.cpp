@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void FileUtils::addTrailingSlash(string& pathStr){
+void FileUtils::fixTrailingSlash(string& pathStr){
 	if (pathStr.back() != '/'){
 		pathStr += '/';
 	}
