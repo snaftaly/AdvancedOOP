@@ -90,14 +90,7 @@ void Simulator::runSimulation(){
 				else {
 					bool isMadeLegalMove = algorithmRunner.getStepAndUpdateIfLegal();
 					if (!isMadeLegalMove){
-//						cout << "Error: algorithm made an illegal step." << endl;
-						string error = "Algorithm "
-								+ algorithmRunner.getAlgoName()
-								+ " when running on House " +
-								+ FileUtils::getFileNameNoExt(house.getFileName())
-								+ " went on a wall in step "
-								+ simulationSteps
-								+ '\n';
+						algoMgr.addAlgoRunError(algorithmRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), simulationSteps);
 						algorithmRunner.setSimulationState(SimulationState::IllegalMove);
 						numAlogsRunning--;
 					}
@@ -209,7 +202,7 @@ void Simulator::printAlgosScores(){
 }
 
 void Simulator::printErrors(){
-	if (houseMgr.getHousesErrors().empty() && algoMgr.getAlgorithmsErrors().empty()){
+	if (houseMgr.getHousesErrors().empty() && algoMgr.getAlgorithmsLoadErrors().empty() && algoMgr.getAlgorithmsRunErrors()){
 		return;
 	}
 	cout << "Errors:" << endl;

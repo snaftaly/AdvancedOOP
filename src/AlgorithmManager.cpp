@@ -89,6 +89,18 @@ void AlgorithmManager::printAlgorithmsErrors(bool all){ // TODO: get full path
 	for(const pair<string, string>& algorithmErrPair : algorithmsLoadErrors) {
 		cout << algorithmErrPair.first << ": " << algorithmErrPair.second << endl;
 	}
+
+	for (const string& runErrStr: algorithmsRunErrors){
+		cout << runErrStr << endl;
+	}
 }
 
-AlgorithmManager::addAlgoRunError();
+void AlgorithmManager::addAlgoRunError(const string & algoName, const string & houseName, int simulationStep){
+	string errorStr = "Algorithm "
+			+ algoName
+			+ " when running on House " +
+			+ houseName
+			+ " went on a wall in step "
+			+ simulationStep;
+	algorithmsRunErrors.push_back(errorStr);
+}

@@ -10,7 +10,7 @@ public:
 	static std::list<std::string> getSortedFileNamesListBySuffix(const std::string & path, const std::string & suffix);
 	static void fixTrailingSlash(std::string& pathStr);
 	static std::string getFileNameFromPath(const std::string& filePath);
-	static std::string getFileNameNoExt(const std::string& fileName);
+	static const std::string getFileNameNoExt(const std::string& fileName);
 	static std::string getFullPath(const std::string& fileName);
 };
 

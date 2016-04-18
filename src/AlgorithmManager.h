@@ -22,16 +22,21 @@ public:
 	bool readAlgoFiles();
 	void printAlgorithmsErrors(bool all);
 	void createAlgorithmRunnerList(ConfigManager& confMgr);
+	void addAlgoRunError(const std::string & algoName,const std::string & houseName, int simulationStep);
 
 
 	// getters
 
-	const std::map<std::string, std::string>& getAlgorithmsErrors() const {
+	const std::map<std::string, std::string>& getAlgorithmsLoadErrors() const {
 		return algorithmsLoadErrors;
 	}
 
 	std::list<AlgorithmRunner>& getAlgorithmRunnerList() {
 		return algorithmRunnerList;
+	}
+
+	const std::list<std::string>& getAlgorithmsRunErrors() const {
+		return algorithmsRunErrors;
 	}
 };
 
