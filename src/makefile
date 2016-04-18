@@ -7,7 +7,7 @@ all: simulator
 clean:
 	rm *.o simulator
 
-simulator: main.o Simulator.o AlgorithmRunner.o Sensor.o BatteryManager.o _305220980_A.o _305220980_B.o _305220980_C.o SimpleAlgorithm.o ConfigManager.o HouseManager.o House.o
+simulator: main.o Simulator.o AlgorithmRunner.o Sensor.o BatteryManager.o GenericAlgorithm.o _305220980_A.o _305220980_B.o _305220980_C.o SimpleAlgorithm.o ConfigManager.o HouseManager.o House.o
 	g++ -o $@ $^ $(CPP_FLAGS)
 
 main.o: main.cpp Simulator.h
@@ -24,6 +24,9 @@ SimpleAlgorithm.o: SimpleAlgorithm.cpp SimpleAlgorithm.h AbstractAlgorithm.h Abs
 	
 BatteryManager.o: BatteryManager.cpp BatteryManager.h
 	g++ $(CPP_FLAGS) -c BatteryManager.cpp
+	
+GenericAlgorithm.o: GenericAlgorithm.cpp GenericAlgorithm.h AbstractAlgorithm.h AbstractSensor.h BatteryManager.h
+	g++ $(CPP_FLAGS) -c GenericAlgorithm.cpp
 	
 _305220980_A.o: _305220980_A.cpp _305220980_A.h AbstractAlgorithm.h AbstractSensor.h BatteryManager.h
 	g++ $(CPP_FLAGS) -c _305220980_A.cpp
