@@ -17,6 +17,7 @@
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
 #include <stack>
+#include "BatteryManager.h"
 
 class _305220980_A: public AbstractAlgorithm {
 
@@ -24,6 +25,7 @@ class _305220980_A: public AbstractAlgorithm {
 	std::map<std::string, int> configs;
 	std::stack<Direction> previousSteps;
 	int stepsUntillFinishing;
+	BatteryManager batteryMng;
 
 public:
 

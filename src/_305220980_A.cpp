@@ -28,11 +28,38 @@ void _305220980_A::setSensor(const AbstractSensor& s){
 
 void _305220980_A::setConfiguration(std::map<std::string, int> config){
 	configs = config;
+	batteryMng.setConfiguration(config);
+	batteryMng.setBatteryState(config["BatteryCapacity"]);
 }
 
 
 Direction _305220980_A::step(){
+
 	Direction nextStep = getStep();
+	int batteryConsumptionRate = configs["BatteryConsumptionRate"];
+	int batteryRechargeRate = configs["BatteryRechargeRate"];
+
+	cout << "battery state!!!!" << batteryMng.getBatteryState() <<endl;//TODO delete
+
+	if (previousSteps.empty() && stepsUntillFinishing > 0){
+		batteryMng.updateBatteryState(batteryRechargeRate);
+		stepsUntillFinishing = -1;
+	}
+	else{
+		batteryMng.updateBatteryState(batteryConsumptionRate*(-1));
+	}
+
+//	cout << "BatteyToGetHome" << previousSteps.size()*batteryConsumptionRate << endl;
+//	cout << "batteryState" << batteryMng.getBatteryState()  << endl; TODO delete
+
+	int batteryToGetToDocking = previousSteps.size()*batteryConsumptionRate;
+	int batteryCapacity = configs["BatteryCapacity"];
+
+	if (batteryMng.getBatteryState() <= batteryToGetToDocking && batteryMng.getBatteryState() < batteryCapacity){
+		cout << "!!!about to finish" << endl;
+		aboutToFinish(previousSteps.size());
+	}
+
 	return nextStep; //Direction::East;
 }
 
@@ -49,50 +76,43 @@ Direction _305220980_A::getStep(){
 		else{
 			nextStep = Direction::Stay;
 		}
-		return nextStep;
-	}
-
-//	cout << "!!!!!!!dirtLevel!!!!!" << endl;
-//	cout << sensor->sense().dirtLevel << endl; TODO
-
-	int dirtLevel = sensor->sense().dirtLevel;
-	if (dirtLevel > 0){
-		nextStep = Direction::Stay;
 	}
 
 	else{
-		//East, West, South, North, Stay
-		std::vector<Direction> possibleMoves {Direction::East,Direction::North,Direction::South,Direction::West,Direction::Stay};
-		Direction currDirection;
-		int i = 0;
-		while ((currDirection = possibleMoves[i]) != Direction::Stay && sensor->sense().isWall[(int)currDirection]){
-			i++;
+		int dirtLevel = sensor->sense().dirtLevel;
+		if (dirtLevel > 0){
+			nextStep = Direction::Stay;
 		}
-		nextStep = currDirection;
+
+		else{
+			std::vector<Direction> possibleMoves {Direction::East,Direction::North,Direction::South,Direction::West,Direction::Stay};
+			Direction currDirection;
+			int i = 0;
+			while ((currDirection = possibleMoves[i]) != Direction::Stay && sensor->sense().isWall[(int)currDirection]){
+				i++;
+			}
+			nextStep = currDirection;
+		}
+
+		//Adds only steps that are not 'stay'
+		switch (nextStep){
+			case Direction::East:
+				previousSteps.push(Direction::West);
+				break;
+			case Direction::West:
+				previousSteps.push(Direction::East);
+				break;
+			case Direction::North:
+				previousSteps.push(Direction::South);
+				break;
+			case Direction::South:
+				previousSteps.push(Direction::North);
+				break;
+			case Direction::Stay:
+				break;
+		}
 	}
 
-	//Adds only steps that are not 'stay'
-	switch (nextStep){
-		case Direction::East:
-			previousSteps.push(Direction::West);
-			break;
-		case Direction::West:
-			previousSteps.push(Direction::East);
-			break;
-		case Direction::North:
-			previousSteps.push(Direction::South);
-			break;
-		case Direction::South:
-			previousSteps.push(Direction::North);
-			break;
-		case Direction::Stay:
-			break;
-	}
-
-	if (nextStep != Direction::Stay){
-
-		previousSteps.push(nextStep);
-	}
 	return nextStep;
 }
 
