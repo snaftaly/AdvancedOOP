@@ -1,10 +1,3 @@
-/*
- * 305220980A.h
- *
- *  Created on: Apr 11, 2016
- *      Author: noaleibo1
- */
-
 #ifndef _305220980_C_H_
 #define _305220980_C_H_
 
@@ -12,13 +5,13 @@
 #include <map>
 #include <cstdlib>
 #include <vector>
+#include <stack>
 #include "Sensor.h"
 #include "Direction.h"
-#include "AbstractAlgorithm.h"
+#include "GenericAlgorithm.h"
 #include "AbstractSensor.h"
-#include <stack>
 
-class _305220980_C: public AbstractAlgorithm {
+class _305220980_C: public GenericAlgorithm {
 
 	const AbstractSensor * sensor;
 	std::map<std::string, int> configs;

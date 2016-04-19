@@ -1,10 +1,3 @@
-/*
- * 305220980B.cpp
- *
- *  Created on: Apr 11, 2016
- *      Author: noaleibo1
- */
-
 #include "_305220980_B.h"
 
 _305220980_B::_305220980_B(): sensor(NULL), stepsUntillFinishing(-1) {

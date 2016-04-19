@@ -1,24 +1,23 @@
-/*
- * BatteryManager.cpp
- *
- *  Created on: Apr 18, 2016
- *      Author: noaleibo1
- */
-
 #include "BatteryManager.h"
+using namespace std;
 
-BatteryManager::BatteryManager(): batteryState(0) {
-	// TODO Auto-generated constructor stub
+BatteryManager::BatteryManager(int _batteryCapacity, int _batteryRechargeRate, int _batteryRechargeRate) {
+	batteryState = 0;
+	BatteryCapacity = _batteryCapacity;
+	batteryConsumptionRate = _batteryRechargeRate;
+	batteryRechargeRate = _batteryRechargeRate;
+	}
 
+BatteryManager::~BatteryManager() { }
+
+void BatteryManager::chargeBattery(){
+	batteryState = max(batteryState + batteryRechargeRate, BatteryCapacity);
 }
 
-BatteryManager::~BatteryManager() {
-	// TODO Auto-generated destructor stub
+void BatteryManager::consumeBattery(){
+	batteryState -= min(batteryState - batteryConsumptionRate, 0);
 }
 
-void BatteryManager::setConfiguration(std::map<std::string, int> config){//TODO remove?
-	configs = config;
-}
-void BatteryManager::updateBatteryState(int addToBattery){
-	batteryState += addToBattery;
+bool BatteryManager::isBatteryFull(){
+	return batteryState >= BatteryCapacity;
 }

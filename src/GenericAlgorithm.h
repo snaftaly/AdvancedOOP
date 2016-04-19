@@ -12,31 +12,34 @@
 #include <map>
 #include <cstdlib>
 #include <vector>
+#include <stack>
 #include "Sensor.h"
 #include "Direction.h"
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
-#include <stack>
 #include "BatteryManager.h"
 
 
 class GenericAlgorithm: public AbstractAlgorithm {
 
 	const AbstractSensor * sensor;
-	std::map<std::string, int> configs;
-	std::stack<Direction> previousSteps;
 	int stepsUntillFinishing;
+	int xDistanceFromDock;
+	int yDistanceFromDock;
+	std::stack<Direction> previousSteps;
 	BatteryManager batteryMng;
 
 public:
 	GenericAlgorithm();
 	virtual ~GenericAlgorithm();
 
-	void setSensor(const AbstractSensor& sensor);
-	void setConfiguration(std::map<std::string, int> config);
-	Direction step();
-	void aboutToFinish(int stepsTillFinishing);
-	virtual Direction getStep();
+	virtual void setSensor(const AbstractSensor& sensor) override;
+	virtual void setConfiguration(std::map<std::string, int> config) override;
+	virtual Direction step() = 0;
+	virtual void aboutToFinish(int stepsTillFinishing) override;
+protected:
+	virtual Direction getStep(std::vector<Direction> possibleMoves);
+	bool isRobotInDock();
 };
 
 #endif /* GENERICALGORITHM_H_ */

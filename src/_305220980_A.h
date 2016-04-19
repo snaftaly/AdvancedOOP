@@ -1,10 +1,3 @@
-/*
- * 305220980A.h
- *
- *  Created on: Apr 11, 2016
- *      Author: noaleibo1
- */
-
 #ifndef _305220980_A_H_
 #define _305220980_A_H_
 
@@ -12,21 +5,19 @@
 #include <map>
 #include <cstdlib>
 #include <vector>
+#include <stack>
 #include "Sensor.h"
 #include "Direction.h"
-#include "AbstractAlgorithm.h"
+#include "GenericAlgorithm.h"
 #include "AbstractSensor.h"
-#include <stack>
-#include "BatteryManager.h"
 
 class _305220980_A: public GenericAlgorithm {
 
 public:
 
-	_305220980_A();
-	~_305220980_A();
+	using GenericAlgorithm::GenericAlgorithm; // inherit ctor
 
-	Direction getStep();
+	virtual Direction step() override;
 };
 
 #endif /* 305220980A_H_ */

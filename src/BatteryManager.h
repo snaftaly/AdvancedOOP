@@ -1,34 +1,38 @@
-/*
- * BatteryManager.h
- *
- *  Created on: Apr 18, 2016
- *      Author: noaleibo1
- */
-
 #ifndef BATTERYMANAGER_H_
 #define BATTERYMANAGER_H_
 
-#include <map>
-#include <string>
-
 class BatteryManager {
 
-	std::map<std::string, int> configs;
 	int batteryState;
+	int BatteryCapacity;
+	int batteryConsumptionRate;
+	int batteryRechargeRate;
 
 public:
-	BatteryManager();
+	BatteryManager(int _batteryCapacity, int _batteryRechargeRate, int _batteryRechargeRate);
 	virtual ~BatteryManager();
 
-	void setConfiguration(std::map<std::string, int> config);
-	void updateBatteryState(int addToBattery);
+	void chargeBattery();
+	void consumeBattery();
+	void resetBattery();
+	bool isBatteryFull();
+
+	// getters
 
 	int getBatteryState() const {
 		return batteryState;
 	}
 
-	void setBatteryState(int batteryState) {
-		this->batteryState = batteryState;
+	int getBatteryCapacity() const {
+		return BatteryCapacity;
+	}
+
+	int getBatteryConsumptionRate() const {
+		return batteryConsumptionRate;
+	}
+
+	int getBatteryRechargeRate() const {
+		return batteryRechargeRate;
 	}
 };
 
