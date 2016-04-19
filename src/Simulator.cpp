@@ -1,5 +1,5 @@
 #include "Simulator.h"
-#include "SimpleAlgorithm.h"
+#include "_305220980_A.h"
 
 //C'tor implementation
 Simulator::Simulator(const string& configPath, const string& housesPath ):
@@ -96,6 +96,8 @@ void Simulator::runSimulation(){
 			simulationSteps++;
 			numStepsRemaining--;
 			currSuccessfullAlgoPosition += numSuccessfulAlgosInRound;
+		    cout << "\033[2J\033[1;1H"; // clear screen
+
 		}
 		// end of while for the house - update algos scores
 		for (AlgorithmRunner& algoRunner : algorithmRunnerList){
@@ -155,7 +157,7 @@ void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner){
 }
 
 void Simulator::fillAlgorithmList(){
-	algorithms.emplace_back(new SimpleAlgorithm());
+	algorithms.emplace_back(new _305220980_A());
 }
 
 

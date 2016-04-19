@@ -7,13 +7,13 @@ all: simulator
 clean:
 	rm *.o simulator
 
-simulator: main.o Simulator.o AlgorithmRunner.o Sensor.o BatteryManager.o GenericAlgorithm.o _305220980_A.o _305220980_B.o _305220980_C.o SimpleAlgorithm.o ConfigManager.o HouseManager.o House.o
+simulator: main.o Simulator.o AlgorithmRunner.o Sensor.o BatteryManager.o GenericAlgorithm.o _305220980_A.o SimpleAlgorithm.o ConfigManager.o HouseManager.o House.o
 	g++ -o $@ $^ $(CPP_FLAGS)
 
 main.o: main.cpp Simulator.h
 	g++ $(CPP_FLAGS) -c main.cpp
 
-Simulator.o: Simulator.cpp Simulator.h AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h _305220980_A.h _305220980_B.h _305220980_C.h SimpleAlgorithm.h House.h ConfigManager.h HouseManager.h SimulationFinishState.h
+Simulator.o: Simulator.cpp Simulator.h AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h _305220980_A.h SimpleAlgorithm.h House.h ConfigManager.h HouseManager.h SimulationFinishState.h
 	g++ $(CPP_FLAGS) -c Simulator.cpp
 
 AlgorithmRunner.o: AlgorithmRunner.cpp AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h Sensor.h House.h SensorInformation.h Direction.h SimulationFinishState.h 
@@ -21,15 +21,15 @@ AlgorithmRunner.o: AlgorithmRunner.cpp AlgorithmRunner.h AbstractAlgorithm.h Abs
 
 SimpleAlgorithm.o: SimpleAlgorithm.cpp SimpleAlgorithm.h AbstractAlgorithm.h AbstractSensor.h
 	g++ $(CPP_FLAGS) -c SimpleAlgorithm.cpp
-	
-BatteryManager.o: BatteryManager.cpp BatteryManager.h
-	g++ $(CPP_FLAGS) -c BatteryManager.cpp
-	
+
+_305220980_A.o: _305220980_A.cpp _305220980_A.h AbstractAlgorithm.h GenericAlgorithm.h AbstractSensor.h BatteryManager.h
+	g++ $(CPP_FLAGS) -c _305220980_A.cpp
+
 GenericAlgorithm.o: GenericAlgorithm.cpp GenericAlgorithm.h AbstractAlgorithm.h AbstractSensor.h BatteryManager.h
 	g++ $(CPP_FLAGS) -c GenericAlgorithm.cpp
 	
-_305220980_A.o: _305220980_A.cpp _305220980_A.h AbstractAlgorithm.h GenericAlgorithm.h AbstractSensor.h BatteryManager.h
-	g++ $(CPP_FLAGS) -c _305220980_A.cpp
+BatteryManager.o: BatteryManager.cpp BatteryManager.h
+	g++ $(CPP_FLAGS) -c BatteryManager.cpp
 
 Sensor.o: Sensor.cpp Sensor.h AbstractSensor.h House.h Direction.h SensorInformation.h  
 	g++ $(CPP_FLAGS) -c Sensor.cpp

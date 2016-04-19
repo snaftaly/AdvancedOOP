@@ -26,7 +26,9 @@ void GenericAlgorithm::setSensor(const AbstractSensor& s){
 }
 
 void GenericAlgorithm::setConfiguration(std::map<std::string, int> config){
-	batteryMng(config["BatteryCapacity"], config["BatteryRechargeRate"], config["BatteryRechargeRate"]);
+	batteryMng.setBatteryCapacity(config["BatteryCapacity"]);
+	batteryMng.setBatteryRechargeRate(config["BatteryRechargeRate"]);
+	batteryMng.setBatteryConsumptionRate(config["BatteryConsumptionRate"]);
 }
 
 void GenericAlgorithm::aboutToFinish(int stepsTillFinishing){
@@ -34,7 +36,7 @@ void GenericAlgorithm::aboutToFinish(int stepsTillFinishing){
 }
 
 
-Direction GenericAlgorithm::getStep(std::vector<Direction> possibleMoves){
+Direction GenericAlgorithm::getStep(const std::vector<Direction>& possibleMoves){
 
 	cout << "battery state!!!!" << batteryMng.getBatteryState() << endl;//TODO delete
 	Direction nextStep =  Direction::Stay; // default is stay
@@ -45,9 +47,9 @@ Direction GenericAlgorithm::getStep(std::vector<Direction> possibleMoves){
 		nextStep = Direction::Stay;
 	}
 	else {
-		int batteryToGetToDockingForStep = (previousSteps.size()+1)*batteryMng.getBatteryConsumptionRate();
-
-		if((stepsUntillFinishing != -1 && stepsUntillFinishing < previousSteps.size()+1) ||
+		int numPrevSteps = previousSteps.size();
+		int batteryToGetToDockingForStep = (numPrevSteps+1)*batteryMng.getBatteryConsumptionRate();
+		if((stepsUntillFinishing != -1 && stepsUntillFinishing < numPrevSteps+1) ||
 				batteryMng.getBatteryState() < batteryToGetToDockingForStep){
 			// The robot needs to head back to the docking station - either because:
 			// - aboutToFinish is called and there are not enough steps
@@ -66,14 +68,12 @@ Direction GenericAlgorithm::getStep(std::vector<Direction> possibleMoves){
 				nextStep = Direction::Stay;
 			}
 			else{
-				Direction currDirection;
 				for (Direction direction : possibleMoves){
-					if (!sensor->sense().isWall[(int)currDirection]){
+					if (!sensor->sense().isWall[(int)direction]){
 						nextStep = direction;
 						break;
 					}
 				}
-				nextStep = currDirection;
 			}
 		}
 	}
@@ -111,6 +111,7 @@ Direction GenericAlgorithm::getStep(std::vector<Direction> possibleMoves){
 	else {
 		batteryMng.consumeBattery();
 	}
+	cout << "battery state = " << batteryMng.getBatteryState() << endl;//TODO delete
 
 	return nextStep;
 }

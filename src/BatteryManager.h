@@ -4,12 +4,13 @@
 class BatteryManager {
 
 	int batteryState;
-	int BatteryCapacity;
+	int batteryCapacity;
 	int batteryConsumptionRate;
 	int batteryRechargeRate;
 
 public:
-	BatteryManager(int _batteryCapacity, int _batteryRechargeRate, int _batteryRechargeRate);
+	BatteryManager():
+		batteryState(0), batteryCapacity(0), batteryConsumptionRate(0), batteryRechargeRate(0){}
 	virtual ~BatteryManager();
 
 	void chargeBattery();
@@ -24,7 +25,7 @@ public:
 	}
 
 	int getBatteryCapacity() const {
-		return BatteryCapacity;
+		return batteryCapacity;
 	}
 
 	int getBatteryConsumptionRate() const {
@@ -33,6 +34,18 @@ public:
 
 	int getBatteryRechargeRate() const {
 		return batteryRechargeRate;
+	}
+
+	void setBatteryCapacity(int batteryCapacity) {
+		this->batteryCapacity = batteryCapacity;
+	}
+
+	void setBatteryConsumptionRate(int batteryConsumptionRate) {
+		this->batteryConsumptionRate = batteryConsumptionRate;
+	}
+
+	void setBatteryRechargeRate(int batteryRechargeRate) {
+		this->batteryRechargeRate = batteryRechargeRate;
 	}
 };
 

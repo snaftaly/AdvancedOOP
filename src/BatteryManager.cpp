@@ -1,23 +1,22 @@
 #include "BatteryManager.h"
+#include <algorithm>
+#include <iostream>
 using namespace std;
-
-BatteryManager::BatteryManager(int _batteryCapacity, int _batteryRechargeRate, int _batteryRechargeRate) {
-	batteryState = 0;
-	BatteryCapacity = _batteryCapacity;
-	batteryConsumptionRate = _batteryRechargeRate;
-	batteryRechargeRate = _batteryRechargeRate;
-	}
 
 BatteryManager::~BatteryManager() { }
 
 void BatteryManager::chargeBattery(){
-	batteryState = max(batteryState + batteryRechargeRate, BatteryCapacity);
+	batteryState = std::min(batteryState + batteryRechargeRate, batteryCapacity);
 }
 
 void BatteryManager::consumeBattery(){
-	batteryState -= min(batteryState - batteryConsumptionRate, 0);
+	batteryState = std::max(batteryState - batteryConsumptionRate, 0);
 }
 
 bool BatteryManager::isBatteryFull(){
-	return batteryState >= BatteryCapacity;
+	return batteryState >= batteryCapacity;
+}
+
+void BatteryManager::resetBattery(){
+	batteryState = batteryCapacity;
 }
