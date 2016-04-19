@@ -14,7 +14,7 @@ public:
 	// empty d'tor
 	~Sensor() {};
 
-	SensorInformation sense() const;
+	virtual SensorInformation sense() const override;
 	void setRobotLocation(int i, int j);
 
 	// setters
