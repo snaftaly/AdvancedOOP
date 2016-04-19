@@ -18,10 +18,11 @@ void SimpleAlgorithm::setConfiguration(std::map<std::string, int> config){
 
 
 Direction SimpleAlgorithm::step(){
-	int i = 0;
+//	int i = 0;
 	std::vector<Direction> possibleSteps = getPossibleSteps();
-	i = rand() % possibleSteps.size();
-	return possibleSteps[i]; //Direction::East;
+//	i = rand() % possibleSteps.size();
+
+	return Direction::East;//possibleSteps[i]; //Direction::East;
 }
 
 std::vector<Direction> SimpleAlgorithm::getPossibleSteps(){

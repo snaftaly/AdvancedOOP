@@ -109,7 +109,7 @@ void Simulator::runSimulation(){
 			winnerNumSteps = simulationSteps;
 		}
 		for (AlgorithmRunner& algoRunner : algoMgr.getAlgorithmRunnerList()){
-			algoRunner.updateCurrHouseScoreInList(winnerNumSteps, simulationSteps);
+			algoRunner.addCurrHouseScore(winnerNumSteps, simulationSteps, FileUtils::getFileNameNoExt(house.getFileName()));
 		}
 	}
 
@@ -179,19 +179,20 @@ void Simulator::printTableHeader(const int tableWidth){
 void Simulator::printAlgosScores(){
 	int numHouses = houseMgr.getHouses().size();
 	int tableWidth = FIRST_COLUMN_WIDTH + 2 + (OTHER_COLUMN_WIDTH + 1)*(numHouses+1);
-
+	int scoreAlgoHouse;
+	int scoreSumForAlgo;
 	printTableHeader(tableWidth);
 
 	for (AlgorithmRunner& algoRunner : algoMgr.getAlgorithmRunnerList()){
 		string algoNameTrimmed = algoRunner.getAlgoName();
 		algoNameTrimmed.resize(ALGO_NAME_MAX, ' ');
 		cout << "|" << algoNameTrimmed << " |";
-		int scoreSumForAlgo = 0;
-		// print each house score // TODO: we assume here that the houses score is a list and not a map, maybe we should use a map
-		for (list<int>::iterator housesScoreitr = algoRunner.getHousesScore().begin();
-				housesScoreitr != algoRunner.getHousesScore().end(); housesScoreitr++){
-			scoreSumForAlgo += *housesScoreitr;
-			cout <<  right <<  setw(10) << *housesScoreitr << "|";
+		scoreSumForAlgo = 0;
+		// print each house score
+		for (const House& house : houseMgr.getHouses()){
+			scoreAlgoHouse = algoRunner.getHousesScore().find(FileUtils::getFileNameNoExt(house.getFileName()))->second;
+			scoreSumForAlgo += scoreAlgoHouse;
+			cout <<  right <<  setw(10) << scoreAlgoHouse << "|";
 		}
 		// print average
 		float avgForAlgo = (float) scoreSumForAlgo/numHouses;
@@ -202,11 +203,10 @@ void Simulator::printAlgosScores(){
 }
 
 void Simulator::printErrors(){
-	if (houseMgr.getHousesErrors().empty() && algoMgr.getAlgorithmsLoadErrors().empty() && algoMgr.getAlgorithmsRunErrors()){
+	if (houseMgr.getHousesErrors().empty() && algoMgr.getAlgorithmsLoadErrors().empty() && algoMgr.getAlgorithmsRunErrors().empty()){
 		return;
 	}
 	cout << "Errors:" << endl;
 	houseMgr.printHousesErrors(false);
 	algoMgr.printAlgorithmsErrors(false);
-	// TODO: add printing of failed algorithms
 }

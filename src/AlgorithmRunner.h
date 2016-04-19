@@ -26,7 +26,7 @@ class AlgorithmRunner {
 	int algoPositionInCompetition;
 	SimulationState simulationState;
 
-	std::list<int> housesScore;
+	std::map<std::string, int> housesScores;
 
 	static map<string, int> config;
 
@@ -58,7 +58,7 @@ public:
 
 
 	void updateStepsRemainingOnWinner(int numStepsRemaining);
-	void updateCurrHouseScoreInList(int winnerMaxSteps, int simulationSteps);
+	void addCurrHouseScore(const int winnerNumSteps, const int simulationSteps, const string& houseName);
 
 	// setters
 
@@ -77,8 +77,8 @@ public:
 		return (this->simulationState != SimulationState::Running);
 	}
 
-	std::list<int>& getHousesScore() {
-		return housesScore;
+	std::map<std::string, int>& getHousesScore() {
+		return housesScores;
 	}
 
 	int getNumSteps() const {

@@ -114,7 +114,7 @@ bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 			stepi < currHouse.getRows() && stepj < currHouse.getCols());
 }
 
-void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const int simulationSteps){
+void AlgorithmRunner::addCurrHouseScore(const int winnerNumSteps, const int simulationSteps, const string& houseName){
 	int currHouseScore;
 	if (simulationState == SimulationState::IllegalMove){
 		currHouseScore = 0;
@@ -141,7 +141,7 @@ void AlgorithmRunner::updateCurrHouseScoreInList(const int winnerNumSteps, const
 				);
 	}
 
-	housesScore.push_back(currHouseScore);
+	housesScores[houseName] = currHouseScore;
 }
 
 int AlgorithmRunner::getPositionInCompetitionForScore(){

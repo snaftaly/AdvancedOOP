@@ -27,10 +27,12 @@ AlgorithmManager::~AlgorithmManager(){
 		delete algoRunner.getAlgorithm();
 		cout << algoRunner.getAlgorithm() << endl;
 	}
-
+	cout << "inside algomgr dtor" << endl;
 	// now delete the so that was registered
 	for(auto itr = dl_list.begin(); itr!=dl_list.end(); itr++){
+		cout << "inside algomgr dtor for loop dlclose" << endl;
 		dlclose(*itr);
+
 	}
 
 
@@ -51,7 +53,6 @@ bool AlgorithmManager::readAlgoFiles(){
 		string algoPath = algorithmsPath + algoFileName;
 		dlib = dlopen(algoPath.c_str(), RTLD_NOW);
 		if(dlib == NULL){
-			cout << algoPath << " so is null" << endl;
 			algorithmsLoadErrors[algoFileName] = "file cannot be loaded or is not a valid .so";
 			continue;
 		}
@@ -98,9 +99,9 @@ void AlgorithmManager::printAlgorithmsErrors(bool all){ // TODO: get full path
 void AlgorithmManager::addAlgoRunError(const string & algoName, const string & houseName, int simulationStep){
 	string errorStr = "Algorithm "
 			+ algoName
-			+ " when running on House " +
+			+ " when running on House "
 			+ houseName
 			+ " went on a wall in step "
-			+ simulationStep;
+			+ to_string(simulationStep);
 	algorithmsRunErrors.push_back(errorStr);
 }
