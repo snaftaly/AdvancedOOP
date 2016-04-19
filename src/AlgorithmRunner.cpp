@@ -164,6 +164,6 @@ void AlgorithmRunner::printSimulation(int stepi, int stepj){
     cout << "num steps: " << numSteps  << "/" << config.find("MaxSteps")->second << endl;
     cout << "Battery: " << batteryLevel << endl;
     cout << "dirt collected: " << dirtCollected << "/" <<  AlgorithmRunner::currHouseTotDirt << endl;
-    usleep(50000);
+    usleep(5000);
     currHouse.getHouseMatrix()[roboti][robotj] = currChar;
 }

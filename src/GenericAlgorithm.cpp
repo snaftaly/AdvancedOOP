@@ -48,7 +48,9 @@ Direction GenericAlgorithm::getStep(const std::vector<Direction>& possibleMoves)
 	}
 	else {
 		int numPrevSteps = previousSteps.size();
+		cout << "numPrevSteps = " << numPrevSteps << endl;
 		int batteryToGetToDockingForStep = (numPrevSteps+1)*batteryMng.getBatteryConsumptionRate();
+		cout << "batteryToGetToDockingForStep = " << batteryToGetToDockingForStep << endl;
 		if((stepsUntillFinishing != -1 && stepsUntillFinishing < numPrevSteps+1) ||
 				batteryMng.getBatteryState() < batteryToGetToDockingForStep){
 			// The robot needs to head back to the docking station - either because:
@@ -75,30 +77,12 @@ Direction GenericAlgorithm::getStep(const std::vector<Direction>& possibleMoves)
 					}
 				}
 			}
+			updatePreviousStep(nextStep);
 		}
 	}
 
-	//Adds only steps that are not 'stay' and update robot distance from battery for next step
-	switch (nextStep){
-		case Direction::East:
-			xDistanceFromDock++;
-			previousSteps.push(Direction::West);
-			break;
-		case Direction::West:
-			xDistanceFromDock--;
-			previousSteps.push(Direction::East);
-			break;
-		case Direction::North:
-			yDistanceFromDock++;
-			previousSteps.push(Direction::South);
-			break;
-		case Direction::South:
-			yDistanceFromDock--;
-			previousSteps.push(Direction::North);
-			break;
-		case Direction::Stay:
-			break;
-	}
+	// update robot distance from battery for next step
+	updateXYfromDock(nextStep);
 
 	// update num steps remaining for next step
 	if (stepsUntillFinishing != -1){
@@ -118,4 +102,43 @@ Direction GenericAlgorithm::getStep(const std::vector<Direction>& possibleMoves)
 
 bool GenericAlgorithm::isRobotInDock(){
 	return (xDistanceFromDock == 0 && yDistanceFromDock == 0);
+}
+
+void GenericAlgorithm::updatePreviousStep(const Direction & nextStep){
+	//Adds only steps that are not 'stay'
+	switch (nextStep){
+		case Direction::East:
+			previousSteps.push(Direction::West);
+			break;
+		case Direction::West:
+			previousSteps.push(Direction::East);
+			break;
+		case Direction::North:
+			previousSteps.push(Direction::South);
+			break;
+		case Direction::South:
+			previousSteps.push(Direction::North);
+			break;
+		case Direction::Stay:
+			break;
+	}
+}
+void GenericAlgorithm::updateXYfromDock(const Direction & nextStep){
+	// update robot distance from battery for next step
+	switch (nextStep){
+		case Direction::East:
+			xDistanceFromDock++;
+			break;
+		case Direction::West:
+			xDistanceFromDock--;
+			break;
+		case Direction::North:
+			yDistanceFromDock++;
+			break;
+		case Direction::South:
+			yDistanceFromDock--;
+			break;
+		case Direction::Stay:
+			break;
+	}
 }

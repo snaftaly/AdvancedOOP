@@ -62,6 +62,8 @@ void Simulator::runSimulation(){
 
 		// run the simulator - for each house run the different algorithms
 		while (numAlogsRunning > 0 && numStepsRemaining > 0){
+		    cout << "\033[2J\033[1;1H"; // clear screen
+
 			numSuccessfulAlgosInRound = 0;
 			for (AlgorithmRunner& algorithmRunner : algorithmRunnerList){
 				if (algorithmRunner.getIsFinished()){
@@ -96,7 +98,6 @@ void Simulator::runSimulation(){
 			simulationSteps++;
 			numStepsRemaining--;
 			currSuccessfullAlgoPosition += numSuccessfulAlgosInRound;
-		    cout << "\033[2J\033[1;1H"; // clear screen
 
 		}
 		// end of while for the house - update algos scores

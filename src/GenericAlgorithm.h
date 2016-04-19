@@ -38,6 +38,8 @@ public:
 	virtual Direction step() = 0;
 	virtual void aboutToFinish(int stepsTillFinishing) override;
 protected:
+	virtual void updatePreviousStep(const Direction & nextStep);
+	virtual void updateXYfromDock(const Direction & nextStep);
 	virtual Direction getStep(const std::vector<Direction>& possibleMoves);
 	bool isRobotInDock();
 };
