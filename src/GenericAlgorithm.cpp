@@ -52,7 +52,7 @@ Direction GenericAlgorithm::getStep(const std::vector<Direction>& possibleMoves)
 		int batteryToGetToDockingForStep = (numPrevSteps+1)*batteryMng.getBatteryConsumptionRate();
 		cout << "batteryToGetToDockingForStep = " << batteryToGetToDockingForStep << endl;
 		if((stepsUntillFinishing != -1 && stepsUntillFinishing < numPrevSteps+1) ||
-				batteryMng.getBatteryState() < batteryToGetToDockingForStep){
+				batteryMng.getBatteryState() <= batteryToGetToDockingForStep){
 			// The robot needs to head back to the docking station - either because:
 			// - aboutToFinish is called and there are not enough steps
 			// - battery is not enough to go back
@@ -106,6 +106,7 @@ bool GenericAlgorithm::isRobotInDock(){
 
 void GenericAlgorithm::updatePreviousStep(const Direction & nextStep){
 	//Adds only steps that are not 'stay'
+	cout << "update" << endl;
 	switch (nextStep){
 		case Direction::East:
 			previousSteps.push(Direction::West);

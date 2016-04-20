@@ -12,12 +12,16 @@
 #include "AbstractSensor.h"
 
 class _305220980_A: public GenericAlgorithm {
-
+	int counter;
+	std::vector<Direction> possibleMoves;
 public:
 
-	using GenericAlgorithm::GenericAlgorithm; // inherit ctor
+//	 GenericAlgorithm::GenericAlgorithm; // inherit ctor
+	 _305220980_A(): GenericAlgorithm(), counter(0){
+		 possibleMoves = {Direction::North, Direction::West, Direction::South, Direction::East, Direction::Stay};
+	 }
 
-	virtual Direction step() override;
+	 virtual Direction step() override;
 };
 
 #endif /* 305220980A_H_ */
