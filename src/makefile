@@ -19,6 +19,12 @@ SimpleAlgorithmCP_.so: SimpleAlgorithmCP_.o
 
 305220980_A_.so: _305220980_A.o GenericAlgorithm.o BatteryManager.o
 	g++ -shared -Wl,-soname,305220980_A_.so -o 305220980_A_.so _305220980_A.o GenericAlgorithm.o BatteryManager.o
+	
+305220980_B_.so: _305220980_B.o GenericAlgorithm.o BatteryManager.o
+	g++ -shared -Wl,-soname,305220980_B_.so -o 305220980_B_.so _305220980_B.o GenericAlgorithm.o BatteryManager.o
+
+305220980_C_.so: _305220980_C.o GenericAlgorithm.o BatteryManager.o
+	g++ -shared -Wl,-soname,305220980_C_.so -o 305220980_C_.so _305220980_C.o GenericAlgorithm.o BatteryManager.o
 
 SimpleAlgorithm_.o: SimpleAlgorithm_.cpp SimpleAlgorithm_.h AbstractAlgorithm.h AbstractSensor.h AlgosCommon.h
 	g++ $(CPP_FLAGS) -c SimpleAlgorithm_.cpp
@@ -28,6 +34,12 @@ SimpleAlgorithmCP_.o: SimpleAlgorithmCP_.cpp SimpleAlgorithmCP_.h AbstractAlgori
 
 _305220980_A.o: _305220980_A.cpp _305220980_A.h AbstractAlgorithm.h GenericAlgorithm.h AbstractSensor.h BatteryManager.h AlgosCommon.h
 	g++ $(CPP_FLAGS) -c _305220980_A.cpp
+
+_305220980_B.o: _305220980_B.cpp _305220980_B.h AbstractAlgorithm.h GenericAlgorithm.h AbstractSensor.h BatteryManager.h AlgosCommon.h
+	g++ $(CPP_FLAGS) -c _305220980_B.cpp
+	
+_305220980_C.o: _305220980_C.cpp _305220980_C.h AbstractAlgorithm.h GenericAlgorithm.h AbstractSensor.h BatteryManager.h AlgosCommon.h
+	g++ $(CPP_FLAGS) -c _305220980_C.cpp
 
 GenericAlgorithm.o: GenericAlgorithm.cpp GenericAlgorithm.h AbstractAlgorithm.h AbstractSensor.h BatteryManager.h AlgosCommon.h
 	g++ $(CPP_FLAGS) -c GenericAlgorithm.cpp
