@@ -27,10 +27,8 @@ AlgorithmManager::~AlgorithmManager(){
 		delete algoRunner.getAlgorithm();
 		cout << algoRunner.getAlgorithm() << endl;
 	}
-	cout << "inside algomgr dtor" << endl;
 	// now delete the so that was registered
 	for(auto itr = dl_list.begin(); itr!=dl_list.end(); itr++){
-		cout << "inside algomgr dtor for loop dlclose" << endl;
 		dlclose(*itr);
 
 	}

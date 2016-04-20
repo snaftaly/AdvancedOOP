@@ -99,7 +99,7 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     		dirtCollected += 1;
     	}
     }
-    //printSimulatemplace_backion(stepi, stepj); // print for tests
+    printSimulation(stepi, stepj); // print for tests
     return true;
 }
 
@@ -125,13 +125,13 @@ void AlgorithmRunner::addCurrHouseScore(const int winnerNumSteps, const int simu
 			numSteps = simulationSteps;
 		}
 		//print for tests
-//		cout << "positionInCompetition " << positionInCompetition << endl;
-//		cout << "winnerNumSteps " << winnerNumSteps << endl;
-//		cout << "numSteps " << numSteps << endl;
-//		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
-//		cout << "dirtCollected" << dirtCollected << endl;
-//		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
-//		cout << currHouse <<endl;
+		cout << "positionInCompetition " << positionInCompetition << endl;
+		cout << "winnerNumSteps " << winnerNumSteps << endl;
+		cout << "numSteps " << numSteps << endl;
+		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
+		cout << "dirtCollected" << dirtCollected << endl;
+		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
+		cout << currHouse << endl;
 		currHouseScore = max(0,
 				2000
 				- (positionInCompetition - 1)*50
@@ -164,9 +164,9 @@ void AlgorithmRunner::printSimulation(int stepi, int stepj){
     cout << "\033[2J\033[1;1H"; // clear screen
     currHouse.getHouseMatrix()[roboti][robotj] = 'B';
     cout << currHouse << endl;
-    cout << "num steps: " << numSteps  << "/" << config.find("MaxSteps")->second << endl;
+    cout << "num steps: " << numSteps  << "/" << currHouse.getMaxSteps() << endl;
     cout << "Battery: " << batteryLevel << endl;
     cout << "dirt collected: " << dirtCollected << "/" <<  AlgorithmRunner::currHouseTotDirt << endl;
-    usleep(5000);
+    usleep(2000000);
     currHouse.getHouseMatrix()[roboti][robotj] = currChar;
 }

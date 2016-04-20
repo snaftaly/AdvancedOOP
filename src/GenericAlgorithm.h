@@ -1,10 +1,3 @@
-/*
- * GenericAlgorithm.h
- *
- *  Created on: Apr 18, 2016
- *      Author: noaleibo1
- */
-
 #ifndef GENERICALGORITHM_H_
 #define GENERICALGORITHM_H_
 
@@ -18,6 +11,7 @@
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
 #include "BatteryManager.h"
+#include "AlgosCommon.h"
 
 
 class GenericAlgorithm: public AbstractAlgorithm {
@@ -28,6 +22,7 @@ class GenericAlgorithm: public AbstractAlgorithm {
 	int yDistanceFromDock;
 	std::stack<Direction> previousSteps;
 	BatteryManager batteryMng;
+	int maxStepsAfterWinner;
 
 public:
 	GenericAlgorithm();

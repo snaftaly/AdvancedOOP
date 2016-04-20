@@ -29,6 +29,7 @@ void GenericAlgorithm::setConfiguration(std::map<std::string, int> config){
 	batteryMng.setBatteryCapacity(config["BatteryCapacity"]);
 	batteryMng.setBatteryRechargeRate(config["BatteryRechargeRate"]);
 	batteryMng.setBatteryConsumptionRate(config["BatteryConsumptionRate"]);
+	maxStepsAfterWinner = config["MaxStepsAfterWinner"];
 }
 
 void GenericAlgorithm::aboutToFinish(int stepsTillFinishing){
@@ -38,7 +39,6 @@ void GenericAlgorithm::aboutToFinish(int stepsTillFinishing){
 
 Direction GenericAlgorithm::getStep(const std::vector<Direction>& possibleMoves){
 
-	cout << "battery state!!!!" << batteryMng.getBatteryState() << endl;//TODO delete
 	Direction nextStep =  Direction::Stay; // default is stay
 
 
@@ -48,14 +48,14 @@ Direction GenericAlgorithm::getStep(const std::vector<Direction>& possibleMoves)
 	}
 	else {
 		int numPrevSteps = previousSteps.size();
-		cout << "numPrevSteps = " << numPrevSteps << endl;
 		int batteryToGetToDockingForStep = (numPrevSteps+1)*batteryMng.getBatteryConsumptionRate();
-		cout << "batteryToGetToDockingForStep = " << batteryToGetToDockingForStep << endl;
-		if((stepsUntillFinishing != -1 && stepsUntillFinishing < numPrevSteps+1) ||
-				batteryMng.getBatteryState() <= batteryToGetToDockingForStep){
+		if((stepsUntillFinishing != -1 && stepsUntillFinishing <= numPrevSteps+1) ||
+				batteryMng.getBatteryState() <= batteryToGetToDockingForStep ||
+				numPrevSteps+1 > maxStepsAfterWinner ){
 			// The robot needs to head back to the docking station - either because:
 			// - aboutToFinish is called and there are not enough steps
 			// - battery is not enough to go back
+			// - about to finish was not called but there might not be enough step (algo using caution)
 			if (!previousSteps.empty()){ // there are steps to go back
 				nextStep = previousSteps.top();
 				previousSteps.pop();
@@ -95,7 +95,6 @@ Direction GenericAlgorithm::getStep(const std::vector<Direction>& possibleMoves)
 	else {
 		batteryMng.consumeBattery();
 	}
-	cout << "battery state = " << batteryMng.getBatteryState() << endl;//TODO delete
 
 	return nextStep;
 }
@@ -106,7 +105,6 @@ bool GenericAlgorithm::isRobotInDock(){
 
 void GenericAlgorithm::updatePreviousStep(const Direction & nextStep){
 	//Adds only steps that are not 'stay'
-	cout << "update" << endl;
 	switch (nextStep){
 		case Direction::East:
 			previousSteps.push(Direction::West);

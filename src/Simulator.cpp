@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <unistd.h> // for usleep
 #include "Simulator.h"
 #include "FileUtils.h"
 
@@ -66,6 +67,7 @@ void Simulator::runSimulation(){
 			// check if stepsRemaining == maxStepsAfterWinner
 			if (!isUpdatedAboutToFinish && simulationSteps == (maxSteps - maxStepsAfterWinner)){
 				cout << "simulationSteps == (maxSteps - maxStepsAfterWinner)" << endl;
+				usleep(1000000);
 				updateAboutToFinish();
 			}
 			// reset number of successful algorithms in round (step)
@@ -112,6 +114,8 @@ void Simulator::runSimulation(){
 		for (AlgorithmRunner& algoRunner : algoMgr.getAlgorithmRunnerList()){
 			algoRunner.addCurrHouseScore(winnerNumSteps, simulationSteps, FileUtils::getFileNameNoExt(house.getFileName()));
 		}
+		cout << "finished house" << endl;
+	    usleep(5000000);
 	}
 
 }
@@ -125,6 +129,7 @@ void Simulator::setHouseForEachAlgorithmRunner(const House& house){
 		algoRunner.resetRunnerForNewHouse(house, currHouseDocki, currHouseDockj);
 	}
 }
+
 
 void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner){
 	successAlgorithmRunner.setAlgoRankInCompetition(currSuccessfullAlgoPosition);
