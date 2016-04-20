@@ -103,6 +103,7 @@ void Simulator::runSimulation(){
 			}
 			// end of for loop for each algorithm - update the next successful algo position
 			currSuccessfullAlgoPosition += numSuccessfulAlgosInRound;
+
 		}
 		// end of while for the house - update algos scores
 		if (!isThereAWinner){

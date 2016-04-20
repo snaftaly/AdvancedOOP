@@ -35,6 +35,15 @@ AlgorithmManager.o: AlgorithmManager.cpp AlgorithmManager.h AlgorithmRunner.h Co
 AlgorithmRunner.o: AlgorithmRunner.cpp AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h Sensor.h House.h SensorInformation.h Direction.h SimulationState.h 
 	g++ $(CPP_FLAGS) -c AlgorithmRunner.cpp
 
+_305220980_A.o: _305220980_A.cpp _305220980_A.h AbstractAlgorithm.h GenericAlgorithm.h AbstractSensor.h BatteryManager.h
+	g++ $(CPP_FLAGS) -c _305220980_A.cpp
+
+GenericAlgorithm.o: GenericAlgorithm.cpp GenericAlgorithm.h AbstractAlgorithm.h AbstractSensor.h BatteryManager.h
+	g++ $(CPP_FLAGS) -c GenericAlgorithm.cpp
+	
+BatteryManager.o: BatteryManager.cpp BatteryManager.h
+	g++ $(CPP_FLAGS) -c BatteryManager.cpp
+
 Sensor.o: Sensor.cpp Sensor.h AbstractSensor.h House.h Direction.h SensorInformation.h  
 	g++ $(CPP_FLAGS) -c Sensor.cpp
 

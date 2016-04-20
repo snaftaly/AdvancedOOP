@@ -14,7 +14,7 @@ SensorInformation Sensor::sense() const{
 	struct SensorInformation sensorInfo;
 	char currPlace = sensorHousePtr->getHouseMatrix()[*robotiPtr][*robotjPtr];
 
-	if (currPlace >= 0 && currPlace <=9 ){
+	if (currPlace >= '0' && currPlace <='9'){
 		sensorInfo.dirtLevel = sensorHousePtr->getHouseMatrix()[*robotiPtr][*robotjPtr] - '0'; // dirt level
 	}
 	else { // currPlace == ' ' or 'W' or any other char that is not '0'-'9' or 'W'
