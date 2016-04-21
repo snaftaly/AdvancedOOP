@@ -1,11 +1,6 @@
 #ifndef _305220980_B_H_
 #define _305220980_B_H_
 
-#include <string>
-#include <map>
-#include <cstdlib>
-#include <vector>
-#include <stack>
 #include "Sensor.h"
 #include "Direction.h"
 #include "GenericAlgorithm.h"
@@ -16,7 +11,6 @@ class _305220980_B: public GenericAlgorithm {
 	std::vector<Direction> possibleMoves;
 public:
 
-//	 GenericAlgorithm::GenericAlgorithm; // inherit ctor
 	 _305220980_B(): GenericAlgorithm(), counter(0){
 		 possibleMoves = {Direction::East};
 	 }

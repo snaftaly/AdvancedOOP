@@ -66,8 +66,6 @@ void Simulator::runSimulation(){
 		while (numAlogsRunning > 0 && numStepsRemaining > 0){
 			// check if stepsRemaining == maxStepsAfterWinner
 			if (!isUpdatedAboutToFinish && simulationSteps == (maxSteps - maxStepsAfterWinner)){
-				cout << "simulationSteps == (maxSteps - maxStepsAfterWinner)" << endl;
-//				usleep(1000000);
 				updateAboutToFinish();
 			}
 			// reset number of successful algorithms in round (step)
@@ -114,8 +112,6 @@ void Simulator::runSimulation(){
 		for (AlgorithmRunner& algoRunner : algoMgr.getAlgorithmRunnerList()){
 			algoRunner.addCurrHouseScore(winnerNumSteps, simulationSteps, FileUtils::getFileNameNoExt(house.getFileName()));
 		}
-//		cout << "finished house" << endl;
-//	    usleep(5000000);
 	}
 
 }

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <unistd.h>
+#include <string>
 
 using namespace std;
 
@@ -21,7 +22,7 @@ bool ConfigManager::loadFromFile()
 	}
 
 	ifstream fin(confFilePath);
-	if (!fin.is_open()){ // error opening file // TODO: print full path
+	if (!fin.is_open()){ // error opening file
 		cout << "config.ini exists in '"<< FileUtils::getFullPath(confFilePath) << "' but cannot be opened" << endl;
 		return false;
 	}
@@ -64,7 +65,12 @@ void ConfigManager::processLine(const string& line)
 	{
 		return;
 	}
-	confs[trim(tokens[0])] = stoi(tokens[1]);
+	string key = trim(tokens[0]);
+	if (!key.compare("MaxStepsAfterWinner") || !key.compare("BatteryCapacity") || !key.compare("BatteryConsumptionRate") ||
+			!key.compare("BatteryRechargeRate")){
+		confs[trim(tokens[0])] = stoi(tokens[1]);
+	}
+
 }
 
 void ConfigManager::printConfs()

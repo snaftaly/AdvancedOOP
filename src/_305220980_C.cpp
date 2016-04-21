@@ -1,7 +1,6 @@
 #include "_305220980_C.h"
 
 Direction _305220980_C::step() {
-	// TODO: do some shuffling to not get stuck
 	return getStep(possibleMoves);
 }
 

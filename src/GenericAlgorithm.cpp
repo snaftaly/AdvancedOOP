@@ -71,7 +71,7 @@ Direction GenericAlgorithm::getStep(const std::vector<Direction>& possibleMoves)
 			}
 			else{
 				for (Direction direction : possibleMoves){
-					if (!sensor->sense().isWall[(int)direction]){
+					if (!(direction == Direction::Stay) && !sensor->sense().isWall[(int)direction]){
 						nextStep = direction;
 						break;
 					}

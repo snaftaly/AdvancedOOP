@@ -5,7 +5,7 @@
 using namespace std;
 
 #include "AbstractSensor.h"
- //TODO: make aure it's the same file from moodle!!!!
+
 class AbstractAlgorithm 
 { 
 public: 

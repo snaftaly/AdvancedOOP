@@ -77,7 +77,7 @@ void AlgorithmManager::createAlgorithmRunnerList(ConfigManager& confMgr){
 }
 
 
-void AlgorithmManager::printAlgorithmsErrors(bool all){ // TODO: get full path
+void AlgorithmManager::printAlgorithmsErrors(bool all){
 	if (all){
 		cout << "All algorithm files in target folder '"
 				<< FileUtils::getFullPath(algorithmsPath)

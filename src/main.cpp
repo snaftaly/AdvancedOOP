@@ -68,6 +68,5 @@ int main(int argc, char* argv[]) {
 	simulator.printAlgosScores();
 	simulator.printErrors();
 
-	cout << "Bye" << endl; // TODO: remove this
 	return 0;
 }

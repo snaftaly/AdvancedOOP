@@ -125,14 +125,14 @@ void AlgorithmRunner::addCurrHouseScore(const int winnerNumSteps, const int simu
 			numSteps = simulationSteps;
 		}
 		//print for tests
-		cout << "algoname: " << algoName << endl;
-		cout << "positionInCompetition " << positionInCompetition << endl;
-		cout << "winnerNumSteps " << winnerNumSteps << endl;
-		cout << "numSteps " << numSteps << endl;
-		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
-		cout << "dirtCollected" << dirtCollected << endl;
-		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
-		cout << currHouse << endl;
+//		cout << "algoname: " << algoName << endl;
+//		cout << "positionInCompetition " << positionInCompetition << endl;
+//		cout << "winnerNumSteps " << winnerNumSteps << endl;
+//		cout << "numSteps " << numSteps << endl;
+//		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
+//		cout << "dirtCollected" << dirtCollected << endl;
+//		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
+//		cout << currHouse << endl;
 		currHouseScore = max(0,
 				2000
 				- (positionInCompetition - 1)*50
