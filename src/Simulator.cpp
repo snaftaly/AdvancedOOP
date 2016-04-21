@@ -67,7 +67,7 @@ void Simulator::runSimulation(){
 			// check if stepsRemaining == maxStepsAfterWinner
 			if (!isUpdatedAboutToFinish && simulationSteps == (maxSteps - maxStepsAfterWinner)){
 				cout << "simulationSteps == (maxSteps - maxStepsAfterWinner)" << endl;
-				usleep(1000000);
+//				usleep(1000000);
 				updateAboutToFinish();
 			}
 			// reset number of successful algorithms in round (step)
@@ -114,8 +114,8 @@ void Simulator::runSimulation(){
 		for (AlgorithmRunner& algoRunner : algoMgr.getAlgorithmRunnerList()){
 			algoRunner.addCurrHouseScore(winnerNumSteps, simulationSteps, FileUtils::getFileNameNoExt(house.getFileName()));
 		}
-		cout << "finished house" << endl;
-	    usleep(5000000);
+//		cout << "finished house" << endl;
+//	    usleep(5000000);
 	}
 
 }
@@ -136,7 +136,7 @@ void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner){
 	successAlgorithmRunner.setSimulationState(SimulationState::Success);
 	numSuccessfulAlgosInRound++;
 	numAlogsRunning--;
-	if (!isThereAWinner){ // && currSuccessfullAlgoPosition == 1){ //TODO: do we need the second check?
+	if (!isThereAWinner){
 		// this algo is the first to win for the house - so update that there was a winner
 		isThereAWinner = true;
 
@@ -212,7 +212,7 @@ void Simulator::printErrors(){
 	if (houseMgr.getHousesErrors().empty() && algoMgr.getAlgorithmsLoadErrors().empty() && algoMgr.getAlgorithmsRunErrors().empty()){
 		return;
 	}
-	cout << "Errors:" << endl;
+	cout << endl << "Errors:" << endl;
 	houseMgr.printHousesErrors(false);
 	algoMgr.printAlgorithmsErrors(false);
 }

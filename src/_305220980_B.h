@@ -18,7 +18,7 @@ public:
 
 //	 GenericAlgorithm::GenericAlgorithm; // inherit ctor
 	 _305220980_B(): GenericAlgorithm(), counter(0){
-		 possibleMoves = {Direction::West, Direction::North, Direction::South, Direction::East, Direction::Stay};
+		 possibleMoves = {Direction::East};
 	 }
 
 	 virtual Direction step() override;

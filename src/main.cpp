@@ -52,17 +52,15 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	// add trailing '/' if it's missing // TODO: maybe move it somewhere else?
+	// add trailing '/' if it's missing
 	FileUtils::fixTrailingSlash(configDir);
 	FileUtils::fixTrailingSlash(housesDir);
 	FileUtils::fixTrailingSlash(algorithmsDir);
-	cout << configDir << ", " << housesDir << ", " << algorithmsDir << ", " << endl;
 
 	Simulator simulator(configDir, algorithmsDir, housesDir);
 
 	if (!simulator.isInitSuccessfull()){
 		// initialization of config file and house was not successful
-		cout << "init not successful. Bye" << endl;
 		return 1;
 	}
 
@@ -70,6 +68,6 @@ int main(int argc, char* argv[]) {
 	simulator.printAlgosScores();
 	simulator.printErrors();
 
-	cout << "Bye" << endl;
+	cout << "Bye" << endl; // TODO: remove this
 	return 0;
 }

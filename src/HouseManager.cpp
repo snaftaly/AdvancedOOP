@@ -11,7 +11,6 @@ using namespace std;
 /**
  * Read houses from path and return false on error
  */
-// TODO: maybe split this function into two
 bool HouseManager::readHousesFiles(){
 	// first, get a list of houses files, sorted alphabetically (full path)
 	housesFileNamesLst = FileUtils::getSortedFileNamesListBySuffix(housesPath, HOUSE_EXT);
@@ -48,7 +47,7 @@ bool HouseManager::readHousesFiles(){
 	return true;
 }
 
-void HouseManager::printHousesErrors(bool all){ // TODO: get full path
+void HouseManager::printHousesErrors(bool all){
 	if (all){
 		cout << "All house files in target folder '"
 				<< FileUtils::getFullPath(housesPath)

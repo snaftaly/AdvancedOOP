@@ -99,7 +99,7 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     		dirtCollected += 1;
     	}
     }
-    printSimulation(stepi, stepj); // print for tests
+//    printSimulation(stepi, stepj); // print for tests
     return true;
 }
 
@@ -125,6 +125,7 @@ void AlgorithmRunner::addCurrHouseScore(const int winnerNumSteps, const int simu
 			numSteps = simulationSteps;
 		}
 		//print for tests
+		cout << "algoname: " << algoName << endl;
 		cout << "positionInCompetition " << positionInCompetition << endl;
 		cout << "winnerNumSteps " << winnerNumSteps << endl;
 		cout << "numSteps " << numSteps << endl;

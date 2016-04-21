@@ -1,7 +1,18 @@
 #include "_305220980_A.h"
 
 Direction _305220980_A::step() {
-	// TODO: do some shuffling to not get stuck
+	counter = (counter + 1) % 10;
+	if (counter == 1){
+		cout << "bla" << endl;
+		Direction temp = possibleMoves[0];
+		possibleMoves[0] = possibleMoves[3];
+		possibleMoves[3] = temp;
+	}
+	if (counter == 6){
+		Direction temp = possibleMoves[1];
+		possibleMoves[1] = possibleMoves[2];
+		possibleMoves[2] = temp;
+	}
 	return getStep(possibleMoves);
 }
 

@@ -206,6 +206,7 @@ bool House::readFromFile(string filePath)
 	for (int i =0; i < rows; ++i)
 	{
 	    std::getline(fin, houseMatrix[i]);
+	    houseMatrix[i].resize(cols, ' ');
 	}
 	fin.close();
 	return true;
