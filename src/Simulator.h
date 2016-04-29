@@ -33,7 +33,7 @@ class Simulator {
 public:
 
 	//C'tor signature
-	Simulator(const std::string& configPath,  const std::string& algorithmsPath, const std::string& housesPath);
+	Simulator::Simulator(const string& configPath, const string & scoreFormulaPath, const string & algorithmsPath, const string& housesPath, int numThreads);
 
 	//D'tor signature
 	~Simulator();

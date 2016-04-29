@@ -17,7 +17,9 @@ bool ConfigManager::loadFromFile()
 
 	// first check if file exists, otherwise print usage
 	if (( access( confFilePath.c_str(), F_OK ) == -1 )){
+		// TODO: should it be the path of the folder or path to the file iteslf?
 		ErrorPrinter::printUsage();
+		cout << "cannot find config.ini file in '" << FileUtils::getFullPath(confPath) << "'" << endl;
 		return false;
 	}
 
@@ -32,6 +34,12 @@ bool ConfigManager::loadFromFile()
 		processLine(line);
 	}
 	fin.close();
+	// TODO: what should be the precedence here?
+	// now check that the the parameters have correct values
+	if (isParamsWithBaValue()){
+		printParamsWithBadValues();
+		return false;
+	}
 	// now check that all values are in the dict
 	if (isMissingParams())
 	{
@@ -61,14 +69,24 @@ string ConfigManager::trim(std::string& str)
 void ConfigManager::processLine(const string& line)
 {
 	vector<string> tokens = split(line, '=');
+	int tempVal;
 	if (tokens.size() != 2)
 	{
+		// TODO: what should be done in case the value is empty?
 		return;
 	}
 	string key = trim(tokens[0]);
 	if (!key.compare("MaxStepsAfterWinner") || !key.compare("BatteryCapacity") || !key.compare("BatteryConsumptionRate") ||
 			!key.compare("BatteryRechargeRate")){
-		confs[trim(tokens[0])] = stoi(tokens[1]);
+		// TODO: should we check other parameters?
+		// TODO: what should be done in case it's empty
+		try{
+			&tempVal = stoi(tokens[1]);
+		}
+		catch (...){
+			tempVal = -1; // there was an error converting to number, -1 indicates error
+		}
+		confs[key] = tempVal;
 	}
 
 }
@@ -81,7 +99,7 @@ void ConfigManager::printConfs()
 }
 
 bool ConfigManager::isMissingParams(){
-	// check if there are missing confs, and if so print error
+	// check if there are missing confs, and if so add to list of missing params and return true
 	if ( confs.find("MaxStepsAfterWinner") == confs.end() ){
 		missingParams.emplace_back("MaxStepsAfterWinner");
 	}
@@ -105,6 +123,31 @@ void ConfigManager::printMissingParams()
 	cout << "config.ini missing " << missingParams.size() << " parameter(s): ";
 	for (auto iter = missingParams.begin(); iter != missingParams.end(); ++iter) {
 		if (iter != missingParams.begin()) cout << ", ";
+		cout << *iter;
+	}
+	cout << endl;
+}
+
+bool ConfigManager::isParamsWithBaValue(){
+	// check if there are bad values for params, and if so put in mi
+	for(const pair<string, int>& confValPair : confs) {
+		if (confValPair.second < 0){
+			// value of param is negative indicating an error
+			paramsWithBadValues.push_back(confValPair.first);
+		}
+	}
+	if (!paramsWithBadValues.empty()){
+		return true;
+	}
+	return false;
+}
+
+
+void ConfigManager::printParamsWithBadValues()
+{
+	cout << "config.ini having bad values for " << paramsWithBadValues.size() << " parameter(s): ";
+	for (auto iter = paramsWithBadValues.begin(); iter != paramsWithBadValues.end(); ++iter) {
+		if (iter != paramsWithBadValues.begin()) cout << ", ";
 		cout << *iter;
 	}
 	cout << endl;

@@ -9,6 +9,7 @@
 class ConfigManager {
 	std::string confPath;
 	std::map<std::string, int> confs;
+	std::list<std::string> paramsWithBadValues;
 	std::list<std::string> missingParams;
 
 	void processLine(const std::string& line);
@@ -16,6 +17,9 @@ class ConfigManager {
 	static std::vector<std::string> split(const std::string &s, char delim);
 	bool isMissingParams();
 	void printMissingParams();
+	bool isParamsWithBaValue();
+	void printParamsWithBadValues();
+
 public:
 	// c'tor for conf manager
 	ConfigManager(std::string _confPath): confPath(_confPath){ };

@@ -14,7 +14,7 @@
 using namespace std;
 
 //C'tor implementation
-Simulator::Simulator(const string& configPath, const string & algorithmsPath, const string& housesPath):
+Simulator::Simulator(const string& configPath, const string & scoreFormulaPath, const string & algorithmsPath, const string& housesPath, int numThreads):
 	confMgr(configPath), algoMgr(algorithmsPath), houseMgr(housesPath), initSuccessfull(true)
 {
 
@@ -23,6 +23,8 @@ Simulator::Simulator(const string& configPath, const string & algorithmsPath, co
 		initSuccessfull = false;
 		return;
 	}
+
+	// score formula init TODO: add this part
 
 	// get algorithms
 	if (!algoMgr.readAlgoFiles()){

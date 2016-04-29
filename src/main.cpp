@@ -13,6 +13,8 @@ int main(int argc, char* argv[]) {
 	string configDir = "./";
 	string housesDir = "./";
 	string algorithmsDir = "./";
+	string scoreFormulaDir = "";
+	int numThreads = 1;
 
 
 	// parse the arguments of the program and check parameter names
@@ -47,6 +49,37 @@ int main(int argc, char* argv[]) {
 				return 1;
 			}
 		}
+		else if (!strcmp("-­score_formula", argv[i])){
+			if (i < argc - 1){
+				scoreFormulaDir = argv[i+1];
+				i+=2;
+			}
+			else {
+				ErrorPrinter::printUsage();
+				return 1;
+			}
+		}
+		else if (!strcmp("-threads", argv[i])){
+			if (i < argc - 1){
+				// try to get num threads, if it's NaN or <=0 then num Threads = 1
+				try{
+					&numThreads = stoi(argv[i+1]);
+				}
+				catch (...){
+					numThreads = 1;
+				}
+				if (numThreads <= 0){
+					numThreads = 1;
+				}
+
+				algorithmsDir = argv[i+1];
+				i+=2;
+			}
+			else {
+				ErrorPrinter::printUsage();
+				return 1;
+			}
+		}
 		else {
 			i++;
 		}
@@ -54,10 +87,15 @@ int main(int argc, char* argv[]) {
 
 	// add trailing '/' if it's missing
 	FileUtils::fixTrailingSlash(configDir);
-	FileUtils::fixTrailingSlash(housesDir);
+	if (!scoreFormulaDir.compare("")){
+		// score formula path was given
+		FileUtils::fixTrailingSlash(scoreFormulaDir);
+	}
 	FileUtils::fixTrailingSlash(algorithmsDir);
+	FileUtils::fixTrailingSlash(housesDir);
 
-	Simulator simulator(configDir, algorithmsDir, housesDir);
+
+	Simulator simulator(configDir, scoreFormulaDir, algorithmsDir, housesDir,  numThreads);
 
 	if (!simulator.isInitSuccessfull()){
 		// initialization of config file and house was not successful
