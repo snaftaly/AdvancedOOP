@@ -4,21 +4,26 @@
 #include "AbstractAlgorithm.h"
 #include "AlgorithmRunner.h"
 #include "ConfigManager.h"
+#include "AlgorithmRegistrar.h"
+
 
 
 class AlgorithmManager {
 	std::string algorithmsPath;
 	std::list<std::string> algorithmsFileNamesLst;
-	std::list<AbstractAlgorithm *> algorithmsList;
-	std::map<std::string, std::string> algorithmsLoadErrors;
+
+//	std::list<AbstractAlgorithm *> algorithmsList;
+	std::map<std::string, AlgoRegState> algorithmsLoadErrors;
+
 	std::list<std::string> algorithmsRunErrors;
+
 	std::list<AlgorithmRunner> algorithmRunnerList;
-	list<void *> dl_list; // list to hold handles for dynamic libs
+//	list<void *> dl_list; // list to hold handles for dynamic libs
 public:
 	// AlgorithmManager ctor
 	AlgorithmManager(const std::string& _algorithmsPath): algorithmsPath(_algorithmsPath){ }
 	// AlgorithmManager dtor
-	~AlgorithmManager();
+	~AlgorithmManager(); // TODO: remove dtor
 	bool readAlgoFiles();
 	void printAlgorithmsErrors(bool all);
 	void createAlgorithmRunnerList(ConfigManager& confMgr);

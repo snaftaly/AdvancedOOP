@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <vector>
 #include <stack>
-#include "Sensor.h"
 #include "Direction.h"
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
