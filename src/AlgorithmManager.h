@@ -32,7 +32,7 @@ public:
 
 	// getters
 
-	const std::map<std::string, std::string>& getAlgorithmsLoadErrors() const {
+	const std::map<std::string, AlgoRegState>& getAlgorithmsLoadErrors() const {
 		return algorithmsLoadErrors;
 	}
 

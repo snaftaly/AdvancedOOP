@@ -15,9 +15,9 @@ class ConfigManager {
 	void processLine(const std::string& line);
 	static std::string trim(std::string& str);
 	static std::vector<std::string> split(const std::string &s, char delim);
-	bool isMissingParams();
+	void updateMissingParams();
 	void printMissingParams();
-	bool isParamsWithBaValue();
+	void updateParamsWithBaValue();
 	void printParamsWithBadValues();
 
 public:

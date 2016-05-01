@@ -1,9 +1,7 @@
 #include "AlgorithmManager.h"
-#include "AlgosCommon.h"
 #include "FileUtils.h"
 #include "ErrorPrinter.h"
 
-#include <dlfcn.h>
 #include <iostream>
 #include <map>
 #include <list>
@@ -17,7 +15,6 @@
 #define ALGO_EXT "_.so"
 
 using namespace std;
-
 
 // TODO: remove d'tor
 AlgorithmManager::~AlgorithmManager(){
@@ -52,6 +49,8 @@ bool AlgorithmManager::readAlgoFiles(){
         	algorithmsLoadErrors[algoFileName] = result;
         }
 	}
+
+	// TODO: remove this:
 //	for (string& algoFileName : algorithmsFileNamesLst){
 //		currFactoryMapSize = factory.size();
 //		string algoPath = algorithmsPath + algoFileName;
@@ -102,14 +101,12 @@ void AlgorithmManager::printAlgorithmsErrors(bool all){
 	}
 	string errStr;
 	// TODO: maybe add a << operator to the enum class??
-	for(const pair<string, string>& algorithmErrPair : algorithmsLoadErrors) {
-		switch (algorithmErrPair.second){
-			case(AlgoRegState::FILE_CANNOT_BE_LOADED) :
+	for(const pair<string, AlgoRegState>& algorithmErrPair : algorithmsLoadErrors) {
+		if (algorithmErrPair.second == AlgoRegState::FILE_CANNOT_BE_LOADED) {
 				errStr =  "file cannot be loaded or is not a valid .so";
-				break;
-			case (AlgoRegState::FILE_CANNOT_BE_LOADED) :
+		}
+		else if (algorithmErrPair.second == AlgoRegState::NO_ALGORITHM_REGISTERED){
 				errStr = "valid .so but no algorithm was registered after loading it";
-				break;
 		}
 		cout << algorithmErrPair.first << ": " << errStr << endl;
 	}
@@ -118,6 +115,7 @@ void AlgorithmManager::printAlgorithmsErrors(bool all){
 		cout << runErrStr << endl;
 	}
 }
+
 
 void AlgorithmManager::addAlgoRunError(const string & algoName, const string & houseName, int simulationStep){
 	string errorStr = "Algorithm "

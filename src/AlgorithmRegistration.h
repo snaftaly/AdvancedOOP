@@ -8,11 +8,11 @@
 
 class AlgorithmRegistration {
 public:
-	AlgorithmRegistration(std::function<std::shared_ptr<AbstractAlgorithm>()>);
+	AlgorithmRegistration(std::function<std::unique_ptr<AbstractAlgorithm>()>);
 };
 
 #define REGISTER_ALGORITHM(class_name) \
 AlgorithmRegistration register_me_##class_name \
-([]{return make_shared<class_name>();} );
+([]{return make_unique<class_name>();} );
 
 #endif /* ALGORITHMREGISTRATION_H_ */

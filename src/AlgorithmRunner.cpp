@@ -8,11 +8,11 @@ using namespace std;
 int AlgorithmRunner::currHouseTotDirt = 0;
 map<string, int> AlgorithmRunner::config;
 
-AlgorithmRunner::AlgorithmRunner(AbstractAlgorithm* _algorithm, string algoName):
+AlgorithmRunner::AlgorithmRunner(unique_ptr<AbstractAlgorithm>& _algorithm, string algoName):
 		algoName(algoName), roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0),
 		dirtCollected(0), algoPositionInCompetition(-1), simulationState(SimulationState::Running)
 {
-	algorithm = _algorithm;
+	algorithm = std::move(_algorithm);
 	setSensorForAlgorithm();
 }
 

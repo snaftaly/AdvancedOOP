@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 			if (i < argc - 1){
 				// try to get num threads, if it's NaN or <=0 then num Threads = 1
 				try{
-					&numThreads = stoi(argv[i+1]);
+					numThreads = stoi(argv[i+1]);
 				}
 				catch (...){
 					numThreads = 1;
@@ -106,5 +106,6 @@ int main(int argc, char* argv[]) {
 	simulator.printAlgosScores();
 	simulator.printErrors();
 
+	cout << "bye " << endl;
 	return 0;
 }

@@ -6,10 +6,14 @@
 #include <memory>
 #include <list>
 #include <cassert>
+#include "Direction.h"
+#include "AbstractAlgorithm.h"
 #include "AlgoRegState.h"
+#include "MakeUniqueAdder.h"
+#include "AlgorithmRegistration.h"
 
 class AlgorithmRegistrar {
-    list<void *> dl_list;
+    std::list<void *> dl_list;
     std::list<std::string> algorithmNames;
     std::list<std::function<std::unique_ptr<AbstractAlgorithm>()>> algorithmFactories;
     void registerAlgorithm(std::function<std::unique_ptr<AbstractAlgorithm>()> algorithmFactory) {
@@ -22,14 +26,8 @@ class AlgorithmRegistrar {
     ~AlgorithmRegistrar();
 public:
     friend class AlgorithmRegistration;
-    int loadAlgorithm(const std::string& path, const std::string& so_file_name_without_so_suffix);
-    std::list<std::unique_ptr<AbstractAlgorithm>> getAlgorithms()const {
-        std::list<std::unique_ptr<AbstractAlgorithm>> algorithms;
-        for(auto algorithmFactoryFunc : algorithmFactories) {
-            algorithms.push_back(algorithmFactoryFunc());
-        }
-        return algorithms;
-    }
+    AlgoRegState loadAlgorithm(const std::string& path, const std::string& so_file_name_without_so_suffix);
+    std::list<std::unique_ptr<AbstractAlgorithm>> getAlgorithms()const;
     const std::list<std::string>& getAlgorithmNames()const {
         return algorithmNames;
     }
@@ -39,10 +37,6 @@ public:
     static AlgorithmRegistrar& getInstance() {
         return instance;
     }
-
-	list<void*>& getDlList() {
-		return dl_list;
-	}
 
 private:
     static AlgorithmRegistrar instance;

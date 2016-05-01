@@ -20,4 +20,4 @@ Direction _305220980_B::step() {
 //// our one instance of the proxy
 //proxy p;
 //}
-REGISTER_ALGORITHM (_305220980_B);
+REGISTER_ALGORITHM (_305220980_B)

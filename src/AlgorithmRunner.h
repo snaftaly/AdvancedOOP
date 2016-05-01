@@ -1,17 +1,19 @@
 #ifndef ALGORITHMRUNNER_H_
 #define ALGORITHMRUNNER_H_
+#include <list>
+#include <tuple>
+#include <map>
+#include <string>
+#include <functional>
+#include <memory>
 #include "Direction.h"
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
 #include "Sensor.h"
 #include "SimulationState.h"
-#include <list>
-#include <tuple>
-#include <map>
-#include <string>
 
 class AlgorithmRunner {
-	AbstractAlgorithm* algorithm;
+	unique_ptr<AbstractAlgorithm> algorithm;
 	Sensor sensor;
 	std::string algoName;
 
@@ -37,7 +39,7 @@ class AlgorithmRunner {
 	void printSimulation(int stepi, int stepj);
 public:
 
-	AlgorithmRunner(AbstractAlgorithm* a, string algoName);
+	AlgorithmRunner(unique_ptr<AbstractAlgorithm>& algo, string algoName);
 
 	void setCurrHouse(const House& currHouse) {
 		this->currHouse = currHouse;
@@ -91,10 +93,6 @@ public:
 
 	const std::string& getAlgoName() const {
 		return algoName;
-	}
-
-	const AbstractAlgorithm* getAlgorithm() const {
-		return algorithm;
 	}
 
 	// static functions

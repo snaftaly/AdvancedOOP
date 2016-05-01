@@ -10,7 +10,8 @@
 #include "AbstractAlgorithm.h"
 #include "AbstractSensor.h"
 #include "BatteryManager.h"
-#include "AlgosCommon.h"
+#include "MakeUniqueAdder.h"
+#include "AlgorithmRegistration.h"
 
 
 class GenericAlgorithm: public AbstractAlgorithm {

@@ -16,13 +16,13 @@ AlgorithmRegistrar::~AlgorithmRegistrar(){
 //		delete algoRunner.getAlgorithm();
 //	}
 //	// now delete the so that was registered
-	for(auto itr = dl_list.begin(); itr!=dl_list.end(); itr++){
-		dlclose(*itr);
 
+	for(auto itr = instance.dl_list.begin(); itr!= instance.dl_list.end(); itr++){
+//		dlclose(*itr); // TODO: understand why we get this error!!!
 	}
 }
 
-int AlgorithmRegistrar::loadAlgorithm(const std::string& path, const std::string& so_file_name){
+AlgoRegState AlgorithmRegistrar::loadAlgorithm(const std::string& path, const std::string& so_file_name){
 
     size_t size = instance.size();
     void *dlib;
@@ -31,7 +31,8 @@ int AlgorithmRegistrar::loadAlgorithm(const std::string& path, const std::string
 	if(dlib == NULL){
 		return AlgoRegState::FILE_CANNOT_BE_LOADED;
 	}
-	instance.getDlList().push_back(dlib);  // for later free of memory
+
+	instance.dl_list.insert(dl_list.end(), dlib);
 
     if(instance.size() == size) {
         return AlgoRegState::NO_ALGORITHM_REGISTERED; // no algorithm registered
@@ -40,4 +41,13 @@ int AlgorithmRegistrar::loadAlgorithm(const std::string& path, const std::string
     instance.setNameForLastAlgorithm(FileUtils::getFileNameNoExt(so_file_name)); // TODO: remove .so extension now
 
     return AlgoRegState::ALGORITHM_REGISTERED_SUCCESSFULY;
+}
+
+
+list<unique_ptr<AbstractAlgorithm>> AlgorithmRegistrar::getAlgorithms()const {
+    list<unique_ptr<AbstractAlgorithm>> algorithms;
+    for(auto algorithmFactoryFunc : algorithmFactories) {
+        algorithms.push_back(algorithmFactoryFunc());
+    }
+    return algorithms;
 }

@@ -35,14 +35,12 @@ bool ConfigManager::loadFromFile()
 	}
 	fin.close();
 	// TODO: what should be the precedence here?
-	// now check that the the parameters have correct values
-	if (isParamsWithBaValue()){
+	// now check that the the parameters have correct values and missing paramas
+	updateParamsWithBaValue();
+	updateMissingParams();
+
+	if (!missingParams.empty() || !paramsWithBadValues.empty()){
 		printParamsWithBadValues();
-		return false;
-	}
-	// now check that all values are in the dict
-	if (isMissingParams())
-	{
 		printMissingParams();
 		return false;
 	}
@@ -70,7 +68,7 @@ void ConfigManager::processLine(const string& line)
 {
 	vector<string> tokens = split(line, '=');
 	int tempVal;
-	if (tokens.size() != 2)
+	if (tokens.size() < 1 || tokens.size() > 2)
 	{
 		// TODO: what should be done in case the value is empty?
 		return;
@@ -78,13 +76,16 @@ void ConfigManager::processLine(const string& line)
 	string key = trim(tokens[0]);
 	if (!key.compare("MaxStepsAfterWinner") || !key.compare("BatteryCapacity") || !key.compare("BatteryConsumptionRate") ||
 			!key.compare("BatteryRechargeRate")){
-		// TODO: should we check other parameters?
-		// TODO: what should be done in case it's empty
-		try{
-			&tempVal = stoi(tokens[1]);
+		if (tokens.size() == 1){
+			tempVal =  -1;
 		}
-		catch (...){
-			tempVal = -1; // there was an error converting to number, -1 indicates error
+		else {
+			try{
+				tempVal = stoi(tokens[1]);
+			}
+			catch (...){
+				tempVal = -1; // there was an error converting to number, -1 indicates error
+			}
 		}
 		confs[key] = tempVal;
 	}
@@ -98,7 +99,7 @@ void ConfigManager::printConfs()
 	}
 }
 
-bool ConfigManager::isMissingParams(){
+void ConfigManager::updateMissingParams(){
 	// check if there are missing confs, and if so add to list of missing params and return true
 	if ( confs.find("MaxStepsAfterWinner") == confs.end() ){
 		missingParams.emplace_back("MaxStepsAfterWinner");
@@ -112,10 +113,6 @@ bool ConfigManager::isMissingParams(){
 	if ( confs.find("BatteryRechargeRate") == confs.end() ){
 		missingParams.emplace_back("BatteryRechargeRate");
 	}
-	if (!missingParams.empty()){
-		return true;
-	}
-	return false;
 }
 
 void ConfigManager::printMissingParams()
@@ -128,7 +125,7 @@ void ConfigManager::printMissingParams()
 	cout << endl;
 }
 
-bool ConfigManager::isParamsWithBaValue(){
+void ConfigManager::updateParamsWithBaValue(){
 	// check if there are bad values for params, and if so put in mi
 	for(const pair<string, int>& confValPair : confs) {
 		if (confValPair.second < 0){
@@ -136,10 +133,6 @@ bool ConfigManager::isParamsWithBaValue(){
 			paramsWithBadValues.push_back(confValPair.first);
 		}
 	}
-	if (!paramsWithBadValues.empty()){
-		return true;
-	}
-	return false;
 }
 
 
