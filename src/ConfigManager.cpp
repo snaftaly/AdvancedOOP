@@ -117,6 +117,7 @@ void ConfigManager::updateMissingParams(){
 
 void ConfigManager::printMissingParams()
 {
+	if (missingParams.empty()) return;
 	cout << "config.ini missing " << missingParams.size() << " parameter(s): ";
 	for (auto iter = missingParams.begin(); iter != missingParams.end(); ++iter) {
 		if (iter != missingParams.begin()) cout << ", ";
@@ -138,6 +139,7 @@ void ConfigManager::updateParamsWithBaValue(){
 
 void ConfigManager::printParamsWithBadValues()
 {
+	if (paramsWithBadValues.empty()) return;
 	cout << "config.ini having bad values for " << paramsWithBadValues.size() << " parameter(s): ";
 	for (auto iter = paramsWithBadValues.begin(); iter != paramsWithBadValues.end(); ++iter) {
 		if (iter != paramsWithBadValues.begin()) cout << ", ";
