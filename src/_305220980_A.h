@@ -15,7 +15,7 @@ public:
 		 possibleMoves = {Direction::North, Direction::West, Direction::South, Direction::East, Direction::Stay};
 	 }
 
-	 virtual Direction step() override;
+	 virtual Direction step(Direction prevStep) override;
 };
 
 #endif /* 305220980A_H_ */

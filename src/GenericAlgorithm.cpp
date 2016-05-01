@@ -37,10 +37,11 @@ void GenericAlgorithm::aboutToFinish(int stepsTillFinishing){
 }
 
 
-Direction GenericAlgorithm::getStep(const std::vector<Direction>& possibleMoves){
+Direction GenericAlgorithm::getStepAndUpdatePrevStep(const std::vector<Direction>& possibleMoves, Direction stepFromSimulator){
+
+	updatePreviousStep(stepFromSimulator); //Step received from the simulator as previous step. EX. 3 modification.
 
 	Direction nextStep =  Direction::Stay; // default is stay
-
 
 	if (isRobotInDock() && !batteryMng.isBatteryFull()){
 		// robot is in docking station and battery not full - stay in place
@@ -77,7 +78,6 @@ Direction GenericAlgorithm::getStep(const std::vector<Direction>& possibleMoves)
 					}
 				}
 			}
-			updatePreviousStep(nextStep);
 		}
 	}
 

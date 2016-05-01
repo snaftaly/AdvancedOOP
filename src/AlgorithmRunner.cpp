@@ -57,7 +57,7 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
 	int stepi = roboti, stepj = robotj;
 	char movePlaceVal;
 	// get the direction from the algorithm
-	Direction direction = algorithm->step();
+	Direction direction = algorithm->step(Direction::Stay);//TODO Should change according to step made by the simulator.
 
     switch(direction) {
 		case Direction::East:
