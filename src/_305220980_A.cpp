@@ -30,5 +30,5 @@ Direction _305220980_A::step() {
 //proxy p;
 //}
 
-//REGISTER_ALGORITHM (_305220980_A)
+REGISTER_ALGORITHM (_305220980_A)
 

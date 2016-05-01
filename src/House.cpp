@@ -46,7 +46,7 @@ House& House::operator=(const House& house)
 		}
 		else {
 			houseMatrix = new string[rows];
-			for (int i = 0; i < rows; i++){
+			for (size_t i = 0; i < rows; i++){
 				houseMatrix[i] = house.houseMatrix[i];
 			}
 		}
@@ -81,7 +81,7 @@ std::string House::getHouseMatrixStr() const
 {
 	std::string retStr;
 	if (houseMatrix != NULL){
-		for (int i = 0; i< rows; i++){
+		for (size_t i = 0; i< rows; i++){
 			retStr += houseMatrix[i];
 			retStr += '\n';
 		}
@@ -95,8 +95,8 @@ int House::calcDirtLevel () const{
 	if (houseMatrix == NULL){
 		return -1;
 	}
-	for (int i=0; i<rows; i++){
-		for (int j=0; j<cols; j++){
+	for (size_t i=0; i<rows; i++){
+		for (size_t j=0; j<cols; j++){
 			currPlace = houseMatrix[i][j] ;
 			if (currPlace > '0' && currPlace <= '9'){
 				dirtLevel += currPlace - '0';
@@ -112,8 +112,8 @@ tuple<int, int> House::getHouseDockPlace() const {
 		return dockPlace;
 	}
 	char currPlace;
-	for (int i=0; i<rows; i++){
-		for (int j=0; j<cols; j++){
+	for (size_t i=0; i<rows; i++){
+		for (size_t j=0; j<cols; j++){
 			currPlace = houseMatrix[i][j];
 			if (currPlace == 'D'){
 				get<0>(dockPlace) = i;
@@ -133,8 +133,8 @@ void House::fixHouse(){
 void House::fixMissingRowsAndCols(){
 	// This functions assumes that the matrix itself is in the correct size
 	// fix rows that are too short
-	for (int i = 0; i < rows; i++){
-		int rowSize = houseMatrix[i].size();
+	for (size_t i = 0; i < rows; i++){
+		size_t rowSize = houseMatrix[i].size();
 		if (rowSize < cols){
 			houseMatrix[i].insert(rowSize, cols - rowSize, ' ');
 		}
@@ -144,12 +144,12 @@ void House::fixMissingRowsAndCols(){
 
 void House::fixWalls(){
 	// fix walls in first row and last row
-	for (int j=0; j < cols; j++){
+	for (size_t j=0; j < cols; j++){
 		houseMatrix[0][j] = 'W';
 		houseMatrix[rows-1][j] = 'W';
 	}
 	// fix walls in first column and last column
-	for (int i=0; i<rows; i++){
+	for (size_t i=0; i<rows; i++){
 		houseMatrix[i][0] = 'W';
 		houseMatrix[i][cols-1] = 'W';
 	}
@@ -159,8 +159,8 @@ void House::fixWalls(){
 bool House::isHouseValid(){
 	int numDocksInHouse = 0;
 	char currPlace;
-	for (int i=0; i<rows; i++){
-		for (int j=0; j<cols; j++){
+	for (size_t i=0; i<rows; i++){
+		for (size_t j=0; j<cols; j++){
 			currPlace = houseMatrix[i][j];
 			if (currPlace == 'D'){
 				numDocksInHouse++;
@@ -203,7 +203,7 @@ bool House::readFromFile(string filePath)
 		delete [] houseMatrix;
 	}
 	houseMatrix = new string[rows];
-	for (int i =0; i < rows; ++i)
+	for (size_t i =0; i < rows; ++i)
 	{
 	    std::getline(fin, houseMatrix[i]);
 	    houseMatrix[i].resize(cols, ' ');
@@ -212,22 +212,23 @@ bool House::readFromFile(string filePath)
 	return true;
 }
 
-bool House::checkNumberInLine(int lineNumber, int * paramName, const string & lineStr){
-	bool isLineOK = true;
+bool House::checkNumberInLine(int lineNumber, size_t * paramName, const string & lineStr){
+	long value;
 	try{
-		*paramName = stoi(lineStr.c_str());
+		value = stol(lineStr.c_str());
 	}
 	catch (...){
-		isLineOK = false;
+		value = -1; // -1 indicates that there was an error
 	}
-	if (*paramName <= 0){
-		isLineOK = false;
-	}
-	if (!isLineOK){
+	if (value <= 0){
 		errStr = "line number "	+
 				to_string(lineNumber) +
 				" in house file shall be a positive number, found: " +
 				lineStr;
+		return false;
 	}
-	return isLineOK;
+	else {
+		*paramName = value;
+		return true;
+	}
 }

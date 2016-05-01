@@ -8,9 +8,9 @@
 class House
 {
 	std::string name;
-	int maxSteps;
-	int rows;
-	int cols;
+	size_t maxSteps;
+	size_t rows;
+	size_t cols;
 	std::string * houseMatrix;
 	std::string filePath;
 	std::string errStr;
@@ -43,7 +43,7 @@ public:
 
     bool readFromFile(std::string fileName);
 
-    bool checkNumberInLine(int lineNumber, int * paramName, const std::string & lineStr);
+    bool checkNumberInLine(int lineNumber, size_t * paramName, const std::string & lineStr);
 
 	void fixHouse();
 
