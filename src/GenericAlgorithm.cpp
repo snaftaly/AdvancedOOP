@@ -41,6 +41,22 @@ Direction GenericAlgorithm::getStepAndUpdatePrevStep(const std::vector<Direction
 
 	updatePreviousStep(stepFromSimulator); //Step received from the simulator as previous step. EX. 3 modification.
 
+	// update robot distance from battery for prev step
+	updateXYfromDock(stepFromSimulator);
+
+	// update battery for prev step
+	if (isRobotInDock()){
+		batteryMng.chargeBattery();
+	}
+	else {
+		batteryMng.consumeBattery();
+	}
+
+	// update num steps remaining for next step
+	if (stepsUntillFinishing != -1){
+		stepsUntillFinishing--;
+	}
+
 	Direction nextStep =  Direction::Stay; // default is stay
 
 	if (isRobotInDock() && !batteryMng.isBatteryFull()){
@@ -81,21 +97,6 @@ Direction GenericAlgorithm::getStepAndUpdatePrevStep(const std::vector<Direction
 		}
 	}
 
-	// update robot distance from battery for next step
-	updateXYfromDock(nextStep);
-
-	// update num steps remaining for next step
-	if (stepsUntillFinishing != -1){
-		stepsUntillFinishing--;
-	}
-	// update battery for next step
-	if (isRobotInDock()){
-		batteryMng.chargeBattery();
-	}
-	else {
-		batteryMng.consumeBattery();
-	}
-
 	return nextStep;
 }
 
@@ -103,9 +104,9 @@ bool GenericAlgorithm::isRobotInDock(){
 	return (xDistanceFromDock == 0 && yDistanceFromDock == 0);
 }
 
-void GenericAlgorithm::updatePreviousStep(const Direction & nextStep){
+void GenericAlgorithm::updatePreviousStep(const Direction & prevStep){
 	//Adds only steps that are not 'stay'
-	switch (nextStep){
+	switch (prevStep){
 		case Direction::East:
 			previousSteps.push(Direction::West);
 			break;
@@ -122,9 +123,10 @@ void GenericAlgorithm::updatePreviousStep(const Direction & nextStep){
 			break;
 	}
 }
-void GenericAlgorithm::updateXYfromDock(const Direction & nextStep){
+
+void GenericAlgorithm::updateXYfromDock(const Direction & prevStep){
 	// update robot distance from battery for next step
-	switch (nextStep){
+	switch (prevStep){
 		case Direction::East:
 			xDistanceFromDock++;
 			break;

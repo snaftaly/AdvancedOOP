@@ -10,7 +10,7 @@ map<string, int> AlgorithmRunner::config;
 
 AlgorithmRunner::AlgorithmRunner(AbstractAlgorithm* _algorithm, string algoName):
 		algoName(algoName), roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0),
-		dirtCollected(0), algoPositionInCompetition(-1), simulationState(SimulationState::Running)
+		dirtCollected(0), prevStep(Direction::Stay), algoPositionInCompetition(-1), simulationState(SimulationState::Running)
 {
 	algorithm = _algorithm;
 	setSensorForAlgorithm();
@@ -33,6 +33,7 @@ void AlgorithmRunner::resetRunnerForNewHouse(const House& house, int currHouseDo
 	dirtCollected = 0;
 	numSteps = 0;
 	batteryLevel = AlgorithmRunner::config["BatteryCapacity"];
+	prevStep = Direction::Stay;
 
 	algoPositionInCompetition = -1;
 	simulationState = SimulationState::Running;
@@ -56,10 +57,11 @@ bool AlgorithmRunner::isRobotInDock(){
 bool AlgorithmRunner::getStepAndUpdateIfLegal(){
 	int stepi = roboti, stepj = robotj;
 	char movePlaceVal;
-	// get the direction from the algorithm
-	Direction direction = algorithm->step(Direction::Stay);//TODO Should change according to step made by the simulator.
 
-    switch(direction) {
+	// get the direction from the algorithm
+	prevStep = algorithm->step(prevStep);
+
+    switch(prevStep) {
 		case Direction::East:
 			stepj += 1;
 			break;
@@ -125,14 +127,14 @@ void AlgorithmRunner::addCurrHouseScore(const int winnerNumSteps, const int simu
 			numSteps = simulationSteps;
 		}
 		//print for tests
-//		cout << "algoname: " << algoName << endl;
-//		cout << "positionInCompetition " << positionInCompetition << endl;
-//		cout << "winnerNumSteps " << winnerNumSteps << endl;
-//		cout << "numSteps " << numSteps << endl;
-//		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
-//		cout << "dirtCollected" << dirtCollected << endl;
-//		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
-//		cout << currHouse << endl;
+		cout << "algoname: " << algoName << endl;
+		cout << "positionInCompetition " << positionInCompetition << endl;
+		cout << "winnerNumSteps " << winnerNumSteps << endl;
+		cout << "numSteps " << numSteps << endl;
+		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
+		cout << "dirtCollected" << dirtCollected << endl;
+		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
+		cout << currHouse << endl;
 		currHouseScore = max(0,
 				2000
 				- (positionInCompetition - 1)*50

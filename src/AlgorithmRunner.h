@@ -22,6 +22,7 @@ class AlgorithmRunner {
 	int batteryLevel;
 	int numSteps;
 	int dirtCollected;
+	Direction prevStep = Direction::Stay;
 
 	int algoPositionInCompetition;
 	SimulationState simulationState;
