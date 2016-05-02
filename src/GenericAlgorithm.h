@@ -20,6 +20,8 @@ class GenericAlgorithm: public AbstractAlgorithm {
 	int stepsUntillFinishing;
 	int xDistanceFromDock;
 	int yDistanceFromDock;
+	Direction prevStepFromAlgo;
+	bool isGoingBack;
 	std::stack<Direction> previousSteps;
 	BatteryManager batteryMng;
 	int maxStepsAfterWinner;
