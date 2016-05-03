@@ -1,7 +1,7 @@
 #ifndef ALGORITHMMANAGER_H_
 #define ALGORITHMMANAGER_H_
-#include "Direction.h"
-#include "AbstractAlgorithm.h"
+#include "../Common/Direction.h"
+#include "../Common/AbstractAlgorithm.h"
 #include "AlgorithmRunner.h"
 #include "ConfigManager.h"
 #include "AlgorithmRegistrar.h"

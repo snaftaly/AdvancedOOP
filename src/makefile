@@ -3,6 +3,10 @@
 CPP_FLAGS=-std=c++11 -O2 -Wall -pedantic -pthread
 LIBS = -ldl
 
+ALG_DIR=Algorithms/
+COM_DIR=Common/
+SIM_DIR=Simulation/
+
 all: simulator 305220980_A_.so 305220980_B_.so 305220980_C_.so  
 
 clean:
@@ -20,53 +24,53 @@ simulator: main.o Simulator.o AlgorithmRunner.o Sensor.o AlgorithmManager.o Algo
 305220980_C_.so: _305220980_C.o GenericAlgorithm.o BatteryManager.o
 	g++ -shared -Wl,-soname,305220980_C_.so -o 305220980_C_.so _305220980_C.o GenericAlgorithm.o BatteryManager.o
 
-_305220980_A.o: _305220980_A.cpp _305220980_A.h AbstractAlgorithm.h GenericAlgorithm.h AbstractSensor.h BatteryManager.h AlgorithmRegistration.h
-	g++ $(CPP_FLAGS) -c _305220980_A.cpp
+_305220980_A.o: $(ALG_DIR)_305220980_A.cpp $(ALG_DIR)_305220980_A.h $(ALG_DIR)GenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h
+	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_A.cpp
 
-_305220980_B.o: _305220980_B.cpp _305220980_B.h AbstractAlgorithm.h GenericAlgorithm.h AbstractSensor.h BatteryManager.h AlgorithmRegistration.h
-	g++ $(CPP_FLAGS) -c _305220980_B.cpp
+_305220980_B.o: $(ALG_DIR)_305220980_B.cpp $(ALG_DIR)_305220980_B.h $(ALG_DIR)GenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h
+	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_B.cpp
 	
-_305220980_C.o: _305220980_C.cpp _305220980_C.h AbstractAlgorithm.h GenericAlgorithm.h AbstractSensor.h BatteryManager.h AlgorithmRegistration.h
-	g++ $(CPP_FLAGS) -c _305220980_C.cpp
+_305220980_C.o: $(ALG_DIR)_305220980_C.cpp $(ALG_DIR)_305220980_C.h $(ALG_DIR)GenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h
+	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_C.cpp
 
-GenericAlgorithm.o: GenericAlgorithm.cpp GenericAlgorithm.h AbstractAlgorithm.h AbstractSensor.h BatteryManager.h AlgorithmRegistration.h MakeUniqueAdder.h
-	g++ $(CPP_FLAGS) -c GenericAlgorithm.cpp
+GenericAlgorithm.o: $(ALG_DIR)GenericAlgorithm.cpp $(ALG_DIR)GenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)MakeUniqueAdder.h
+	g++ $(CPP_FLAGS) -c $(ALG_DIR)GenericAlgorithm.cpp
 
-BatteryManager.o: BatteryManager.cpp BatteryManager.h
-	g++ $(CPP_FLAGS) -c BatteryManager.cpp
+BatteryManager.o: $(ALG_DIR)BatteryManager.cpp $(ALG_DIR)BatteryManager.h
+	g++ $(CPP_FLAGS) -c $(ALG_DIR)BatteryManager.cpp
 
-main.o: main.cpp Simulator.h ErrorPrinter.h FileUtils.h
-	g++ $(CPP_FLAGS) -c main.cpp
+main.o: $(SIM_DIR)main.cpp $(SIM_DIR)Simulator.h $(SIM_DIR)ErrorPrinter.h $(SIM_DIR)FileUtils.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)main.cpp
 
-Simulator.o: Simulator.cpp Simulator.h AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h House.h ConfigManager.h HouseManager.h SimulationState.h FileUtils.h
-	g++ $(CPP_FLAGS) -c Simulator.cpp
+Simulator.o: $(SIM_DIR)Simulator.cpp $(SIM_DIR)Simulator.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)House.h $(SIM_DIR)ConfigManager.h $(SIM_DIR)HouseManager.h $(SIM_DIR)SimulationState.h $(SIM_DIR)FileUtils.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)Simulator.cpp
 
-AlgorithmManager.o: AlgorithmManager.cpp AlgorithmManager.h AlgorithmRunner.h ConfigManager.h AlgorithmRegistrar.h  AlgoRegState.h FileUtils.h ErrorPrinter.h 
-	g++ $(CPP_FLAGS) -c AlgorithmManager.cpp
+AlgorithmManager.o: $(SIM_DIR)AlgorithmManager.cpp $(SIM_DIR)AlgorithmManager.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)ConfigManager.h $(SIM_DIR)AlgorithmRegistrar.h $(SIM_DIR)AlgoRegState.h $(SIM_DIR)FileUtils.h $(SIM_DIR)ErrorPrinter.h 
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)AlgorithmManager.cpp
 
-AlgorithmRegistrar.o: AlgorithmRegistrar.cpp AlgorithmRegistrar.h FileUtils.h AlgoRegState.h AlgorithmRegistration.h MakeUniqueAdder.h
-	g++ $(CPP_FLAGS) -c AlgorithmRegistrar.cpp
+AlgorithmRegistrar.o: $(SIM_DIR)AlgorithmRegistrar.cpp $(SIM_DIR)AlgorithmRegistrar.h $(SIM_DIR)FileUtils.h $(SIM_DIR)AlgoRegState.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)MakeUniqueAdder.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)AlgorithmRegistrar.cpp
 
-AlgorithmRegistration.o: AlgorithmRegistration.cpp AlgorithmRegistration.h AbstractAlgorithm.h AlgorithmRegistrar.h MakeUniqueAdder.h
-	g++ $(CPP_FLAGS) -c AlgorithmRegistration.cpp
+AlgorithmRegistration.o: $(SIM_DIR)AlgorithmRegistration.cpp $(SIM_DIR)AlgorithmRegistrar.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)MakeUniqueAdder.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)AlgorithmRegistration.cpp
 
-AlgorithmRunner.o: AlgorithmRunner.cpp AlgorithmRunner.h AbstractAlgorithm.h AbstractSensor.h Sensor.h House.h SensorInformation.h Direction.h SimulationState.h 
-	g++ $(CPP_FLAGS) -c AlgorithmRunner.cpp
+AlgorithmRunner.o: $(SIM_DIR)AlgorithmRunner.cpp $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)Sensor.h $(SIM_DIR)House.h $(SIM_DIR)SimulationState.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)SensorInformation.h $(COM_DIR)Direction.h 
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)AlgorithmRunner.cpp
 	
-Sensor.o: Sensor.cpp Sensor.h AbstractSensor.h House.h Direction.h SensorInformation.h  
-	g++ $(CPP_FLAGS) -c Sensor.cpp
+Sensor.o: $(SIM_DIR)Sensor.cpp $(SIM_DIR)Sensor.h $(SIM_DIR)House.h $(COM_DIR)Direction.h $(COM_DIR)SensorInformation.h $(COM_DIR)AbstractSensor.h  
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)Sensor.cpp
 
-HouseManager.o: HouseManager.cpp HouseManager.h House.h ErrorPrinter.h FileUtils.h
-	g++ $(CPP_FLAGS) -c HouseManager.cpp
+HouseManager.o: $(SIM_DIR)HouseManager.cpp $(SIM_DIR)HouseManager.h $(SIM_DIR)House.h $(SIM_DIR)ErrorPrinter.h $(SIM_DIR)FileUtils.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)HouseManager.cpp
 
-ConfigManager.o: ConfigManager.cpp ConfigManager.h ErrorPrinter.h FileUtils.h
-	g++ $(CPP_FLAGS) -c ConfigManager.cpp
+ConfigManager.o: $(SIM_DIR)ConfigManager.cpp $(SIM_DIR)ConfigManager.h $(SIM_DIR)ErrorPrinter.h $(SIM_DIR)FileUtils.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)ConfigManager.cpp
 
-House.o: House.cpp House.h FileUtils.h
-	g++ $(CPP_FLAGS) -c House.cpp
+House.o: $(SIM_DIR)House.cpp $(SIM_DIR)House.h $(SIM_DIR)FileUtils.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)House.cpp
 
-ErrorPrinter.o: ErrorPrinter.cpp ErrorPrinter.h
-	g++ $(CPP_FLAGS) -c ErrorPrinter.cpp
+ErrorPrinter.o: $(SIM_DIR)ErrorPrinter.cpp $(SIM_DIR)ErrorPrinter.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)ErrorPrinter.cpp
 
-FileUtils.o: FileUtils.cpp FileUtils.h
-	g++ $(CPP_FLAGS) -c FileUtils.cpp
+FileUtils.o: $(SIM_DIR)FileUtils.cpp $(SIM_DIR)FileUtils.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)FileUtils.cpp

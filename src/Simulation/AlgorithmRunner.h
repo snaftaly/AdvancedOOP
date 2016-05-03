@@ -6,9 +6,9 @@
 #include <string>
 #include <functional>
 #include <memory>
-#include "Direction.h"
-#include "AbstractAlgorithm.h"
-#include "AbstractSensor.h"
+#include "../Common/Direction.h"
+#include "../Common/AbstractAlgorithm.h"
+#include "../Common/AbstractSensor.h"
 #include "Sensor.h"
 #include "SimulationState.h"
 

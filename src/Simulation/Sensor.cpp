@@ -1,5 +1,5 @@
 #include "Sensor.h"
-#include "Direction.h"
+#include "../Common/Direction.h"
 #include <iostream>
 using namespace std;
 

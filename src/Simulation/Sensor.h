@@ -1,6 +1,6 @@
 #ifndef SENSOR_H_
 #define SENSOR_H_
-#include "AbstractSensor.h"
+#include "../Common/AbstractSensor.h"
 #include "House.h"
 #include <iostream>
 

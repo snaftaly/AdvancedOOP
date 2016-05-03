@@ -1,10 +1,9 @@
 #ifndef _305220980_C_H_
 #define _305220980_C_H_
 
-#include "Sensor.h"
-#include "Direction.h"
+#include "../Common/Direction.h"
+#include "../Common/AbstractSensor.h"
 #include "GenericAlgorithm.h"
-#include "AbstractSensor.h"
 
 class _305220980_C: public GenericAlgorithm {
 	std::vector<Direction> possibleMoves;

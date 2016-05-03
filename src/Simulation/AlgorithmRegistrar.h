@@ -6,11 +6,11 @@
 #include <memory>
 #include <list>
 #include <cassert>
-#include "Direction.h"
-#include "AbstractAlgorithm.h"
+#include "../Common/Direction.h"
+#include "../Common/AbstractAlgorithm.h"
+#include "../Common/AlgorithmRegistration.h"
+#include "../Common/MakeUniqueAdder.h"
 #include "AlgoRegState.h"
-#include "MakeUniqueAdder.h"
-#include "AlgorithmRegistration.h"
 
 class AlgorithmRegistrar {
     std::list<void *> dl_list;

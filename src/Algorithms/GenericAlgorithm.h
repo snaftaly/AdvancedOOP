@@ -6,12 +6,12 @@
 #include <cstdlib>
 #include <vector>
 #include <stack>
-#include "Direction.h"
-#include "AbstractAlgorithm.h"
-#include "AbstractSensor.h"
+#include "../Common/Direction.h"
+#include "../Common/AbstractAlgorithm.h"
+#include "../Common/AbstractSensor.h"
+#include "../Common/MakeUniqueAdder.h"
+#include "../Common/AlgorithmRegistration.h"
 #include "BatteryManager.h"
-#include "MakeUniqueAdder.h"
-#include "AlgorithmRegistration.h"
 
 
 class GenericAlgorithm: public AbstractAlgorithm {
