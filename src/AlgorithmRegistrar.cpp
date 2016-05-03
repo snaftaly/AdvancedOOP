@@ -17,8 +17,9 @@ AlgorithmRegistrar::~AlgorithmRegistrar(){
 //	}
 //	// now delete the so that was registered
 
+	algorithmFactories.clear();
 	for(auto itr = instance.dl_list.begin(); itr!= instance.dl_list.end(); itr++){
-//		dlclose(*itr); // TODO: understand why we get this error!!!
+		dlclose(*itr); // TODO: understand why we get this error!!!
 	}
 }
 
