@@ -1,6 +1,6 @@
 #include "_305220980_A.h"
 
-Direction _305220980_A::step() {
+Direction _305220980_A::step(Direction prevStep) {
 	counter = (counter + 1) % 10;
 	if (counter == 1){
 		Direction temp = possibleMoves[0];
@@ -12,7 +12,7 @@ Direction _305220980_A::step() {
 		possibleMoves[1] = possibleMoves[2];
 		possibleMoves[2] = temp;
 	}
-	return getStep(possibleMoves);
+	return getStepAndUpdatePrevStep(possibleMoves, prevStep);
 }
 
 //extern "C" {

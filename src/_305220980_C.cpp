@@ -1,7 +1,7 @@
 #include "_305220980_C.h"
 
-Direction _305220980_C::step() {
-	return getStep(possibleMoves);
+Direction _305220980_C::step(Direction prevStep) {
+	return getStepAndUpdatePrevStep(possibleMoves, prevStep);
 }
 
 //extern "C" {
