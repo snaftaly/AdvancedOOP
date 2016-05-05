@@ -29,11 +29,11 @@ class AlgorithmRunner {
 	int algoPositionInCompetition;
 	SimulationState simulationState;
 
-	std::map<std::string, int> housesScores;
+	std::map<std::string, int> housesScores; // TODO: remove - this is not needed
 
 	static map<string, int> config;
 
-	static int currHouseTotDirt;
+	int currHouseTotDirt;
 
 	bool isLegalStep(int stepi, int stepj);
 
@@ -50,7 +50,7 @@ public:
 		return sensor;
 	}
 
-	void resetRunnerForNewHouse(const House& house, int currHouseDocki, int currHouseDockj);
+	void resetRunnerForNewHouse(const House& house, int currHouseDocki, int currHouseDockj, int houseTotDirt);
 	void setSensorForAlgorithm();
 
 	bool isHouseCleanAndRobotInDock();
@@ -61,7 +61,7 @@ public:
 
 
 	void updateStepsRemainingOnWinner(int numStepsRemaining);
-	void addCurrHouseScore(const int winnerNumSteps, const int simulationSteps, const string& houseName);
+	int getCurrHouseScore(const int winnerNumSteps, const int simulationSteps, const string& houseName);
 
 	// setters
 
@@ -97,7 +97,7 @@ public:
 	}
 
 	// static functions
-	static void resetCommonDataForNewHouse(const House& house);
+//	static void resetCommonDataForNewHouse(const House& house);
 
 	static void setConfig(const map<string, int>& conf) {
 		config = conf;

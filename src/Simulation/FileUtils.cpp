@@ -18,8 +18,8 @@ bool FileUtils::endsWith(const string & str, const string & suffix){
 }
 
 
-list<string> FileUtils::getSortedFileNamesListBySuffix(const string & path, const string & suffix){
-	list<string> fileNamesList;
+vector<string> FileUtils::getSortedFileNamesListBySuffix(const string & path, const string & suffix){
+	vector<string> fileNamesList;
 
 	DIR * dir = opendir(path.c_str());
 	if (dir == NULL){
@@ -32,7 +32,7 @@ list<string> FileUtils::getSortedFileNamesListBySuffix(const string & path, cons
 		}
 	}
 	closedir(dir);
-	fileNamesList.sort();
+//	fileNamesList.sort(); // TODO: this is not needed since we get it sorted already
 	return fileNamesList;
 }
 

@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	simulator.runSimulation();
-	simulator.printAlgosScores();
+	simulator.printResults();
 	simulator.printErrors();
 
 	cout << "bye " << endl;

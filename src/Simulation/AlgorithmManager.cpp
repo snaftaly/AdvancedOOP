@@ -74,23 +74,18 @@ bool AlgorithmManager::readAlgoFiles(){
 }
 
 
-void AlgorithmManager::createAlgorithmRunnerList(ConfigManager& confMgr){
-	// TODO: we will have to create such list for each thread
-	AlgorithmRegistrar& registrar = AlgorithmRegistrar::getInstance();
-
-    auto algorithms = registrar.getAlgorithms();
-    auto& algorithmNames = registrar.getAlgorithmNames();
-    auto pName = algorithmNames.begin();
-    for(auto& algo: algorithms) {
-		algo->setConfiguration(confMgr.getConfs());
-		algorithmRunnerList.emplace_back(algo, *(pName++));
-    }
-//	for (auto const & algorithmMakerPair : factory){
-//		AbstractAlgorithm * algo = algorithmMakerPair.second();
+//void AlgorithmManager::createAlgorithmRunnerList(ConfigManager& confMgr){
+//	// TODO: we will have to create such list for each thread
+//	AlgorithmRegistrar& registrar = AlgorithmRegistrar::getInstance();
+//
+//    auto algorithms = registrar.getAlgorithms();
+//    auto& algorithmNames = registrar.getAlgorithmNames();
+//    auto pName = algorithmNames.begin();
+//    for(auto& algo: algorithms) {
 //		algo->setConfiguration(confMgr.getConfs());
-//		algorithmRunnerList.emplace_back(algo, algorithmMakerPair.first);
-//	}
-}
+//		algorithmRunnerList.emplace_back(algo, *(pName++));
+//    }
+//}
 
 
 void AlgorithmManager::printAlgorithmsErrors(bool all){

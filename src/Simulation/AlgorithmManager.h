@@ -10,15 +10,15 @@
 
 class AlgorithmManager {
 	std::string algorithmsPath;
-	std::list<std::string> algorithmsFileNamesLst;
+	std::vector<std::string> algorithmsFileNamesLst;
 
 //	std::list<AbstractAlgorithm *> algorithmsList;
 	std::map<std::string, AlgoRegState> algorithmsLoadErrors;
 
 	std::list<std::string> algorithmsRunErrors;
 
-	std::list<AlgorithmRunner> algorithmRunnerList;
-//	list<void *> dl_list; // list to hold handles for dynamic libs
+//	std::list<AlgorithmRunner> algorithmRunnerList; // tODO: remove this
+
 public:
 	// AlgorithmManager ctor
 	AlgorithmManager(const std::string& _algorithmsPath): algorithmsPath(_algorithmsPath){ }
@@ -26,7 +26,7 @@ public:
 	~AlgorithmManager(); // TODO: remove dtor
 	bool readAlgoFiles();
 	void printAlgorithmsErrors(bool all);
-	void createAlgorithmRunnerList(ConfigManager& confMgr);
+//	void createAlgorithmRunnerList(ConfigManager& confMgr);
 	void addAlgoRunError(const std::string & algoName,const std::string & houseName, int simulationStep);
 
 
@@ -36,9 +36,9 @@ public:
 		return algorithmsLoadErrors;
 	}
 
-	std::list<AlgorithmRunner>& getAlgorithmRunnerList() {
-		return algorithmRunnerList;
-	}
+//	std::list<AlgorithmRunner>& getAlgorithmRunnerList() {
+//		return algorithmRunnerList;
+//	}
 
 	const std::list<std::string>& getAlgorithmsRunErrors() const {
 		return algorithmsRunErrors;

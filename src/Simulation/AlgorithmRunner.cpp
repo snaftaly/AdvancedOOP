@@ -5,7 +5,7 @@
 using namespace std;
 
 // initialization of static members
-int AlgorithmRunner::currHouseTotDirt = 0;
+//int AlgorithmRunner::currHouseTotDirt = 0;
 map<string, int> AlgorithmRunner::config;
 
 AlgorithmRunner::AlgorithmRunner(unique_ptr<AbstractAlgorithm>& _algorithm, string algoName):
@@ -16,12 +16,12 @@ AlgorithmRunner::AlgorithmRunner(unique_ptr<AbstractAlgorithm>& _algorithm, stri
 	setSensorForAlgorithm();
 }
 
-void AlgorithmRunner::resetCommonDataForNewHouse(const House& house)
-{
-	currHouseTotDirt = house.calcDirtLevel();
-}
+//void AlgorithmRunner::resetCommonDataForNewHouse(const House& house)
+//{
+//	currHouseTotDirt = house.calcDirtLevel();
+//}
 
-void AlgorithmRunner::resetRunnerForNewHouse(const House& house, int currHouseDocki, int currHouseDockj){
+void AlgorithmRunner::resetRunnerForNewHouse(const House& house, int currHouseDocki, int currHouseDockj, int currHouseDirt){
 	setCurrHouse(house); // copy the house info using the = operator
 
 	// set robot location
@@ -34,6 +34,7 @@ void AlgorithmRunner::resetRunnerForNewHouse(const House& house, int currHouseDo
 	numSteps = 0;
 	batteryLevel = AlgorithmRunner::config["BatteryCapacity"];
 	prevStep = Direction::Stay;
+	currHouseTotDirt = currHouseDirt;
 
 	algoPositionInCompetition = -1;
 	simulationState = SimulationState::Running;
@@ -116,7 +117,7 @@ bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 			stepi < currHouse.getRows() && stepj < currHouse.getCols());
 }
 
-void AlgorithmRunner::addCurrHouseScore(const int winnerNumSteps, const int simulationSteps, const string& houseName){
+int AlgorithmRunner::getCurrHouseScore(const int winnerNumSteps, const int simulationSteps, const string& houseName){
 	int currHouseScore;
 	if (simulationState == SimulationState::IllegalMove){
 		currHouseScore = 0;
@@ -143,8 +144,8 @@ void AlgorithmRunner::addCurrHouseScore(const int winnerNumSteps, const int simu
 				+ (isRobotInDock() ? 50 : -200)
 				);
 	}
-
-	housesScores[houseName] = currHouseScore;
+	return currHouseScore;
+//	housesScores[houseName] = currHouseScore;
 }
 
 int AlgorithmRunner::getPositionInCompetitionForScore(){
