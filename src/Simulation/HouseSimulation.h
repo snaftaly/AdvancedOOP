@@ -4,6 +4,7 @@
 #include "House.h"
 #include "AlgorithmRunner.h"
 #include "AlgorithmManager.h"
+#include "ScoreManager.h"
 
 class HouseSimulation {
 
@@ -19,9 +20,9 @@ class HouseSimulation {
 
 public:
 	HouseSimulation();
-	virtual ~HouseSimulation();
+	~HouseSimulation();
 
-	void runSimulationForHouse(AlgorithmManager& algoMgr, const House& house, std::list<AlgorithmRunner>& algoRunnerList, const int maxStepsAfterWinner);
+	void runSimulationForHouse(AlgorithmManager& algoMgr, ScoreManager& scoreMgr, const House& house, std::list<AlgorithmRunner>& algoRunnerList, const int maxStepsAfterWinner);
 	void updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner, list<AlgorithmRunner>& algoRunnerList);
 	void updateAboutToFinish(list<AlgorithmRunner>& algoRunnerList);
 

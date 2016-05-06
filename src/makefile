@@ -12,7 +12,7 @@ all: simulator 305220980_A_.so 305220980_B_.so 305220980_C_.so
 clean:
 	rm *.so *.o simulator
 
-simulator: main.o Simulator.o AlgorithmRunner.o Sensor.o AlgorithmManager.o AlgorithmRegistration.o AlgorithmRegistrar.o ConfigManager.o HouseManager.o House.o ErrorPrinter.o FileUtils.o $(LIBS)
+simulator: main.o Simulator.o HouseSimulation.o Sensor.o AlgorithmManager.o ScoreManager.o AlgorithmRunner.o AlgorithmRegistration.o AlgorithmRegistrar.o ConfigManager.o HouseManager.o House.o ErrorPrinter.o FileUtils.o $(LIBS)
 	g++ -rdynamic -o $@ $^ $(CPP_FLAGS)
 
 305220980_A_.so: _305220980_A.o GenericAlgorithm.o BatteryManager.o
@@ -42,8 +42,14 @@ BatteryManager.o: $(ALG_DIR)BatteryManager.cpp $(ALG_DIR)BatteryManager.h
 main.o: $(SIM_DIR)main.cpp $(SIM_DIR)Simulator.h $(SIM_DIR)ErrorPrinter.h $(SIM_DIR)FileUtils.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)main.cpp
 
-Simulator.o: $(SIM_DIR)Simulator.cpp $(SIM_DIR)Simulator.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)House.h $(SIM_DIR)ConfigManager.h $(SIM_DIR)HouseManager.h $(SIM_DIR)SimulationState.h $(SIM_DIR)FileUtils.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h
+Simulator.o: $(SIM_DIR)Simulator.cpp $(SIM_DIR)Simulator.h $(SIM_DIR)HouseSimulation.h $(SIM_DIR)ScoreManager.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)House.h $(SIM_DIR)ConfigManager.h $(SIM_DIR)HouseManager.h $(SIM_DIR)SimulationState.h $(SIM_DIR)FileUtils.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)MakeUniqueAdder.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)Simulator.cpp
+
+HouseSimulation.o: $(SIM_DIR)HouseSimulation.cpp $(SIM_DIR)HouseSimulation.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)AlgorithmManager.h $(SIM_DIR)ScoreManager.h $(SIM_DIR)House.h $(SIM_DIR)FileUtils.h $(SIM_DIR)House.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)HouseSimulation.cpp
+
+ScoreManager.o: $(SIM_DIR)ScoreManager.cpp $(SIM_DIR)ScoreManager.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)ScoreManager.cpp
 
 AlgorithmManager.o: $(SIM_DIR)AlgorithmManager.cpp $(SIM_DIR)AlgorithmManager.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)ConfigManager.h $(SIM_DIR)AlgorithmRegistrar.h $(SIM_DIR)AlgoRegState.h $(SIM_DIR)FileUtils.h $(SIM_DIR)ErrorPrinter.h 
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)AlgorithmManager.cpp

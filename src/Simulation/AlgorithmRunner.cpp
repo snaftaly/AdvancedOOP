@@ -117,7 +117,7 @@ bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 			stepi < currHouse.getRows() && stepj < currHouse.getCols());
 }
 
-int AlgorithmRunner::getCurrHouseScore(const int winnerNumSteps, const int simulationSteps, const string& houseName){
+int AlgorithmRunner::getCurrHouseScore(const int winnerNumSteps, const int simulationSteps){
 	int currHouseScore;
 	if (simulationState == SimulationState::IllegalMove){
 		currHouseScore = 0;
@@ -128,14 +128,14 @@ int AlgorithmRunner::getCurrHouseScore(const int winnerNumSteps, const int simul
 			numSteps = simulationSteps;
 		}
 		//print for tests
-		cout << "algoname: " << algoName << endl;
-		cout << "positionInCompetition " << positionInCompetition << endl;
-		cout << "winnerNumSteps " << winnerNumSteps << endl;
-		cout << "numSteps " << numSteps << endl;
-		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
-		cout << "dirtCollected" << dirtCollected << endl;
-		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
-		cout << currHouse << endl;
+//		cout << "algoname: " << algoName << endl;
+//		cout << "positionInCompetition " << positionInCompetition << endl;
+//		cout << "winnerNumSteps " << winnerNumSteps << endl;
+//		cout << "numSteps " << numSteps << endl;
+//		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
+//		cout << "dirtCollected" << dirtCollected << endl;
+//		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
+//		cout << currHouse << endl;
 		currHouseScore = max(0,
 				2000
 				- (positionInCompetition - 1)*50

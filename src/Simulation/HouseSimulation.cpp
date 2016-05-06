@@ -19,7 +19,7 @@ HouseSimulation::~HouseSimulation() {
 	// TODO Auto-generated destructor stub
 }
 
-void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, const House& house,
+void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreManager& scoreMgr, const House& house,
 		list<AlgorithmRunner>& algoRunnerList, const int _maxStepsAfterWinner){
 	int maxSteps = house.getMaxSteps(); // no need to save
 
@@ -31,6 +31,7 @@ void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, const Hou
 	isThereAWinner = false;
 	isUpdatedAboutToFinish = false;
 	maxStepsAfterWinner = _maxStepsAfterWinner;
+
 	// run the simulation - for the different algorithms
 	while (numAlogsRunning > 0 && numStepsRemaining > 0){
 		// check if stepsRemaining == maxStepsAfterWinner
@@ -78,9 +79,11 @@ void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, const Hou
 	if (!isThereAWinner){
 		winnerNumSteps = simulationSteps;
 	}
+	int score;
 	for (AlgorithmRunner& algoRunner : algoRunnerList){
-		// TODO: add score to a global place
-		algoRunner.getCurrHouseScore(winnerNumSteps, simulationSteps, FileUtils::getFileNameNoExt(house.getFileName()));
+		score = algoRunner.getCurrHouseScore(winnerNumSteps, simulationSteps);
+		cout << algoRunner.getAlgoName() << ": " << house.getFileName() << ":" << score << endl;
+		scoreMgr.updateScore(algoRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), score);
 	}
 }
 

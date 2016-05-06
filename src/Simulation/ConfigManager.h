@@ -22,7 +22,7 @@ class ConfigManager {
 
 public:
 	// c'tor for conf manager
-	ConfigManager(std::string _confPath): confPath(_confPath){ };
+	ConfigManager(const std::string& _confPath): confPath(_confPath){ };
 
 	bool loadFromFile();
 	void printConfs();

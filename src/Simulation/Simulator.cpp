@@ -7,6 +7,7 @@
 #include "Simulator.h"
 #include "FileUtils.h"
 #include "AlgorithmRegistrar.h"
+#include "../Common/MakeUniqueAdder.h"
 
 
 #define HOUSE_NAME_MAX 9
@@ -18,8 +19,8 @@ using namespace std;
 
 
 //C'tor implementation
-Simulator::Simulator(const string& configPath, const string & scoreFormulaPath, const string & algorithmsPath, const string& housesPath, size_t numThreads):
-	houseCounter(0), confMgr(configPath), algoMgr(algorithmsPath), houseMgr(housesPath), initSuccessfull(true)
+Simulator::Simulator(const string& configPath, const string & scoreFormulaPath, const string & algorithmsPath, const string& housesPath, size_t _numThreads):
+	houseIndex(0), confMgr(configPath), scoreMgr(scoreFormulaPath), algoMgr(algorithmsPath), houseMgr(housesPath), numThreads(_numThreads), initSuccessfull(true)
 {
 
 	// get configurations from file
@@ -55,17 +56,29 @@ Simulator::~Simulator() {
 }
 
 
-void Simulator::threadFunc(){
-	// get the next house for the thread - using mutex
-	string houseFileName;
-	{
-		std::lock_guard<std::mutex> guard(houseReadMutex); // use mutex for this part
-		if (houseCounter >= houseMgr.getHousesFileNamesLst().size()){
-			return;
-		}
-		houseFileName = houseMgr.getHousesFileNamesLst().at(houseCounter++);
+void Simulator::runSingleSubSimulationThread(){
+	// fetch old value, then add. equivalent to: fetch_add(1)
+	for (size_t index = houseIndex++; index < houseMgr.getHousesFileNamesLst().size();  index = houseIndex++){
+		runSingleSubSimulation(houseMgr.getHousesFileNamesLst().at(index));
+		cout << "running for house number: " << index << endl;
 	}
 
+	// TODO: remove this
+//	// get the next house for the thread - using mutex
+//	string houseFileName;
+//	{
+//		std::lock_guard<std::mutex> guard(houseReadMutex); // use mutex for this part
+//		if (houseIndex >= houseMgr.getHousesFileNamesLst().size()){
+//			return;
+//		}
+//		houseFileName = houseMgr.getHousesFileNamesLst().at(houseIndex++);
+//	}
+
+
+}
+
+
+void Simulator::runSingleSubSimulation(const string& houseFileName){
 	House currHouse;
 	if (!(currHouse.readFromFile(houseMgr.getHousesPath() + houseFileName))){
 		// there was an error reading from house from file, continue to next file
@@ -96,9 +109,8 @@ void Simulator::threadFunc(){
 	// create an instance to run the simulation for the house
 	HouseSimulation houseSimulation;
 	size_t maxStepsAfterWinner = confMgr.getConfs().find("MaxStepsAfterWinner")->second;
-	houseSimulation.runSimulationForHouse(this, algoMgr, currHouse, algorithmRunnerList, maxStepsAfterWinner);
+	houseSimulation.runSimulationForHouse(algoMgr, scoreMgr, currHouse, algorithmRunnerList, maxStepsAfterWinner);
 }
-
 
 //void Simulator::runSimulationForHouse(const House& house, list<AlgorithmRunner>& algoRunnerList){
 //	int maxSteps = house.getMaxSteps(); // no need to save
@@ -216,17 +228,18 @@ void Simulator::setHouseForEachAlgorithmRunner(const House& house, list<Algorith
 
 void Simulator::runSimulation(){
 
-	size_t numTrheads = min(numTrheads, houseMgr.getHousesFileNamesLst().size());
-	vector<thread> threads;
-	// create the threads
-	for (int i =0 ; i< numThreads; i++){
-		threads.emplace_back(threadFunc);
-	}
+	size_t numNeededTrheads = min(numThreads, houseMgr.getHousesFileNamesLst().size());
+	vector<unique_ptr<thread>> threads(numNeededTrheads);	// create the threads
 
-	// loop again to join the threads
-	for (auto& t : threads){
-		t.join();
-	}
+    for(auto& thread_ptr : threads) {
+        // ===> actually create the threads and run them
+        thread_ptr = make_unique<thread>(&Simulator::runSingleSubSimulationThread, this); // create and run the thread
+    }
+
+    // ===> join all the threads to finish nicely (i.e. without crashing / terminating threads)
+    for(auto& thread_ptr : threads) {
+        thread_ptr->join();
+    }
 
 //	for (const House& house : houseMgr.getHouses()){
 //		int maxSteps = house.getMaxSteps();
@@ -306,8 +319,12 @@ void Simulator::printTableHeader(const int tableWidth){
 	printRowSeparator(tableWidth);
 	// print houses names
 	cout << "|             |";
-	for (const House& house : houseMgr.getHouses()){
-		string name =  FileUtils::getFileNameNoExt(house.getFileName());
+	for (const string& houseFileName : houseMgr.getHousesFileNamesLst()){
+		if (houseMgr.getHousesErrors().find(houseFileName) != houseMgr.getHousesErrors().end()){
+			// house had errors so continue to next
+			continue;
+		}
+		string name =  FileUtils::getFileNameNoExt(houseFileName);
 		name.resize(HOUSE_NAME_MAX, ' ');
 		cout << name << " |";
 	}
@@ -319,31 +336,36 @@ void Simulator::printTableHeader(const int tableWidth){
 
 void Simulator::printResults(){
 	// check if all houses were problematic
-	if (houseMgr.getHousesErrors().size() == houseMgr.getHousesFileNamesLst().size()){
+	int numValidHouses = houseMgr.getHousesFileNamesLst().size() - houseMgr.getHousesErrors().size();
+
+	if (numValidHouses == 0){
 		// all the houses were problematic
 		houseMgr.printHousesErrors(true);
 		return;
 	}
 
-	int numHouses = houseMgr.getHousesFileNamesLst().size();
-	int tableWidth = FIRST_COLUMN_WIDTH + 2 + (OTHER_COLUMN_WIDTH + 1)*(numHouses+1);
+	int tableWidth = FIRST_COLUMN_WIDTH + 2 + (OTHER_COLUMN_WIDTH + 1)*(numValidHouses+1);
 	int scoreAlgoHouse;
 	int scoreSumForAlgo;
 	printTableHeader(tableWidth);
 
-	for (AlgorithmRunner& algoRunner : algoMgr.getAlgorithmRunnerList()){
-		string algoNameTrimmed = algoRunner.getAlgoName();
+	for (const auto& algoNameHouseScorePair : scoreMgr.getAlgosScoresForHouses()){
+		string algoNameTrimmed = algoNameHouseScorePair.first;
 		algoNameTrimmed.resize(ALGO_NAME_MAX, ' ');
 		cout << "|" << algoNameTrimmed << " |";
 		scoreSumForAlgo = 0;
 		// print each house score
-		for (const House& house : houseMgr.getHouses()){
-			scoreAlgoHouse = algoRunner.getHousesScore().find(FileUtils::getFileNameNoExt(house.getFileName()))->second;
+		for (const string& houseFileName : houseMgr.getHousesFileNamesLst()){
+			if (houseMgr.getHousesErrors().find(houseFileName) != houseMgr.getHousesErrors().end()){
+				// house had errors so continue to next
+				continue;
+			}
+			scoreAlgoHouse = algoNameHouseScorePair.second.find(FileUtils::getFileNameNoExt(houseFileName))->second;
 			scoreSumForAlgo += scoreAlgoHouse;
 			cout <<  right <<  setw(10) << scoreAlgoHouse << "|";
 		}
 		// print average
-		float avgForAlgo = (float) scoreSumForAlgo/numHouses;
+		float avgForAlgo = (float) scoreSumForAlgo/numValidHouses;
 		//print row separator
 		cout << fixed << setprecision(2) << right<< setw(10) << avgForAlgo  << "|" << endl;
 		printRowSeparator(tableWidth);

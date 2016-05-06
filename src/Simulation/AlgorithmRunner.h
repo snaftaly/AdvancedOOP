@@ -61,7 +61,7 @@ public:
 
 
 	void updateStepsRemainingOnWinner(int numStepsRemaining);
-	int getCurrHouseScore(const int winnerNumSteps, const int simulationSteps, const string& houseName);
+	int getCurrHouseScore(const int winnerNumSteps, const int simulationSteps);
 
 	// setters
 

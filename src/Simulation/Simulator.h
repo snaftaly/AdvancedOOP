@@ -14,16 +14,16 @@
 #include "ConfigManager.h"
 #include "SimulationState.h"
 #include "HouseSimulation.h"
+#include "ScoreManager.h"
 
 
 
 class Simulator {
 
-	std::atomic<int> houseCounter; // TODO: not sure if atomic needed
-
-	std::mutex houseReadMutex;
+	std::atomic<size_t> houseIndex;
 
 	ConfigManager confMgr;
+	ScoreManager scoreMgr;
 	AlgorithmManager algoMgr;
 	HouseManager houseMgr;
 	size_t numThreads;
@@ -31,19 +31,10 @@ class Simulator {
 
 	std::map<std::string, std::map<std::string, int>> results;
 
-	// values for curr house run
-//	int numStepsRemaining;
-//	int simulationSteps;
-//	int numAlogsRunning;
-//	int currSuccessfullAlgoPosition;
-//	int numSuccessfulAlgosInRound;
-//	int winnerNumSteps;
-//	bool isThereAWinner;
-//	bool isUpdatedAboutToFinish;
-
 	void updateOnSuccessfulAlgo(AlgorithmRunner& algorithmRunner);
 	void updateAboutToFinish();
-	void threadFunc();
+	void runSingleSubSimulationThread();
+	void runSingleSubSimulation(const string& houseFileName);
 public:
 
 	//C'tor signature
