@@ -18,7 +18,8 @@ void GenericAlgorithm::setSensor(const AbstractSensor& s){
 	xDistanceFromDock = 0;
 	yDistanceFromDock = 0;
 	batteryMng.resetBattery();
-
+	isGoingBack = false;
+	prevStepFromAlgo = Direction::Stay;
 
 	//Empty stack of previous steps - TODO-Check.
 	std::stack<Direction> empty;

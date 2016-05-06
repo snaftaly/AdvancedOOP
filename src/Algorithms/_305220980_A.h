@@ -15,6 +15,8 @@ public:
 	 }
 
 	 virtual Direction step(Direction prevStep) override;
+
+	 virtual void setSensor(const AbstractSensor& sensor) override;
 };
 
 #endif /* 305220980A_H_ */

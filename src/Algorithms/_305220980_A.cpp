@@ -15,5 +15,12 @@ Direction _305220980_A::step(Direction prevStep) {
 	return getStepAndUpdatePrevStep(possibleMoves, prevStep);
 }
 
+void _305220980_A::setSensor(const AbstractSensor& sensor){
+	counter = 0;
+	possibleMoves = {Direction::North, Direction::West, Direction::South, Direction::East, Direction::Stay};
+
+	GenericAlgorithm::setSensor(sensor);
+}
+
 REGISTER_ALGORITHM (_305220980_A)
 
