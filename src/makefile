@@ -7,13 +7,16 @@ ALG_DIR=Algorithms/
 COM_DIR=Common/
 SIM_DIR=Simulation/
 
-all: simulator 305220980_A_.so 305220980_B_.so 305220980_C_.so  
+all: simulator 305220980_A_.so 305220980_B_.so 305220980_C_.so score_formula.so
 
 clean:
 	rm *.so *.o simulator
 
 simulator: main.o Simulator.o HouseSimulation.o Sensor.o AlgorithmManager.o ScoreManager.o AlgorithmRunner.o AlgorithmRegistration.o AlgorithmRegistrar.o ConfigManager.o HouseManager.o House.o ErrorPrinter.o FileUtils.o $(LIBS)
 	g++ -rdynamic -o $@ $^ $(CPP_FLAGS)
+
+score_formula.so: score_formula.o
+	g++ -shared -Wl,-soname,score_formula.so -o score_formula.so score_formula.o
 
 305220980_A_.so: _305220980_A.o GenericAlgorithm.o BatteryManager.o
 	g++ -shared -Wl,-soname,305220980_A_.so -o 305220980_A_.so _305220980_A.o GenericAlgorithm.o BatteryManager.o
@@ -38,6 +41,9 @@ GenericAlgorithm.o: $(ALG_DIR)GenericAlgorithm.cpp $(ALG_DIR)GenericAlgorithm.h 
 
 BatteryManager.o: $(ALG_DIR)BatteryManager.cpp $(ALG_DIR)BatteryManager.h
 	g++ $(CPP_FLAGS) -c $(ALG_DIR)BatteryManager.cpp
+
+score_formula.o: $(SIM_DIR)score_formula.cpp
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)score_formula.cpp
 
 main.o: $(SIM_DIR)main.cpp $(SIM_DIR)Simulator.h $(SIM_DIR)ErrorPrinter.h $(SIM_DIR)FileUtils.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)main.cpp

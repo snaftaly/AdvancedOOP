@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 				return 1;
 			}
 		}
-		else if (!strcmp("-­score_formula", argv[i])){
+		else if (!strcmp("-score_formula", argv[i])){
 			if (i < argc - 1){
 				scoreFormulaDir = argv[i+1];
 				i+=2;

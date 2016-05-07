@@ -150,10 +150,7 @@ int AlgorithmRunner::getCurrHouseScore(ScoreManager& scoreMgr, const int winnerN
 //				+ (isRobotInDock() ? 50 : -200)
 //				);
 	}
-	// tODO: remove this
-	for (const auto& pair : scoreParams){
-		cout << pair.first << ": " << pair.second << endl;
-	}
+
 	currHouseScore = scoreMgr.calcScore(isMadeIllegalMove, scoreParams);
 	return currHouseScore;
 }

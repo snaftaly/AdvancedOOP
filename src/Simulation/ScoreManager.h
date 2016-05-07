@@ -22,6 +22,7 @@ public:
 	bool loadFormula();
 	int calcScore(bool isMadeIllegalMove, const std::map<std::string, int>& scoreParams);
 	void updateScore(const std::string& algoName, const std::string& houseFileName, int score);
+	void printError();
 
 	// getters
 	const std::map<std::string, std::map<std::string, int> >& getAlgosScoresForHouses() const {

@@ -10,11 +10,8 @@
 using namespace std;
 
 int defaultFormula(const std::map<std::string, int>& resMap){
-	cout << "inside ffault formula!!!!" << endl;
+	cout << "inside fdefault formula!!!!" << endl;
 
-	for (const auto& pair : resMap){
-		cout << pair.first << ": " << pair.second << endl;
-	}
 	int actual_position_in_competition;
 //	int simulation_steps; // TODO: check default formula
 	int winner_num_steps;
@@ -110,14 +107,9 @@ bool ScoreManager::loadFormula(){
 }
 
 int ScoreManager::calcScore(bool isMadeIllegalMove, const std::map<std::string, int>& scoreParams){
-	for (const auto& pair : scoreParams){
-		cout << pair.first << ": " << pair.second << endl;
-	}
-
 	if (isMadeIllegalMove){
 		return 0;
 	}
-	cout << "after isMadeIllegalMove !!!!!!!!!!!!!!" << endl;
 	int score = scorefunc_fptr(scoreParams);
 	if (score == -1){
 		isScoreError = true;
@@ -129,4 +121,10 @@ int ScoreManager::calcScore(bool isMadeIllegalMove, const std::map<std::string, 
 void ScoreManager::updateScore(const std::string& algoName, const std::string& houseFileNameNoExt, int score){
 	std::lock_guard<std::mutex> guard(scoreUpdateMutex); // use mutex for this part
 	algosScoresForHouses[algoName][houseFileNameNoExt] = score;
+}
+
+void ScoreManager::printError(){
+	if (isScoreError){
+		cout << "Score formula could not calculate some scores, see ­1 in the results table" << endl;
+	}
 }
