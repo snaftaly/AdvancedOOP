@@ -197,8 +197,8 @@ bool House::readFromFile(string filePath)
 	if (!checkNumberInLine(3, &rows, tempLine)) return false;
 
 	getline(fin, tempLine);
-	if (!checkNumberInLine(4, &cols, tempLine)) return false;
 
+	if (!checkNumberInLine(4, &cols, tempLine)) return false;
 	if (houseMatrix != NULL){
 		delete [] houseMatrix;
 	}

@@ -5,7 +5,6 @@
 using namespace std;
 
 // initialization of static members
-//int AlgorithmRunner::currHouseTotDirt = 0;
 map<string, int> AlgorithmRunner::config;
 
 AlgorithmRunner::AlgorithmRunner(unique_ptr<AbstractAlgorithm>& _algorithm, string algoName):
@@ -15,11 +14,6 @@ AlgorithmRunner::AlgorithmRunner(unique_ptr<AbstractAlgorithm>& _algorithm, stri
 	algorithm = std::move(_algorithm);
 	setSensorForAlgorithm();
 }
-
-//void AlgorithmRunner::resetCommonDataForNewHouse(const House& house)
-//{
-//	currHouseTotDirt = house.calcDirtLevel();
-//}
 
 void AlgorithmRunner::resetRunnerForNewHouse(const House& house, int currHouseDocki, int currHouseDockj, int currHouseDirt){
 	setCurrHouse(house); // copy the house info using the = operator
@@ -145,7 +139,6 @@ int AlgorithmRunner::getCurrHouseScore(const int winnerNumSteps, const int simul
 				);
 	}
 	return currHouseScore;
-//	housesScores[houseName] = currHouseScore;
 }
 
 int AlgorithmRunner::getPositionInCompetitionForScore(){

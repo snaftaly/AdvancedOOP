@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <iostream>
 #include <stdlib.h>
+#include <list>
 
 using namespace std;
 
@@ -19,11 +20,11 @@ bool FileUtils::endsWith(const string & str, const string & suffix){
 
 
 vector<string> FileUtils::getSortedFileNamesListBySuffix(const string & path, const string & suffix){
-	vector<string> fileNamesList;
-
+	list<string> fileNamesList;
+	vector<string> fileNamesVec;
 	DIR * dir = opendir(path.c_str());
 	if (dir == NULL){
-		return fileNamesList;
+		return fileNamesVec;
 	}
 	struct dirent *dp;
 	while ((dp = readdir(dir)) != NULL){
@@ -32,8 +33,10 @@ vector<string> FileUtils::getSortedFileNamesListBySuffix(const string & path, co
 		}
 	}
 	closedir(dir);
-//	fileNamesList.sort(); // TODO: this is not needed since we get it sorted already
-	return fileNamesList;
+	fileNamesList.sort();
+	fileNamesVec.reserve(fileNamesList.size());
+	fileNamesVec.insert(fileNamesVec.end(),fileNamesList.begin(),fileNamesList.end());
+	return fileNamesVec;
 }
 
 string FileUtils::getFileNameFromPath(const std::string& filePath)

@@ -102,7 +102,6 @@ int main(int argc, char* argv[]) {
 
 	simulator.runSimulation();
 	simulator.printResults();
-	simulator.printErrors();
 
 	cout << "bye " << endl;
 	return 0;

@@ -10,8 +10,7 @@
 // in the next exercises this class will get the houses from files and keep them in a list.
 class HouseManager {
 	std::string housesPath;
-	std::vector<std::string> housesFileNamesLst;
-//	std::list<House> houses;
+	std::vector<std::string> housesFileNames;
 	std::map<std::string, std::string> housesErrors; // TODO: make sure this is sorted
 public:
 
@@ -24,10 +23,6 @@ public:
 
 	// getters
 
-//	const std::list<House>& getHouses() {
-//		return houses;
-//	}
-
 	const std::map<std::string, std::string>& getHousesErrors() const {
 		return housesErrors;
 	}
@@ -37,7 +32,7 @@ public:
 	}
 
 	const std::vector<std::string>& getHousesFileNamesLst() const {
-		return housesFileNamesLst;
+		return housesFileNames;
 	}
 };
 

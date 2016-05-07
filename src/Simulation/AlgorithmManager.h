@@ -10,14 +10,11 @@
 
 class AlgorithmManager {
 	std::string algorithmsPath;
-	std::vector<std::string> algorithmsFileNamesLst;
+	std::vector<std::string> algorithmsFileNames;
 
-//	std::list<AbstractAlgorithm *> algorithmsList;
 	std::map<std::string, AlgoRegState> algorithmsLoadErrors;
 
 	std::list<std::string> algorithmsRunErrors;
-
-//	std::list<AlgorithmRunner> algorithmRunnerList; // tODO: remove this
 
 public:
 	// AlgorithmManager ctor
@@ -26,7 +23,6 @@ public:
 	~AlgorithmManager(); // TODO: remove dtor
 	bool readAlgoFiles();
 	void printAlgorithmsErrors(bool all);
-//	void createAlgorithmRunnerList(ConfigManager& confMgr);
 	void addAlgoRunError(const std::string & algoName,const std::string & houseName, int simulationStep);
 
 
@@ -35,10 +31,6 @@ public:
 	const std::map<std::string, AlgoRegState>& getAlgorithmsLoadErrors() const {
 		return algorithmsLoadErrors;
 	}
-
-//	std::list<AlgorithmRunner>& getAlgorithmRunnerList() {
-//		return algorithmRunnerList;
-//	}
 
 	const std::list<std::string>& getAlgorithmsRunErrors() const {
 		return algorithmsRunErrors;

@@ -10,16 +10,12 @@ AlgorithmRegistrar AlgorithmRegistrar::instance;
 
 // AlgorithmRegistrar d'tor to close all DLs
 AlgorithmRegistrar::~AlgorithmRegistrar(){
-	// delete from memory all the dynamically created algorithms
-	// TODO: how will they be removed? (unique ptr)
-//	for (AlgorithmRunner& algoRunner : algorithmRunnerList){
-//		delete algoRunner.getAlgorithm();
-//	}
-//	// now delete the so that was registered
-
+	// delete from memory all the dynamically created algorithm factories
 	algorithmFactories.clear();
+	// now delete the .so files that were registered
+
 	for(auto itr = dl_list.begin(); itr!= dl_list.end(); itr++){
-		dlclose(*itr); // TODO: understand why we get this error!!!
+		dlclose(*itr);
 	}
 }
 
@@ -39,7 +35,7 @@ AlgoRegState AlgorithmRegistrar::loadAlgorithm(const std::string& path, const st
         return AlgoRegState::NO_ALGORITHM_REGISTERED; // no algorithm registered
     }
 
-    setNameForLastAlgorithm(FileUtils::getFileNameNoExt(so_file_name)); // TODO: remove .so extension now
+    setNameForLastAlgorithm(FileUtils::getFileNameNoExt(so_file_name)); // remove .so extension now
 
     return AlgoRegState::ALGORITHM_REGISTERED_SUCCESSFULY;
 }

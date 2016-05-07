@@ -46,8 +46,6 @@ Simulator::Simulator(const string& configPath, const string & scoreFormulaPath, 
 	// put confs in algorithm runner staticaly
 	AlgorithmRunner::setConfig(confMgr.getConfs());
 
-	// create algo runner list
-//	algoMgr.createAlgorithmRunnerList(confMgr);
 }
 
 //D'tor implementation
@@ -57,24 +55,11 @@ Simulator::~Simulator() {
 
 
 void Simulator::runSingleSubSimulationThread(){
-	// fetch old value, then add. equivalent to: fetch_add(1)
+	// fetch old value, then add.
 	for (size_t index = houseIndex++; index < houseMgr.getHousesFileNamesLst().size();  index = houseIndex++){
 		runSingleSubSimulation(houseMgr.getHousesFileNamesLst().at(index));
 		cout << "running for house number: " << index << endl;
 	}
-
-	// TODO: remove this
-//	// get the next house for the thread - using mutex
-//	string houseFileName;
-//	{
-//		std::lock_guard<std::mutex> guard(houseReadMutex); // use mutex for this part
-//		if (houseIndex >= houseMgr.getHousesFileNamesLst().size()){
-//			return;
-//		}
-//		houseFileName = houseMgr.getHousesFileNamesLst().at(houseIndex++);
-//	}
-
-
 }
 
 
@@ -112,76 +97,6 @@ void Simulator::runSingleSubSimulation(const string& houseFileName){
 	houseSimulation.runSimulationForHouse(algoMgr, scoreMgr, currHouse, algorithmRunnerList, maxStepsAfterWinner);
 }
 
-//void Simulator::runSimulationForHouse(const House& house, list<AlgorithmRunner>& algoRunnerList){
-//	int maxSteps = house.getMaxSteps(); // no need to save
-//	int maxStepsAfterWinner = confMgr.getConfs().find("MaxStepsAfterWinner")->second;
-
-//	int currSuccessfullAlgoPosition = 1;
-//	int numSuccessfulAlgosInRound; // need to save
-//	int winnerNumSteps = maxSteps; //need to save
-//	int numStepsRemaining = maxSteps; // need to save
-//	int numAlogsRunning = algoRunnerList.size(); // need to save
-//	int simulationSteps = 0;
-//	bool isThereAWinner = false; // need to save
-//	bool isUpdatedAboutToFinish = false; // need to save
-	// set the current house for the algorithm runners;
-//	setHouseForEachAlgorithmRunner(house, algoRunnerList);
-//
-//	// run the simulation - for the different algorithms
-//	while (numAlogsRunning > 0 && numStepsRemaining > 0){
-//		// check if stepsRemaining == maxStepsAfterWinner
-//		if (!isUpdatedAboutToFinish && simulationSteps == (maxSteps - maxStepsAfterWinner)){
-//			updateAboutToFinish();
-//		}
-//		// reset number of successful algorithms in round (step)
-//		numSuccessfulAlgosInRound = 0;
-//
-//		// update simulations steps and steps remaining
-//		simulationSteps++;
-//		numStepsRemaining--;
-//		for (AlgorithmRunner& algorithmRunner : algoRunnerList){
-//			if (algorithmRunner.getIsFinished()){ // if algorithm already finished - move to next one
-//				continue;
-//			}
-//			// check if the algorithm has finished
-//			if (algorithmRunner.isHouseCleanAndRobotInDock()){
-//				// this part is done in case the house is already clean before making any step
-//				updateOnSuccessfulAlgo(algorithmRunner, currSuccessfullAlgoPosition);
-//			}
-//			else if (algorithmRunner.isBatteryConsumedAndRobotNotInDock()){ // check if no more battery
-//				algorithmRunner.setSimulationState(SimulationState::OutOfBattery);
-//				numAlogsRunning--;
-//			}
-//			else {
-//				bool isMadeLegalMove = algorithmRunner.getStepAndUpdateIfLegal();
-//				if (!isMadeLegalMove){
-//					algoMgr.addAlgoRunError(algorithmRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), simulationSteps);
-//					algorithmRunner.setSimulationState(SimulationState::IllegalMove);
-//					numAlogsRunning--;
-//				}
-//				else { // move is legal
-//					if (algorithmRunner.isHouseCleanAndRobotInDock()){
-//						updateOnSuccessfulAlgo(algorithmRunner, currSuccessfullAlgoPosition);
-//					}
-//				}
-//			}
-//		}
-//		// end of for loop for each algorithm - update the next successful algo position
-//		currSuccessfullAlgoPosition += numSuccessfulAlgosInRound;
-//
-//	}
-//	// end of while for the house - update algos scores
-//	if (!isThereAWinner){
-//		winnerNumSteps = simulationSteps;
-//	}
-//	for (AlgorithmRunner& algoRunner : algoRunnerList){
-//		// TODO: add score to a global place
-//		algoRunner.addCurrHouseScore(winnerNumSteps, simulationSteps, FileUtils::getFileNameNoExt(house.getFileName()));
-//	}
-
-
-//}
-
 void Simulator::setHouseForEachAlgorithmRunner(const House& house, list<AlgorithmRunner>& algoRunnerList){
 	// set common data about the house for the algorithms
 	int currHouseTotDirt = house.calcDirtLevel();
@@ -191,40 +106,6 @@ void Simulator::setHouseForEachAlgorithmRunner(const House& house, list<Algorith
 		algoRunner.resetRunnerForNewHouse(house, currHouseDocki, currHouseDockj, currHouseTotDirt);
 	}
 }
-
-
-//void Simulator::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner, int currSuccessfullAlgoPosition){
-//	successAlgorithmRunner.setAlgoRankInCompetition(currSuccessfullAlgoPosition);
-//	successAlgorithmRunner.setSimulationState(SimulationState::Success);
-//	*numSuccessfulAlgosInRound++;
-//	*numAlogsRunning--;
-//	if (!(*isThereAWinner)){
-//		// this algo is the first to win for the house - so update that there was a winner
-//		isThereAWinner = true;
-//
-//		// update winner num steps
-//		*winnerNumSteps =  successAlgorithmRunner.getNumSteps();
-//
-//		if (!(*isUpdatedAboutToFinish)){
-//			// update other algos with result
-//			updateAboutToFinish();
-//		}
-//
-//	}
-//}
-//
-//void Simulator::updateAboutToFinish(){
-//
-//	isUpdatedAboutToFinish = true;
-//	// update steps remaining for simulator
-//	numStepsRemaining = min(confMgr.getConfs().find("MaxStepsAfterWinner")->second, numStepsRemaining);
-//	// update steps remaining for each algorithm
-//	for (AlgorithmRunner& algorithmRunner : algoMgr.getAlgorithmRunnerList()){
-//		algorithmRunner.updateStepsRemainingOnWinner(numStepsRemaining);
-//	}
-//}
-
-
 
 void Simulator::runSimulation(){
 
@@ -240,72 +121,6 @@ void Simulator::runSimulation(){
     for(auto& thread_ptr : threads) {
         thread_ptr->join();
     }
-
-//	for (const House& house : houseMgr.getHouses()){
-//		int maxSteps = house.getMaxSteps();
-//		int maxStepsAfterWinner = confMgr.getConfs().find("MaxStepsAfterWinner")->second;
-//		currSuccessfullAlgoPosition = 1;
-//		winnerNumSteps = numStepsRemaining = maxSteps;
-//		numAlogsRunning = algoMgr.getAlgorithmRunnerList().size();
-//		simulationSteps = 0;
-//		isThereAWinner = false;
-//		isUpdatedAboutToFinish = false;
-
-		// set the current house for the algorithm runners;
-//		setHouseForEachAlgorithmRunner(house);
-
-		// run the simulator - for each house run the different algorithms
-//		while (numAlogsRunning > 0 && numStepsRemaining > 0){
-//			// check if stepsRemaining == maxStepsAfterWinner
-//			if (!isUpdatedAboutToFinish && simulationSteps == (maxSteps - maxStepsAfterWinner)){
-//				updateAboutToFinish();
-//			}
-//			// reset number of successful algorithms in round (step)
-//			numSuccessfulAlgosInRound = 0;
-//
-//			// update simulations steps and steps remaining
-//			simulationSteps++;
-//			numStepsRemaining--;
-//			for (AlgorithmRunner& algorithmRunner : algoMgr.getAlgorithmRunnerList()){
-//				if (algorithmRunner.getIsFinished()){ // if algorithm already finished - move to next one
-//					continue;
-//				}
-//				// check if the algorithm has finished
-//				if (algorithmRunner.isHouseCleanAndRobotInDock()){
-//					// this part is done in case the house is already clean before making any step
-//					updateOnSuccessfulAlgo(algorithmRunner);
-//				}
-//				else if (algorithmRunner.isBatteryConsumedAndRobotNotInDock()){ // check if no more battery
-//					algorithmRunner.setSimulationState(SimulationState::OutOfBattery);
-//					numAlogsRunning--;
-//				}
-//				else {
-//					bool isMadeLegalMove = algorithmRunner.getStepAndUpdateIfLegal();
-//					if (!isMadeLegalMove){
-//						algoMgr.addAlgoRunError(algorithmRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), simulationSteps);
-//						algorithmRunner.setSimulationState(SimulationState::IllegalMove);
-//						numAlogsRunning--;
-//					}
-//					else { // move is legal
-//						if (algorithmRunner.isHouseCleanAndRobotInDock()){
-//							updateOnSuccessfulAlgo(algorithmRunner);
-//						}
-//					}
-//				}
-//			}
-//			// end of for loop for each algorithm - update the next successful algo position
-//			currSuccessfullAlgoPosition += numSuccessfulAlgosInRound;
-//
-//		}
-//		// end of while for the house - update algos scores
-//		if (!isThereAWinner){
-//			winnerNumSteps = simulationSteps;
-//		}
-//		for (AlgorithmRunner& algoRunner : algoMgr.getAlgorithmRunnerList()){
-//			algoRunner.addCurrHouseScore(winnerNumSteps, simulationSteps, FileUtils::getFileNameNoExt(house.getFileName()));
-//		}
-//	}
-
 }
 
 
@@ -335,6 +150,7 @@ void Simulator::printTableHeader(const int tableWidth){
 
 
 void Simulator::printResults(){
+	// TODO: sort by AVG
 	// check if all houses were problematic
 	int numValidHouses = houseMgr.getHousesFileNamesLst().size() - houseMgr.getHousesErrors().size();
 
@@ -370,6 +186,8 @@ void Simulator::printResults(){
 		cout << fixed << setprecision(2) << right<< setw(10) << avgForAlgo  << "|" << endl;
 		printRowSeparator(tableWidth);
 	}
+
+	printErrors();
 }
 
 void Simulator::printErrors(){

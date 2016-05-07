@@ -34,12 +34,12 @@ bool ConfigManager::loadFromFile()
 		processLine(line);
 	}
 	fin.close();
-	// TODO: what should be the precedence here?
 	// now check that the the parameters have correct values and missing paramas
 	updateParamsWithBaValue();
 	updateMissingParams();
 
 	if (!missingParams.empty() || !paramsWithBadValues.empty()){
+		// print params with bad values and missing params
 		printParamsWithBadValues();
 		printMissingParams();
 		return false;
@@ -70,7 +70,6 @@ void ConfigManager::processLine(const string& line)
 	int tempVal;
 	if (tokens.size() < 1 || tokens.size() > 2)
 	{
-		// TODO: what should be done in case the value is empty?
 		return;
 	}
 	string key = trim(tokens[0]);

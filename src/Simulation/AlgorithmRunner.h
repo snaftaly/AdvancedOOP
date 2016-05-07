@@ -25,15 +25,13 @@ class AlgorithmRunner {
 	int numSteps;
 	int dirtCollected;
 	Direction prevStep = Direction::Stay;
+	int currHouseTotDirt;
 
 	int algoPositionInCompetition;
 	SimulationState simulationState;
 
-	std::map<std::string, int> housesScores; // TODO: remove - this is not needed
-
 	static map<string, int> config;
 
-	int currHouseTotDirt;
 
 	bool isLegalStep(int stepi, int stepj);
 
@@ -78,10 +76,6 @@ public:
 
 	bool getIsFinished() const {
 		return (this->simulationState != SimulationState::Running);
-	}
-
-	std::map<std::string, int>& getHousesScore() {
-		return housesScores;
 	}
 
 	int getNumSteps() const {
