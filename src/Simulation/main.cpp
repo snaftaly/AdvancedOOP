@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 
 	// add trailing '/' if it's missing
 	FileUtils::fixTrailingSlash(configDir);
-	if (!scoreFormulaDir.compare("")){
+	if (!scoreFormulaDir.empty()){
 		// score formula path was given
 		FileUtils::fixTrailingSlash(scoreFormulaDir);
 	}

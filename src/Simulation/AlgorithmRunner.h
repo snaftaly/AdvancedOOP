@@ -10,6 +10,7 @@
 #include "../Common/AbstractAlgorithm.h"
 #include "../Common/AbstractSensor.h"
 #include "Sensor.h"
+#include "ScoreManager.h"
 #include "SimulationState.h"
 
 class AlgorithmRunner {
@@ -55,11 +56,12 @@ public:
 	bool isBatteryConsumedAndRobotNotInDock();
 	bool getStepAndUpdateIfLegal();
 	bool isRobotInDock();
-	int getPositionInCompetitionForScore();
+	int getActualPositionInCompetition();
 
 
 	void updateStepsRemainingOnWinner(int numStepsRemaining);
-	int getCurrHouseScore(const int winnerNumSteps, const int simulationSteps);
+	int getCurrHouseScore(ScoreManager& scoreMgr, const int winnerNumSteps, const int simulationSteps,
+			const int unsuccessfullAlgosPosition);
 
 	// setters
 

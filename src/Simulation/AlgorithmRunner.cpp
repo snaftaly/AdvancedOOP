@@ -111,16 +111,28 @@ bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 			stepi < currHouse.getRows() && stepj < currHouse.getCols());
 }
 
-int AlgorithmRunner::getCurrHouseScore(const int winnerNumSteps, const int simulationSteps){
+int AlgorithmRunner::getCurrHouseScore(ScoreManager& scoreMgr, const int winnerNumSteps, const int simulationSteps,
+		const int unsuccessfullAlgosPosition){
 	int currHouseScore;
+	map<string, int> scoreParams;
+	bool isMadeIllegalMove = false;
 	if (simulationState == SimulationState::IllegalMove){
-		currHouseScore = 0;
+		isMadeIllegalMove = true;
 	}
 	else {
-		int positionInCompetition = getPositionInCompetitionForScore();
+		int actualPositionInCompetition = simulationState == SimulationState::Success ? algoPositionInCompetition : unsuccessfullAlgosPosition;
 		if (simulationState == SimulationState::OutOfBattery){
 			numSteps = simulationSteps;
 		}
+		scoreParams["actual_position_in_competition"] = actualPositionInCompetition;
+		scoreParams["simulation_steps"] = simulationSteps;
+		scoreParams["winner_num_steps"] = winnerNumSteps;
+		scoreParams["this_num_steps"] = numSteps;
+		scoreParams["sum_dirt_in_house"] = currHouseTotDirt;
+		scoreParams["dirt_collected"] = dirtCollected;
+		scoreParams["is_back_in_docking"] = isRobotInDock() ? 1 : 0;
+
+
 		//print for tests
 //		cout << "algoname: " << algoName << endl;
 //		cout << "positionInCompetition " << positionInCompetition << endl;
@@ -130,22 +142,20 @@ int AlgorithmRunner::getCurrHouseScore(const int winnerNumSteps, const int simul
 //		cout << "dirtCollected" << dirtCollected << endl;
 //		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
 //		cout << currHouse << endl;
-		currHouseScore = max(0,
-				2000
-				- (positionInCompetition - 1)*50
-				+ (winnerNumSteps - numSteps)*10
-				-(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3
-				+ (isRobotInDock() ? 50 : -200)
-				);
+//		currHouseScore = max(0,
+//				2000
+//				- (positionInCompetition - 1)*50
+//				+ (winnerNumSteps - numSteps)*10
+//				-(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3
+//				+ (isRobotInDock() ? 50 : -200)
+//				);
 	}
+	// tODO: remove this
+	for (const auto& pair : scoreParams){
+		cout << pair.first << ": " << pair.second << endl;
+	}
+	currHouseScore = scoreMgr.calcScore(isMadeIllegalMove, scoreParams);
 	return currHouseScore;
-}
-
-int AlgorithmRunner::getPositionInCompetitionForScore(){
-	if (!(simulationState == SimulationState::Success)){
-		return 10;
-	}
-	return min(algoPositionInCompetition, 4);
 }
 
 void AlgorithmRunner::setSensorForAlgorithm(){

@@ -81,8 +81,10 @@ void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreMana
 	}
 	int score;
 	for (AlgorithmRunner& algoRunner : algoRunnerList){
-		score = algoRunner.getCurrHouseScore(winnerNumSteps, simulationSteps);
-		cout << algoRunner.getAlgoName() << ": " << house.getFileName() << ":" << score << endl;
+		// currSuccessfullAlgoPosition now has the position of the unsuccessful algos
+		// TODO: refactor this somehow
+		score = algoRunner.getCurrHouseScore(scoreMgr, winnerNumSteps, simulationSteps, currSuccessfullAlgoPosition);
+		cout << algoRunner.getAlgoName() << ": " << house.getFileName() << ":" << score << endl; // tODO: remove this;
 		scoreMgr.updateScore(algoRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), score);
 	}
 }

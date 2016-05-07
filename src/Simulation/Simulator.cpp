@@ -201,4 +201,5 @@ void Simulator::printErrors(){
 	cout << endl << "Errors:" << endl;
 	houseMgr.printHousesErrors(false);
 	algoMgr.printAlgorithmsErrors(false);
+	// TODO: print errors for -1 score
 }
