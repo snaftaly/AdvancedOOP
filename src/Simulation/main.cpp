@@ -71,8 +71,6 @@ int main(int argc, char* argv[]) {
 				if (numThreads <= 0){
 					numThreads = 1;
 				}
-
-				algorithmsDir = argv[i+1];
 				i+=2;
 			}
 			else {
