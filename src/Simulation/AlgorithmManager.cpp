@@ -33,8 +33,8 @@ bool AlgorithmManager::readAlgoFiles(){
 	AlgorithmRegistrar& registrar = AlgorithmRegistrar::getInstance();
 
 	for (const auto &algoFileName : algorithmsFileNames){
-		AlgoRegState result = registrar.loadAlgorithm(algorithmsPath, algoFileName);
-        if(result != AlgoRegState::ALGORITHM_REGISTERED_SUCCESSFULY) {
+		SORegState result = registrar.loadAlgorithm(algorithmsPath, algoFileName);
+        if(result != SORegState::REGISTERED_SUCCESSFULY) {
             // handle errors in loading algorithm - add it to list of errors
         	algorithmsLoadErrors[algoFileName] = result;
         }
@@ -56,11 +56,11 @@ void AlgorithmManager::printAlgorithmsErrors(bool all){
 	}
 	string errStr;
 	// TODO: maybe add a << operator to the enum class??
-	for(const pair<string, AlgoRegState>& algorithmErrPair : algorithmsLoadErrors) {
-		if (algorithmErrPair.second == AlgoRegState::FILE_CANNOT_BE_LOADED) {
+	for(const pair<string, SORegState>& algorithmErrPair : algorithmsLoadErrors) {
+		if (algorithmErrPair.second == SORegState::FILE_CANNOT_BE_LOADED) {
 				errStr =  "file cannot be loaded or is not a valid .so";
 		}
-		else if (algorithmErrPair.second == AlgoRegState::NO_ALGORITHM_REGISTERED){
+		else if (algorithmErrPair.second == SORegState::NO_REGISTERED){
 				errStr = "valid .so but no algorithm was registered after loading it";
 		}
 		cout << algorithmErrPair.first << ": " << errStr << endl;

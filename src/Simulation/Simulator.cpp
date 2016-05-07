@@ -30,6 +30,10 @@ Simulator::Simulator(const string& configPath, const string & scoreFormulaPath, 
 	}
 
 	// score formula init TODO: add this part
+	if (!scoreMgr.loadFormula()){
+		initSuccessfull = false;
+		return;
+	}
 
 	// get algorithms
 	if (!algoMgr.readAlgoFiles()){

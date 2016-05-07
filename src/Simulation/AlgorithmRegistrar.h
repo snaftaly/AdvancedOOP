@@ -10,7 +10,7 @@
 #include "../Common/AbstractAlgorithm.h"
 #include "../Common/AlgorithmRegistration.h"
 #include "../Common/MakeUniqueAdder.h"
-#include "AlgoRegState.h"
+#include "SORegState.h"
 
 class AlgorithmRegistrar {
     std::list<void *> dl_list;
@@ -26,7 +26,7 @@ class AlgorithmRegistrar {
     ~AlgorithmRegistrar();
 public:
     friend class AlgorithmRegistration;
-    AlgoRegState loadAlgorithm(const std::string& path, const std::string& so_file_name_without_so_suffix);
+    SORegState loadAlgorithm(const std::string& path, const std::string& so_file_name_without_so_suffix);
     std::list<std::unique_ptr<AbstractAlgorithm>> getAlgorithms()const;
     const std::list<std::string>& getAlgorithmNames()const {
         return algorithmNames;

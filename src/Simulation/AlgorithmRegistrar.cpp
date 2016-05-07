@@ -19,25 +19,25 @@ AlgorithmRegistrar::~AlgorithmRegistrar(){
 	}
 }
 
-AlgoRegState AlgorithmRegistrar::loadAlgorithm(const std::string& path, const std::string& so_file_name){
+SORegState AlgorithmRegistrar::loadAlgorithm(const std::string& path, const std::string& so_file_name){
 
     size_t prev_size = size();
     void *dlib;
 	string algoPath = path + so_file_name;
 	dlib = dlopen(algoPath.c_str(), RTLD_NOW);
 	if(dlib == NULL){
-		return AlgoRegState::FILE_CANNOT_BE_LOADED;
+		return SORegState::FILE_CANNOT_BE_LOADED;
 	}
 
 	dl_list.insert(dl_list.end(), dlib);
 
     if(size() == prev_size) {
-        return AlgoRegState::NO_ALGORITHM_REGISTERED; // no algorithm registered
+        return SORegState::NO_REGISTERED; // no algorithm registered
     }
 
     setNameForLastAlgorithm(FileUtils::getFileNameNoExt(so_file_name)); // remove .so extension now
 
-    return AlgoRegState::ALGORITHM_REGISTERED_SUCCESSFULY;
+    return SORegState::REGISTERED_SUCCESSFULY;
 }
 
 

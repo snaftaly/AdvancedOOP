@@ -12,7 +12,7 @@ class AlgorithmManager {
 	std::string algorithmsPath;
 	std::vector<std::string> algorithmsFileNames;
 
-	std::map<std::string, AlgoRegState> algorithmsLoadErrors;
+	std::map<std::string, SORegState> algorithmsLoadErrors;
 
 	std::list<std::string> algorithmsRunErrors;
 
@@ -28,7 +28,7 @@ public:
 
 	// getters
 
-	const std::map<std::string, AlgoRegState>& getAlgorithmsLoadErrors() const {
+	const std::map<std::string, SORegState>& getAlgorithmsLoadErrors() const {
 		return algorithmsLoadErrors;
 	}
 

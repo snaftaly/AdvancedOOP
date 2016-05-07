@@ -48,13 +48,13 @@ Simulator.o: $(SIM_DIR)Simulator.cpp $(SIM_DIR)Simulator.h $(SIM_DIR)HouseSimula
 HouseSimulation.o: $(SIM_DIR)HouseSimulation.cpp $(SIM_DIR)HouseSimulation.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)AlgorithmManager.h $(SIM_DIR)ScoreManager.h $(SIM_DIR)House.h $(SIM_DIR)FileUtils.h $(SIM_DIR)House.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)HouseSimulation.cpp
 
-ScoreManager.o: $(SIM_DIR)ScoreManager.cpp $(SIM_DIR)ScoreManager.h
+ScoreManager.o: $(SIM_DIR)ScoreManager.cpp $(SIM_DIR)ScoreManager.h $(SIM_DIR)SORegState.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)ScoreManager.cpp
 
-AlgorithmManager.o: $(SIM_DIR)AlgorithmManager.cpp $(SIM_DIR)AlgorithmManager.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)ConfigManager.h $(SIM_DIR)AlgorithmRegistrar.h $(SIM_DIR)AlgoRegState.h $(SIM_DIR)FileUtils.h $(SIM_DIR)ErrorPrinter.h 
+AlgorithmManager.o: $(SIM_DIR)AlgorithmManager.cpp $(SIM_DIR)AlgorithmManager.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)ConfigManager.h $(SIM_DIR)AlgorithmRegistrar.h $(SIM_DIR)SORegState.h $(SIM_DIR)FileUtils.h $(SIM_DIR)ErrorPrinter.h 
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)AlgorithmManager.cpp
 
-AlgorithmRegistrar.o: $(SIM_DIR)AlgorithmRegistrar.cpp $(SIM_DIR)AlgorithmRegistrar.h $(SIM_DIR)FileUtils.h $(SIM_DIR)AlgoRegState.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)MakeUniqueAdder.h
+AlgorithmRegistrar.o: $(SIM_DIR)AlgorithmRegistrar.cpp $(SIM_DIR)AlgorithmRegistrar.h $(SIM_DIR)FileUtils.h $(SIM_DIR)SORegState.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)MakeUniqueAdder.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)AlgorithmRegistrar.cpp
 
 AlgorithmRegistration.o: $(SIM_DIR)AlgorithmRegistration.cpp $(SIM_DIR)AlgorithmRegistrar.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)MakeUniqueAdder.h

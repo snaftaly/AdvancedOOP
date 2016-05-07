@@ -7,15 +7,16 @@
 
 
 class ScoreManager {
-	std::string scoreFilePath;
+	void *dlib;
+	std::string scoreDirPath;
 	std::mutex scoreUpdateMutex;
 	std::map<std::string, std::map<std::string, int>> algosScoresForHouses; // think of a better container
 
-
 public:
-	ScoreManager(const std::string& _scoreFilePath): scoreFilePath(_scoreFilePath){ }
+	ScoreManager(const std::string& _scoreFilePath): dlib(NULL), scoreDirPath(_scoreFilePath){ }
 	~ScoreManager();
 
+	bool loadFormula();
 	void updateScore(const std::string& algoName, const std::string& houseFileName, int score);
 
 	const std::map<std::string, std::map<std::string, int> >& getAlgosScoresForHouses() const {
