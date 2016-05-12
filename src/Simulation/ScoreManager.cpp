@@ -10,7 +10,7 @@
 using namespace std;
 
 int defaultFormula(const std::map<std::string, int>& resMap){
-	cout << "inside fdefault formula!!!!" << endl;
+	cout << "inside default formula!!!!" << endl;
 
 	int actual_position_in_competition;
 //	int simulation_steps; // TODO: check default formula
@@ -120,7 +120,7 @@ int ScoreManager::calcScore(bool isMadeIllegalMove, const std::map<std::string, 
 
 void ScoreManager::updateScore(const std::string& algoName, const std::string& houseFileNameNoExt, int score){
 	std::lock_guard<std::mutex> guard(scoreUpdateMutex); // use mutex for this part
-	algosScoresForHouses[algoName][houseFileNameNoExt] = score;
+
 }
 
 void ScoreManager::printError(){
@@ -128,3 +128,18 @@ void ScoreManager::printError(){
 		cout << "Score formula could not calculate some scores, see ­1 in the results table" << endl;
 	}
 }
+
+
+// inner class related functions
+bool operator==(const ScoreManager::algoHouseScores& lhs, const ScoreManager::algoHouseScores& rhs){
+	return lhs.algoName == rhs.algoName;
+}
+
+const float enclose::algoHouseScores::getAvg() const{
+	int sum = 0;
+	for (const auto& pair : houseScores){
+		sum += pair.second;
+	}
+	return (float)sum/houseScores.size();
+}
+
