@@ -22,7 +22,7 @@ public:
 		this->sensorHousePtr = sensorHouse;
 	}
 
-	void setRobotiPrt(int* robotiPrt) {
+	void setRobotiPtr(int* robotiPrt) {
 		this->robotiPtr = robotiPrt;
 	}
 

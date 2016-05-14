@@ -79,13 +79,12 @@ void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreMana
 	if (!isThereAWinner){
 		winnerNumSteps = simulationSteps;
 	}
-	int score;
+	int algoScore;
 	for (AlgorithmRunner& algoRunner : algoRunnerList){
 		// currSuccessfullAlgoPosition now has the position of the unsuccessful algos
-		// TODO: refactor this somehow
-		score = algoRunner.getCurrHouseScore(scoreMgr, winnerNumSteps, simulationSteps, currSuccessfullAlgoPosition);
-		cout << algoRunner.getAlgoName() << ": " << house.getFileName() << ":" << score << endl; // tODO: remove this;
-		scoreMgr.updateScore(algoRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), score);
+		algoScore = scoreMgr.calcScore(algoRunner.isMadeIllegalMove(), algoRunner.getScoreParams(winnerNumSteps, simulationSteps, currSuccessfullAlgoPosition));
+//		cout << algoRunner.getAlgoName() << ": " << house.getFileName() << ":" << algoScore << endl; // tODO: remove this;
+		scoreMgr.updateScore(algoRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), algoScore);
 	}
 }
 

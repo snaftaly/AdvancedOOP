@@ -10,7 +10,6 @@
 #include "../Common/AbstractAlgorithm.h"
 #include "../Common/AbstractSensor.h"
 #include "Sensor.h"
-#include "ScoreManager.h"
 #include "SimulationState.h"
 
 class AlgorithmRunner {
@@ -60,8 +59,13 @@ public:
 
 
 	void updateStepsRemainingOnWinner(int numStepsRemaining);
-	int getCurrHouseScore(ScoreManager& scoreMgr, const int winnerNumSteps, const int simulationSteps,
+
+	const std::map<std::string, int> getScoreParams(const int winnerNumSteps, const int simulationSteps,
 			const int unsuccessfullAlgosPosition);
+	bool isMadeIllegalMove();
+
+//	void getCurrHouseScoreAndUpdateIt(ScoreManager& scoreMgr, const int winnerNumSteps, const int simulationSteps,
+//			const int unsuccessfullAlgosPosition);
 
 	// setters
 

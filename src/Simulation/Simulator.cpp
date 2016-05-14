@@ -1,19 +1,12 @@
 #include <iomanip>
 #include <algorithm>
 #include <iostream>
-#include <iomanip>
 #include <sstream>
 #include <unistd.h> // for usleep
 #include "Simulator.h"
 #include "FileUtils.h"
 #include "AlgorithmRegistrar.h"
 #include "../Common/MakeUniqueAdder.h"
-
-
-#define HOUSE_NAME_MAX 9
-#define ALGO_NAME_MAX 12
-#define FIRST_COLUMN_WIDTH 13
-#define OTHER_COLUMN_WIDTH 10
 
 using namespace std;
 
@@ -60,9 +53,8 @@ Simulator::~Simulator() {
 
 void Simulator::runSingleSubSimulationThread(){
 	// fetch old value, then add.
-	for (size_t index = houseIndex++; index < houseMgr.getHousesFileNamesLst().size();  index = houseIndex++){
-		runSingleSubSimulation(houseMgr.getHousesFileNamesLst().at(index));
-		cout << "running for house number: " << index << endl;
+	for (size_t index = houseIndex++; index < houseMgr.getHousesFileNames().size();  index = houseIndex++){
+		runSingleSubSimulation(houseMgr.getHousesFileNames().at(index));
 	}
 }
 
@@ -79,6 +71,8 @@ void Simulator::runSingleSubSimulation(const string& houseFileName){
 		houseMgr.addHouseErr(houseFileName, currHouse.getErrStr());
 		return;
 	}
+	// house is valid - add to valid names.
+	houseMgr.addValidHouse(houseFileName);
 
 	// create the algo runner list
 	AlgorithmRegistrar& registrar = AlgorithmRegistrar::getInstance();
@@ -113,7 +107,7 @@ void Simulator::setHouseForEachAlgorithmRunner(const House& house, list<Algorith
 
 void Simulator::runSimulation(){
 
-	size_t numNeededTrheads = min(numThreads, houseMgr.getHousesFileNamesLst().size());
+	size_t numNeededTrheads = min(numThreads, houseMgr.getHousesFileNames().size());
 	vector<unique_ptr<thread>> threads(numNeededTrheads);	// create the threads
 
     for(auto& thread_ptr : threads) {
@@ -129,68 +123,18 @@ void Simulator::runSimulation(){
 
 
 
-void Simulator::printRowSeparator(const int tableWidth){
-	cout << setw(tableWidth) << setfill('-') << "" << endl << setfill(' ');;
-}
-
-void Simulator::printTableHeader(const int tableWidth){
-	//print row separator
-	printRowSeparator(tableWidth);
-	// print houses names
-	cout << "|             |";
-	for (const string& houseFileName : houseMgr.getHousesFileNamesLst()){
-		if (houseMgr.getHousesErrors().find(houseFileName) != houseMgr.getHousesErrors().end()){
-			// house had errors so continue to next
-			continue;
-		}
-		string name =  FileUtils::getFileNameNoExt(houseFileName);
-		name.resize(HOUSE_NAME_MAX, ' ');
-		cout << name << " |";
-	}
-	cout << std::left << std::setw(10) << "AVG" << "|" << endl;
-	//print row separator
-	printRowSeparator(tableWidth);
-}
-
-
 void Simulator::printResults(){
-	// TODO: sort by AVG
 	// check if all houses were problematic
-	int numValidHouses = houseMgr.getHousesFileNamesLst().size() - houseMgr.getHousesErrors().size();
-
-	if (numValidHouses == 0){
+	if ((houseMgr.getValidHousesFileNamesSorted().size()) == 0){
 		// all the houses were problematic
 		houseMgr.printHousesErrors(true);
 		return;
 	}
 
-	int tableWidth = FIRST_COLUMN_WIDTH + 2 + (OTHER_COLUMN_WIDTH + 1)*(numValidHouses+1);
-	int scoreAlgoHouse;
-	int scoreSumForAlgo;
-	printTableHeader(tableWidth);
+	// print score table sorted by avg
+	scoreMgr.printScoreTable(houseMgr.getValidHousesFileNamesSorted());
 
-	for (const auto& algoNameHouseScorePair : scoreMgr.getAlgosScoresForHouses()){
-		string algoNameTrimmed = algoNameHouseScorePair.first;
-		algoNameTrimmed.resize(ALGO_NAME_MAX, ' ');
-		cout << "|" << algoNameTrimmed << " |";
-		scoreSumForAlgo = 0;
-		// print each house score
-		for (const string& houseFileName : houseMgr.getHousesFileNamesLst()){
-			if (houseMgr.getHousesErrors().find(houseFileName) != houseMgr.getHousesErrors().end()){
-				// house had errors so continue to next
-				continue;
-			}
-			scoreAlgoHouse = algoNameHouseScorePair.second.find(FileUtils::getFileNameNoExt(houseFileName))->second;
-			scoreSumForAlgo += scoreAlgoHouse;
-			cout <<  right <<  setw(10) << scoreAlgoHouse << "|";
-		}
-		// print average
-		float avgForAlgo = (float) scoreSumForAlgo/numValidHouses;
-		//print row separator
-		cout << fixed << setprecision(2) << right<< setw(10) << avgForAlgo  << "|" << endl;
-		printRowSeparator(tableWidth);
-	}
-
+	// print all the errors
 	printErrors();
 }
 
@@ -202,5 +146,4 @@ void Simulator::printErrors(){
 	houseMgr.printHousesErrors(false);
 	algoMgr.printAlgorithmsErrors(false);
 	scoreMgr.printError();
-	// TODO: print errors for -1 score
 }

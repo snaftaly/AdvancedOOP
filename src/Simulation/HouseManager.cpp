@@ -35,6 +35,20 @@ void HouseManager::printHousesErrors(bool all){
 	}
 }
 
-void HouseManager::addHouseErr(const std::string houseeFileName, const std::string errorStr){
+void HouseManager::addHouseErr(const std::string& houseeFileName, const std::string& errorStr){
 	housesErrors[houseeFileName] = errorStr;
 }
+
+void HouseManager::addValidHouse(const std::string& houseeFileName){
+	validHousesFileNames.push_back(houseeFileName);
+}
+
+
+
+std::list<std::string>& HouseManager::getValidHousesFileNamesSorted(){
+	validHousesFileNames.sort();
+	return validHousesFileNames;
+
+}
+
+

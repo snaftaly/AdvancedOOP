@@ -3,14 +3,20 @@
 #include <unistd.h>
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
 #include "ScoreManager.h"
 #include "ErrorPrinter.h"
 #include "FileUtils.h"
 
+#define HOUSE_NAME_MAX 9
+#define ALGO_NAME_MAX 12
+#define FIRST_COLUMN_WIDTH 13
+#define OTHER_COLUMN_WIDTH 10
+
 using namespace std;
 
+
 int defaultFormula(const std::map<std::string, int>& resMap){
-	cout << "inside default formula!!!!" << endl;
 
 	int actual_position_in_competition;
 //	int simulation_steps; // TODO: check default formula
@@ -22,22 +28,21 @@ int defaultFormula(const std::map<std::string, int>& resMap){
 
 	int position_in_competition;
 	int score;
-
 	// check if one of the params don't exist
 	if (resMap.find("actual_position_in_competition") == resMap.end() ||
-//		resMap.find("simulation_steps") == resMap.end() ||
+//		resMap.find("simulation_steps") == resMap.end() || // TODO: check default formula - is it needed?
 		resMap.find("winner_num_steps") == resMap.end() ||
 		resMap.find("this_num_steps") == resMap.end() ||
 		resMap.find("sum_dirt_in_house") == resMap.end() ||
 		resMap.find("dirt_collected") == resMap.end() ||
 		resMap.find("is_back_in_docking") == resMap.end())
 	{
-		cout << "return -1!!!!!!!!!!!!!!!!!!!" << endl;
+		// one of the params is missing, return -1;
 		return -1;
 	}
 
 	actual_position_in_competition = resMap.find("actual_position_in_competition")->second;
-//	simulation_steps = resMap.find("simulation_steps")->second;
+//	simulation_steps = resMap.find("simulation_steps")->second; // TODO: check default formula - is it needed?
 	winner_num_steps = resMap.find("winner_num_steps")->second;
 	this_num_steps = resMap.find("this_num_steps")->second;
 	sum_dirt_in_house = resMap.find("sum_dirt_in_house")->second;
@@ -120,12 +125,70 @@ int ScoreManager::calcScore(bool isMadeIllegalMove, const std::map<std::string, 
 
 void ScoreManager::updateScore(const std::string& algoName, const std::string& houseFileNameNoExt, int score){
 	std::lock_guard<std::mutex> guard(scoreUpdateMutex); // use mutex for this part
+	//search for algo in list
+
+	auto result = std::find_if(algoScoresLst.begin(), algoScoresLst.end(), [algoName] (const algoHouseScores& s) { return s.getAlgoName() == algoName; });
+	// if found - add to map
+	if (result != algoScoresLst.end()){
+		(*result).addHouseScore(houseFileNameNoExt, score);
+	}
+	// if not found create a new one
+	else {
+		map<string, int> tempMap;// {house, score};
+		tempMap[houseFileNameNoExt] = score;
+		algoScoresLst.push_back(algoHouseScores(algoName, tempMap));
+	}
 
 }
 
 void ScoreManager::printError(){
 	if (isScoreError){
-		cout << "Score formula could not calculate some scores, see ­1 in the results table" << endl;
+		cout << "Score formula could not calculate some scores, see -1 in the results table" << endl;
+	}
+}
+
+
+void ScoreManager::printRowSeparator(const int tableWidth){
+	cout << setw(tableWidth) << setfill('-') << "" << endl << setfill(' ');;
+}
+
+void ScoreManager::printTableHeader(const list<string>& validHousesFileNamesSorted, const int tableWidth){
+	//print row separator
+	printRowSeparator(tableWidth);
+	// print houses names
+	cout << "|             |";
+	for (const string& houseFileName : validHousesFileNamesSorted){
+		string name =  FileUtils::getFileNameNoExt(houseFileName);
+		name.resize(HOUSE_NAME_MAX, ' ');
+		cout << name << " |";
+	}
+	cout << std::left << std::setw(10) << "AVG" << "|" << endl;
+	//print row separator
+	printRowSeparator(tableWidth);
+}
+
+void ScoreManager::printScoreTable(const list<string>& validHousesFileNamesSorted){
+	int tableWidth = FIRST_COLUMN_WIDTH + 2 + (OTHER_COLUMN_WIDTH + 1)*(validHousesFileNamesSorted.size()+1);
+	int scoreAlgoHouse;
+	printTableHeader(validHousesFileNamesSorted, tableWidth);
+
+	// sort the algo score (by avg and then by algo name
+	algoScoresLst.sort();
+
+	// print the results
+	for (const auto& algoScoreObj : algoScoresLst){
+		string algoNameTrimmed = algoScoreObj.getAlgoName();
+		algoNameTrimmed.resize(ALGO_NAME_MAX, ' ');
+		cout << "|" << algoNameTrimmed << " |";
+		// print each house score
+		for (const string& houseFileName : validHousesFileNamesSorted){
+			scoreAlgoHouse = algoScoreObj.getHouseScores().find(FileUtils::getFileNameNoExt(houseFileName))->second;
+			cout <<  right <<  setw(10) << scoreAlgoHouse << "|";
+		}
+
+		//print row separator
+		cout << fixed << setprecision(2) << right<< setw(10) << algoScoreObj.getAvg()  << "|" << endl;
+		printRowSeparator(tableWidth);
 	}
 }
 
@@ -135,7 +198,7 @@ bool operator==(const ScoreManager::algoHouseScores& lhs, const ScoreManager::al
 	return lhs.algoName == rhs.algoName;
 }
 
-const float enclose::algoHouseScores::getAvg() const{
+const float ScoreManager::algoHouseScores::getAvg() const{
 	int sum = 0;
 	for (const auto& pair : houseScores){
 		sum += pair.second;

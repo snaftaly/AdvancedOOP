@@ -4,20 +4,20 @@
 #include <mutex>
 #include <string>
 #include <list>
+#include <map>
 
 typedef int (*func_ptr)(const std::map<std::string, int>&);
 
 class ScoreManager {
-    class algoHouseScores; // declaration of inner class
+    class algoHouseScores; // declaration of inner class to store each algo houses scores
 
 	std::string scoreDirPath;
 	void *dlib;
     func_ptr scorefunc_fptr;
     bool isScoreError;
 	std::mutex scoreUpdateMutex; // TODO: make sure we use mutex when updating the list
-    std::list<algoHouseScores> lst;
+    std::list<algoHouseScores> algoScoresLst;
 
-    void addScoreToList(std::string algoName, std::string house, int score);
     void printListSorted(); // TODO: remove this
 
     // *** inner class definition ***
@@ -55,6 +55,10 @@ public:
 	int calcScore(bool isMadeIllegalMove, const std::map<std::string, int>& scoreParams);
 	void updateScore(const std::string& algoName, const std::string& houseFileName, int score);
 	void printError();
+
+	void printScoreTable(const std::list<std::string>& housesFileNamesSorted);
+	void printRowSeparator(const int tableWidth);
+	void printTableHeader(const std::list<std::string>& validHousesFileNamesSorted, const int tableWidth);
 
 };
 

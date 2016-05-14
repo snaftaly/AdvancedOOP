@@ -111,54 +111,61 @@ bool AlgorithmRunner::isLegalStep(int stepi, int stepj){
 			stepi < currHouse.getRows() && stepj < currHouse.getCols());
 }
 
-int AlgorithmRunner::getCurrHouseScore(ScoreManager& scoreMgr, const int winnerNumSteps, const int simulationSteps,
+
+const std::map<std::string, int> AlgorithmRunner::getScoreParams(const int winnerNumSteps, const int simulationSteps,
 		const int unsuccessfullAlgosPosition){
-	int currHouseScore;
 	map<string, int> scoreParams;
-	bool isMadeIllegalMove = false;
-	if (simulationState == SimulationState::IllegalMove){
-		isMadeIllegalMove = true;
+	int actualPositionInCompetition = simulationState == SimulationState::Success ? algoPositionInCompetition : unsuccessfullAlgosPosition;
+	if (simulationState == SimulationState::OutOfBattery){
+		numSteps = simulationSteps;
 	}
-	else {
-		int actualPositionInCompetition = simulationState == SimulationState::Success ? algoPositionInCompetition : unsuccessfullAlgosPosition;
-		if (simulationState == SimulationState::OutOfBattery){
-			numSteps = simulationSteps;
-		}
-		scoreParams["actual_position_in_competition"] = actualPositionInCompetition;
-		scoreParams["simulation_steps"] = simulationSteps;
-		scoreParams["winner_num_steps"] = winnerNumSteps;
-		scoreParams["this_num_steps"] = numSteps;
-		scoreParams["sum_dirt_in_house"] = currHouseTotDirt;
-		scoreParams["dirt_collected"] = dirtCollected;
-		scoreParams["is_back_in_docking"] = isRobotInDock() ? 1 : 0;
-
-
-		//print for tests
-//		cout << "algoname: " << algoName << endl;
-//		cout << "positionInCompetition " << positionInCompetition << endl;
-//		cout << "winnerNumSteps " << winnerNumSteps << endl;
-//		cout << "numSteps " << numSteps << endl;
-//		cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
-//		cout << "dirtCollected" << dirtCollected << endl;
-//		cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
-//		cout << currHouse << endl;
-//		currHouseScore = max(0,
-//				2000
-//				- (positionInCompetition - 1)*50
-//				+ (winnerNumSteps - numSteps)*10
-//				-(AlgorithmRunner::currHouseTotDirt - dirtCollected)*3
-//				+ (isRobotInDock() ? 50 : -200)
-//				);
-	}
-
-	currHouseScore = scoreMgr.calcScore(isMadeIllegalMove, scoreParams);
-	return currHouseScore;
+	scoreParams["actual_position_in_competition"] = actualPositionInCompetition;
+	scoreParams["simulation_steps"] = simulationSteps;
+	scoreParams["winner_num_steps"] = winnerNumSteps;
+	scoreParams["this_num_steps"] = numSteps;
+	scoreParams["sum_dirt_in_house"] = currHouseTotDirt;
+	scoreParams["dirt_collected"] = dirtCollected;
+	scoreParams["is_back_in_docking"] = isRobotInDock() ? 1 : 0;
+	//		//print for tests
+//			cout << "algoname: " << algoName << endl;
+//			cout << "actual_position_in_competition " << actualPositionInCompetition << endl;
+//			cout << "winnerNumSteps " << winnerNumSteps << endl;
+//			cout << "numSteps " << numSteps << endl;
+//			cout << "curr house tot dirt "<< AlgorithmRunner::currHouseTotDirt << endl;
+//			cout << "dirtCollected" << dirtCollected << endl;
+//			cout << "isRobotindoc" << (isRobotInDock() ? 50 : -200) << endl;
+//			cout << currHouse << endl;
+	return scoreParams;
 }
+
+bool AlgorithmRunner::isMadeIllegalMove(){
+	return simulationState == SimulationState::IllegalMove;
+}
+
+
+
+//void AlgorithmRunner::getCurrHouseScoreAndUpdateIt(ScoreManager& scoreMgr, ){
+//	int currHouseScore;
+//	map<string, int> scoreParams;
+//	bool isMadeIllegalMove = false;
+//	if (simulationState == SimulationState::IllegalMove){
+//		isMadeIllegalMove = true;
+//	}
+//	else {
+//
+//
+//
+
+//	}
+//	currHouseScore = scoreMgr.calcScore(isMadeIllegalMove, scoreParams);
+//	cout << algoName << ": " << currHouse.getFileName() << ":" << currHouseScore << endl; // tODO: remove this;
+//	scoreMgr.updateScore(algoName, FileUtils::getFileNameNoExt(currHouse.getFileName()), currHouseScore);
+//}
 
 void AlgorithmRunner::setSensorForAlgorithm(){
 	algorithm->setSensor(sensor);
 	sensor.setSensorHouse(&currHouse);
-	sensor.setRobotiPrt(&roboti);
+	sensor.setRobotiPtr(&roboti);
 	sensor.setRobotjPtr(&robotj);
 }
 
