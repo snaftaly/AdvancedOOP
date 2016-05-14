@@ -5,25 +5,19 @@
 using namespace std;
 
 // House c'tor - only initialized the matrix to NULL in the init list
-House::House(): name(""), maxSteps(0), rows(0), cols(0), houseMatrix(NULL), filePath(""), errStr("") { }
+House::House(): name(""), maxSteps(0), rows(0), cols(0), houseMatrix(nullptr), filePath(""), errStr("") { }
 
 // House d'tor implementation
-House::~House()
-{
-	if (houseMatrix != NULL)
-	{
-		delete[] houseMatrix;
-	}
-}
+House::~House(){}
 
 // House copy c'tor implementation
-House::House(const House& house): rows(0), cols(0), houseMatrix(NULL){
+House::House(const House& house): rows(0), cols(0), houseMatrix(nullptr){
 	*this = house;
 }
 
 // house Move c'tor implementation
 House::House(House&& house): name(house.name), maxSteps(house.maxSteps),
-		rows(house.rows), cols(house.cols), houseMatrix(NULL),
+		rows(house.rows), cols(house.cols), houseMatrix(nullptr),
 		filePath(house.filePath), errStr(house.errStr){
 	std::swap(houseMatrix, house.houseMatrix); // the swap trick
 }
@@ -32,20 +26,18 @@ House::House(House&& house): name(house.name), maxSteps(house.maxSteps),
 House& House::operator=(const House& house)
 {
     if(this != &house) {
-    	if (houseMatrix != NULL){
-    		delete [] houseMatrix;
-    	}
+
 		name = house.name;
 		maxSteps = house.maxSteps;
 		rows = house.rows;
 		cols = house.cols;
 		filePath = house.filePath;
 		errStr = house.errStr;
-		if (house.houseMatrix == NULL){
-			houseMatrix = NULL;
+		if (!house.houseMatrix){ // house's houseMatrix is nullPtr
+			houseMatrix.reset(nullptr);
 		}
 		else {
-			houseMatrix = new string[rows];
+			houseMatrix = make_unique<std::string[]>(rows);
 			for (size_t i = 0; i < rows; i++){
 				houseMatrix[i] = house.houseMatrix[i];
 			}
@@ -57,9 +49,6 @@ House& House::operator=(const House& house)
 // House move assignment operator implementation
 House& House::operator=(House&& house){
 
-	if (houseMatrix != NULL){
-		delete [] houseMatrix;
-	}
 	name = house.name;
 	maxSteps = house.maxSteps;
 	rows = house.rows;
@@ -80,7 +69,7 @@ std::ostream& operator<<(std::ostream& out, const House& house)
 std::string House::getHouseMatrixStr() const
 {
 	std::string retStr;
-	if (houseMatrix != NULL){
+	if (houseMatrix){
 		for (size_t i = 0; i< rows; i++){
 			retStr += houseMatrix[i];
 			retStr += '\n';
@@ -92,7 +81,7 @@ std::string House::getHouseMatrixStr() const
 int House::calcDirtLevel () const{
 	int dirtLevel = 0;
 	char currPlace;
-	if (houseMatrix == NULL){
+	if (!houseMatrix){
 		return -1;
 	}
 	for (size_t i=0; i<rows; i++){
@@ -199,10 +188,8 @@ bool House::readFromFile(string filePath)
 	getline(fin, tempLine);
 
 	if (!checkNumberInLine(4, &cols, tempLine)) return false;
-	if (houseMatrix != NULL){
-		delete [] houseMatrix;
-	}
-	houseMatrix = new string[rows];
+
+	houseMatrix = make_unique<std::string[]>(rows);
 	for (size_t i =0; i < rows; ++i)
 	{
 	    std::getline(fin, houseMatrix[i]);

@@ -17,7 +17,6 @@ bool ConfigManager::loadFromFile()
 
 	// first check if file exists, otherwise print usage
 	if (( access( confFilePath.c_str(), F_OK ) == -1 )){
-		// TODO: should it be the path of the folder or path to the file iteslf?
 		ErrorPrinter::printUsage();
 		cout << "cannot find config.ini file in '" << FileUtils::getFullPath(confPath) << "'" << endl;
 		return false;

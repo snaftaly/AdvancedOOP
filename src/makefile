@@ -78,7 +78,7 @@ HouseManager.o: $(SIM_DIR)HouseManager.cpp $(SIM_DIR)HouseManager.h $(SIM_DIR)Ho
 ConfigManager.o: $(SIM_DIR)ConfigManager.cpp $(SIM_DIR)ConfigManager.h $(SIM_DIR)ErrorPrinter.h $(SIM_DIR)FileUtils.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)ConfigManager.cpp
 
-House.o: $(SIM_DIR)House.cpp $(SIM_DIR)House.h $(SIM_DIR)FileUtils.h
+House.o: $(SIM_DIR)House.cpp $(SIM_DIR)House.h $(SIM_DIR)FileUtils.h $(COM_DIR)MakeUniqueAdder.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)House.cpp
 
 ErrorPrinter.o: $(SIM_DIR)ErrorPrinter.cpp $(SIM_DIR)ErrorPrinter.h

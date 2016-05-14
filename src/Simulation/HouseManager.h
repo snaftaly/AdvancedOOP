@@ -12,7 +12,7 @@ class HouseManager {
 	std::string housesPath;
 	std::vector<std::string> housesFileNames;
 	std::list<std::string> validHousesFileNames;
-	std::map<std::string, std::string> housesErrors; // TODO: make sure this is sorted
+	std::map<std::string, std::string> housesErrors;
 public:
 
 	// HouseManager c'tor:

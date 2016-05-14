@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <tuple>
+#include "../Common/MakeUniqueAdder.h"
 
 class House
 {
@@ -11,7 +12,7 @@ class House
 	size_t maxSteps;
 	size_t rows;
 	size_t cols;
-	std::string * houseMatrix;
+	std::unique_ptr<std::string[]> houseMatrix;
 	std::string filePath;
 	std::string errStr;
 public:
@@ -75,15 +76,16 @@ public:
 		return filePath;
 	}
 
-	std::string* getHouseMatrix() const {
-		return houseMatrix;
-	}
-
 	const std::string getErrStr() const {
 		return errStr;
 	}
 
+	std::unique_ptr<std::string[]>& getHouseMatrix() {
+		return houseMatrix;
+	}
+
 	std::string getHouseMatrixStr() const;
+
 
 	// setters
 
@@ -102,11 +104,6 @@ public:
 	void setCols(int cols) {
 		this->cols = cols;
 	}
-
-	void setHouseMatrix(std::string* houseMatrix) {
-		this->houseMatrix = houseMatrix;
-	}
-
 };
 
 #endif

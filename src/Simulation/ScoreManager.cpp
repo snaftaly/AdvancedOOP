@@ -15,11 +15,10 @@
 
 using namespace std;
 
-
+// new
 int defaultFormula(const std::map<std::string, int>& resMap){
 
 	int actual_position_in_competition;
-//	int simulation_steps; // TODO: check default formula
 	int winner_num_steps;
 	int this_num_steps;
 	int sum_dirt_in_house;
@@ -30,7 +29,6 @@ int defaultFormula(const std::map<std::string, int>& resMap){
 	int score;
 	// check if one of the params don't exist
 	if (resMap.find("actual_position_in_competition") == resMap.end() ||
-//		resMap.find("simulation_steps") == resMap.end() || // TODO: check default formula - is it needed?
 		resMap.find("winner_num_steps") == resMap.end() ||
 		resMap.find("this_num_steps") == resMap.end() ||
 		resMap.find("sum_dirt_in_house") == resMap.end() ||
@@ -42,7 +40,6 @@ int defaultFormula(const std::map<std::string, int>& resMap){
 	}
 
 	actual_position_in_competition = resMap.find("actual_position_in_competition")->second;
-//	simulation_steps = resMap.find("simulation_steps")->second; // TODO: check default formula - is it needed?
 	winner_num_steps = resMap.find("winner_num_steps")->second;
 	this_num_steps = resMap.find("this_num_steps")->second;
 	sum_dirt_in_house = resMap.find("sum_dirt_in_house")->second;
@@ -81,7 +78,6 @@ bool ScoreManager::loadFormula(){
 	string scorefuncFilePath = scoreDirPath + "score_formula.so";
 
 	if (( access( scorefuncFilePath.c_str(), F_OK ) == -1 )){
-		// TODO: should it be the path of the folder or path to the file iteslf?
 		ErrorPrinter::printUsage();
 		// TODO: put such errors in error printer
 		cout << "cannot find score_formula.so file in '" << FileUtils::getFullPath(scoreDirPath) << "'" << endl;
@@ -134,7 +130,7 @@ void ScoreManager::updateScore(const std::string& algoName, const std::string& h
 	}
 	// if not found create a new one
 	else {
-		map<string, int> tempMap;// {house, score};
+		map<string, int> tempMap;
 		tempMap[houseFileNameNoExt] = score;
 		algoScoresLst.push_back(algoHouseScores(algoName, tempMap));
 	}

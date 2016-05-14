@@ -15,10 +15,8 @@ class ScoreManager {
 	void *dlib;
     func_ptr scorefunc_fptr;
     bool isScoreError;
-	std::mutex scoreUpdateMutex; // TODO: make sure we use mutex when updating the list
+	std::mutex scoreUpdateMutex;
     std::list<algoHouseScores> algoScoresLst;
-
-    void printListSorted(); // TODO: remove this
 
     // *** inner class definition ***
 	class algoHouseScores{ // nested class

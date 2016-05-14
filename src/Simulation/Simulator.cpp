@@ -22,7 +22,7 @@ Simulator::Simulator(const string& configPath, const string & scoreFormulaPath, 
 		return;
 	}
 
-	// score formula init TODO: add this part
+	// score formula init
 	if (!scoreMgr.loadFormula()){
 		initSuccessfull = false;
 		return;

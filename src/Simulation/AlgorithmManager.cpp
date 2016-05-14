@@ -55,7 +55,6 @@ void AlgorithmManager::printAlgorithmsErrors(bool all){
 				<< "' cannot be opened or are invalid:" << endl;
 	}
 	string errStr;
-	// TODO: maybe add a << operator to the enum class??
 	for(const pair<string, SORegState>& algorithmErrPair : algorithmsLoadErrors) {
 		if (algorithmErrPair.second == SORegState::FILE_CANNOT_BE_LOADED) {
 				errStr =  "file cannot be loaded or is not a valid .so";

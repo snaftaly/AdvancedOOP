@@ -142,26 +142,6 @@ bool AlgorithmRunner::isMadeIllegalMove(){
 	return simulationState == SimulationState::IllegalMove;
 }
 
-
-
-//void AlgorithmRunner::getCurrHouseScoreAndUpdateIt(ScoreManager& scoreMgr, ){
-//	int currHouseScore;
-//	map<string, int> scoreParams;
-//	bool isMadeIllegalMove = false;
-//	if (simulationState == SimulationState::IllegalMove){
-//		isMadeIllegalMove = true;
-//	}
-//	else {
-//
-//
-//
-
-//	}
-//	currHouseScore = scoreMgr.calcScore(isMadeIllegalMove, scoreParams);
-//	cout << algoName << ": " << currHouse.getFileName() << ":" << currHouseScore << endl; // tODO: remove this;
-//	scoreMgr.updateScore(algoName, FileUtils::getFileNameNoExt(currHouse.getFileName()), currHouseScore);
-//}
-
 void AlgorithmRunner::setSensorForAlgorithm(){
 	algorithm->setSensor(sensor);
 	sensor.setSensorHouse(&currHouse);
