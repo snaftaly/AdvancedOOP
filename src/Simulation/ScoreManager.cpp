@@ -84,7 +84,6 @@ bool ScoreManager::loadFormula(){
 
 	dlib = dlopen(scorefuncFilePath.c_str(), RTLD_NOW);
 	if(dlib == NULL){
-		ErrorPrinter::printUsage();
 		ErrorPrinter::cantOpenFile("score_formula.so", scoreDirPath, true);
 		return false;
 	}
@@ -96,7 +95,6 @@ bool ScoreManager::loadFormula(){
     scorefunc_fptr = reinterpret_cast<func_ptr>(reinterpret_cast<long>(tempptr));
     const char *dlsym_error = dlerror();
     if (dlsym_error) {
-		ErrorPrinter::printUsage();
 		ErrorPrinter::noValidFormula();
 		return false;
 	}
