@@ -18,13 +18,13 @@ bool ConfigManager::loadFromFile()
 	// first check if file exists, otherwise print usage
 	if (( access( confFilePath.c_str(), F_OK ) == -1 )){
 		ErrorPrinter::printUsage();
-		cout << "cannot find config.ini file in '" << FileUtils::getFullPath(confPath) << "'" << endl;
+		ErrorPrinter::fileNotFound("config.ini", confPath);
 		return false;
 	}
 
 	ifstream fin(confFilePath);
 	if (!fin.is_open()){ // error opening file
-		cout << "config.ini exists in '"<< FileUtils::getFullPath(confFilePath) << "' but cannot be opened" << endl;
+		ErrorPrinter::cantOpenFile("config.ini", confPath, false);
 		return false;
 	}
 	string line;

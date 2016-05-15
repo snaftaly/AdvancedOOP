@@ -26,7 +26,7 @@ bool AlgorithmManager::readAlgoFiles(){
 
 	if (algorithmsFileNames.empty()){
 		ErrorPrinter::printUsage();
-		cout << "cannot find algorithm files in '" << FileUtils::getFullPath(algorithmsPath) << "'"<< endl;
+		ErrorPrinter::cantFindFiles("algorithm", algorithmsPath);
 		return false;
 	}
 

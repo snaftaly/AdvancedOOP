@@ -15,7 +15,6 @@
 
 using namespace std;
 
-// new
 int defaultFormula(const std::map<std::string, int>& resMap){
 
 	int actual_position_in_competition;
@@ -79,16 +78,14 @@ bool ScoreManager::loadFormula(){
 
 	if (( access( scorefuncFilePath.c_str(), F_OK ) == -1 )){
 		ErrorPrinter::printUsage();
-		// TODO: put such errors in error printer
-		cout << "cannot find score_formula.so file in '" << FileUtils::getFullPath(scoreDirPath) << "'" << endl;
+		ErrorPrinter::fileNotFound("score_formula.so", scoreDirPath);
 		return false;
 	}
 
 	dlib = dlopen(scorefuncFilePath.c_str(), RTLD_NOW);
 	if(dlib == NULL){
 		ErrorPrinter::printUsage();
-		// TODO: put such errors in error printer
-		cout << "score_formula.so exists in '" << FileUtils::getFullPath(scoreDirPath) << "' but cannot be opened or is not a valid .so" << endl;
+		ErrorPrinter::cantOpenFile("score_formula.so", scoreDirPath, true);
 		return false;
 	}
 
@@ -100,8 +97,7 @@ bool ScoreManager::loadFormula(){
     const char *dlsym_error = dlerror();
     if (dlsym_error) {
 		ErrorPrinter::printUsage();
-		// TODO: put such errors in error printer
-    	cout << "score_formula.so is a valid .so but it does not have a valid score formula" << endl;
+		ErrorPrinter::noValidFormula();
 		return false;
 	}
 	return true;

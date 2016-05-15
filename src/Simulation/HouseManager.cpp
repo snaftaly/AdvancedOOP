@@ -18,7 +18,7 @@ bool HouseManager::readHousesFiles(){
 	// if list is empty (error opening folder or no houses files in it) - print usage
 	if (housesFileNames.empty()){
 		ErrorPrinter::printUsage();
-		cout << "cannot find house files in '" << FileUtils::getFullPath(housesPath) <<"'" << endl;
+		ErrorPrinter::cantFindFiles("house", housesPath);
 		return false;
 	}
 	return true;
