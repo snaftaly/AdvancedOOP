@@ -44,9 +44,12 @@ int defaultFormula(const std::map<std::string, int>& resMap){
 	sum_dirt_in_house = resMap.find("sum_dirt_in_house")->second;
 	dirt_collected = resMap.find("dirt_collected")->second;
 	is_back_in_docking = resMap.find("is_back_in_docking")->second;
-
+	for (const auto& pair: resMap){
+		cout << pair.first << ": " << pair.second << endl;
+	}
 	if (sum_dirt_in_house == dirt_collected && is_back_in_docking){
 		position_in_competition = min(4, actual_position_in_competition);
+		cout << "position_in_competition: " << position_in_competition << endl;
 	}
 	else{
 		position_in_competition = 10;
@@ -59,6 +62,8 @@ int defaultFormula(const std::map<std::string, int>& resMap){
 			- (sum_dirt_in_house - dirt_collected)*3
 			+ (is_back_in_docking ? 50 : -200)
 			);
+	cout << "pos:" << position_in_competition << endl;
+	cout << "score: "<< score << endl;
 	return score;
 }
 

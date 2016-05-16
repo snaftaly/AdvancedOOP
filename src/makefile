@@ -7,7 +7,7 @@ ALG_DIR=Algorithms/
 COM_DIR=Common/
 SIM_DIR=Simulation/
 
-all: simulator 305220980_A_.so 305220980_B_.so 305220980_C_.so score_formula.so
+all: simulator 305220980_C_.so score_formula.so #305220980_A_.so 305220980_B_.so 
 
 clean:
 	rm *.so *.o simulator

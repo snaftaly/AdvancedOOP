@@ -1,6 +1,9 @@
 #include <queue>
 #include <map>
+#include <iostream>
 #include "SmartGenericAlgorithm.h"
+
+using namespace std;
 
 SmartGenericAlgorithm::SmartGenericAlgorithm(): sensor(NULL), stepsUntillFinishing(-1){
 	// TODO Auto-generated constructor stub
@@ -48,12 +51,11 @@ void SmartGenericAlgorithm::updateAlgorithmInfo(Direction lastStep){
     // update the map with the info on the dirt level
     stepsFromDocking = calcStepsToDocking(stepsFromDocking + 1, currPosition);
     CellInfo tempCellInfo;
-    tempCellInfo.dirt = (s.dirtLevel != 0)? s.dirtLevel - 1 : 0;
+    tempCellInfo.dirt = (s.dirtLevel != 0)? s.dirtLevel : 0;
     tempCellInfo.stepsToDocking = stepsFromDocking;
     tempCellInfo.isWall = false;
     houseMapping[currPosition] = tempCellInfo;
-    // TODO: remove this
-//    houseMapping[currPosition] = {(s.dirtLevel != 0)? s.dirtLevel - 1 : 0, stepsFromDocking}; // if we are in pos it's not a wall
+
     // update all 4 cells around me with Wall information and if possible also with stepsToDocking
     for(Direction d : directions) {
         Point checkPosition = currPosition;
@@ -142,6 +144,7 @@ Direction  SmartGenericAlgorithm::getDirectionToClosestNeededPlace(){
 	while (!Q.empty()){
 	    Point currPoint = Q.front(); // get the head of the queue
 		auto pointInfo = houseMapping.find(currPoint);
+
 	    if (pointInfo == houseMapping.end() ||
 	    		(!pointInfo->second.isWall && pointInfo->second.dirt != 0)){
 	    	// point is not yet mapped OR
@@ -150,12 +153,13 @@ Direction  SmartGenericAlgorithm::getDirectionToClosestNeededPlace(){
 	    	break;
 	    }
 	    for (Direction d: directions){
-			Point neighbour = currPosition;
+			Point neighbour = currPoint;
 			neighbour.move(d);
-			if(parent.find(neighbour) == parent.end()) { //don't add neighbor to queue if it was already visited or is
+			if(parent.find(neighbour) == parent.end()) { //don't add neighbor to queue if it was already visited
 				auto neighbourInfo = houseMapping.find(neighbour);
 				if(neighbourInfo == houseMapping.end() || !neighbourInfo->second.isWall) {
 					// neighbor is not yet mapped, or is mapped and is not a wall
+//					cout << "adding neighbor" << endl;
 			        parent[neighbour] = {currPoint, d};
 			        Q.push(neighbour);
 				}
@@ -165,6 +169,7 @@ Direction  SmartGenericAlgorithm::getDirectionToClosestNeededPlace(){
 	}
 
 	if (Q.empty()){ // this means we didn't find any unrevealed/dirty position - so go back to docking
+//		cout << " Q is empty" << endl;
 		return getDirectionClosestToDocking();
 	}
 	else{ // we found an unrevealed/dirty place - get the direction that will take us there
@@ -176,7 +181,6 @@ Direction  SmartGenericAlgorithm::getDirectionToClosestNeededPlace(){
 			wantedPoint = parent[wantedPoint].first;
 		}
 		return retDirection;
-
 	}
 
 
@@ -192,6 +196,7 @@ Direction SmartGenericAlgorithm::getStepAndUpdatePrevStep(const std::vector<Dire
 	if (isRobotInDock() && !batteryMng.isBatteryFull()){
 		// robot is in docking station and battery not full - stay in place
 		nextStep = Direction::Stay;
+//		cout << "stay in dock" << endl;
 	}
 	else {
 		int batteryToGetToDockingForStep = (stepsFromDocking+1)*batteryMng.getBatteryConsumptionRate();
@@ -204,14 +209,19 @@ Direction SmartGenericAlgorithm::getStepAndUpdatePrevStep(const std::vector<Dire
 				batteryMng.getBatteryState() <= batteryToGetToDockingForStep ||
 				stepsFromDocking+1 > maxStepsAfterWinner ){
 			nextStep = getDirectionClosestToDocking(); // get the direction that has the minimum steps to docking
+//			cout << "robot needs to head back" << endl;
+
 		}
 		// The robot doesn't have to go back - so stay if still dirty or go to closest unrevealed place
 		else {
 			if (s.dirtLevel > 0){ // place is still dirty
 				nextStep = Direction::Stay;
+//				cout << "robot don't need to head back, but place is dirty" << endl;
+
 			}
 			else { // current place is clean so search for the closest unrevealed/dirty place
 				nextStep = getDirectionToClosestNeededPlace();
+//				cout << "robot don't need to head back and place is clean" << endl;
 			}
 		}
 	}
