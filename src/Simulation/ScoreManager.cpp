@@ -114,7 +114,8 @@ int ScoreManager::calcScore(bool isMadeIllegalMove, const std::map<std::string, 
 
 
 void ScoreManager::updateScore(const std::string& algoName, const std::string& houseFileNameNoExt, int score){
-	std::lock_guard<std::mutex> guard(scoreUpdateMutex); // use mutex for this part since we use find_if which can be called by two threads concurrently and there me a race condition
+	// TODO: remove this
+//	std::lock_guard<std::mutex> guard(scoreUpdateMutex); // use mutex for this part since we use find_if which can be called by two threads concurrently and there me a race condition
 	//search for algo in list
 
 	auto result = std::find_if(algoScoresLst.begin(), algoScoresLst.end(),
@@ -123,12 +124,15 @@ void ScoreManager::updateScore(const std::string& algoName, const std::string& h
 	if (result != algoScoresLst.end()){
 		(*result).addHouseScore(houseFileNameNoExt, score);
 	}
+
+	// TODO: remove this
 	// if not found create a new one
-	else {
-		map<string, int> tempMap;
-		tempMap[houseFileNameNoExt] = score;
-		algoScoresLst.push_back(algoHouseScores(algoName, tempMap));
-	}
+//	else {
+//		cout << " not found" << endl;
+////		map<string, int> tempMap;
+////		tempMap[houseFileNameNoExt] = score;
+////		algoScoresLst.push_back(algoHouseScores(algoName, tempMap));
+//	}
 
 }
 
@@ -183,6 +187,12 @@ void ScoreManager::printScoreTable(const list<string>& validHousesFileNamesSorte
 	}
 }
 
+void ScoreManager::prepareScoresList(const list<string>& algorithmNames){
+	for (const auto& algoName : algorithmNames){
+		map<string, int> emptyHouseScoreMap;
+		algoScoresLst.push_back(algoHouseScores(algoName, emptyHouseScoreMap));
+	}
+}
 
 // inner class related functions
 bool operator==(const ScoreManager::algoHouseScores& lhs, const ScoreManager::algoHouseScores& rhs){
@@ -196,4 +206,3 @@ const float ScoreManager::algoHouseScores::getAvg() const{
 	}
 	return (float)sum/houseScores.size();
 }
-

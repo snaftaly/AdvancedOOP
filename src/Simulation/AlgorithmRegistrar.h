@@ -20,7 +20,6 @@ class AlgorithmRegistrar {
         instance.algorithmFactories.push_back(algorithmFactory);
     }
     void setNameForLastAlgorithm(const std::string& algorithmName) {
-//        assert(algorithmFactories.size()-1 == algorithmNames.size()); //TODO: what should be done here???
         algorithmNames.push_back(algorithmName);
     }
     ~AlgorithmRegistrar();

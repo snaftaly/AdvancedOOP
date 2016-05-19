@@ -40,6 +40,11 @@ Simulator::Simulator(const string& configPath, const string & scoreFormulaPath, 
 		return;
 	}
 
+	// prepare the scores list
+	AlgorithmRegistrar& registrar = AlgorithmRegistrar::getInstance();
+	auto& algorithmNames = registrar.getAlgorithmNames();
+	scoreMgr.prepareScoresList(algorithmNames);
+
 	// put confs in algorithm runner staticaly
 	AlgorithmRunner::setConfig(confMgr.getConfs());
 

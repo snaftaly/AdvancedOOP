@@ -36,9 +36,6 @@ _305220980_B.o: $(ALG_DIR)_305220980_B.cpp $(ALG_DIR)_305220980_B.h $(ALG_DIR)Sm
 _305220980_C.o: $(ALG_DIR)_305220980_C.cpp $(ALG_DIR)_305220980_C.h $(ALG_DIR)SmartGenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)Point.h
 	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_C.cpp
 
-GenericAlgorithm.o: $(ALG_DIR)GenericAlgorithm.cpp $(ALG_DIR)GenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)MakeUniqueAdder.h
-	g++ $(CPP_FLAGS) -c $(ALG_DIR)GenericAlgorithm.cpp
-
 SmartGenericAlgorithm.o: $(ALG_DIR)SmartGenericAlgorithm.cpp $(ALG_DIR)SmartGenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)MakeUniqueAdder.h $(COM_DIR)Point.h
 	g++ $(CPP_FLAGS) -c $(ALG_DIR)SmartGenericAlgorithm.cpp
 

@@ -57,6 +57,8 @@ public:
 	void printScoreTable(const std::list<std::string>& housesFileNamesSorted);
 	void printRowSeparator(const int tableWidth);
 	void printTableHeader(const std::list<std::string>& validHousesFileNamesSorted, const int tableWidth);
+	void prepareScoresList(const std::list<std::string>& algorithmNames);
+
 
 };
 
