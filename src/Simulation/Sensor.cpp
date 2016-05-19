@@ -11,7 +11,6 @@ Sensor::Sensor() {
 }
 
 SensorInformation Sensor::sense() const{
-	cout << *robotPosPtr << endl;
 	struct SensorInformation sensorInfo;
 	char currPlace = sensorHousePtr->getHouseMatrix()[robotPosPtr->getY()][robotPosPtr->getX()];
 

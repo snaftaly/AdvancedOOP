@@ -106,7 +106,6 @@ void Simulator::setHouseForEachAlgorithmRunner(const House& house, list<Algorith
 	int currHouseTotDirt = house.calcDirtLevel();
 //	int currHouseDocki, currHouseDockj; // TODO: remove this
 	Point currHouseDockPos = house.getHouseDockPlace();
-	cout << currHouseDockPos << endl;
 	for (AlgorithmRunner& algoRunner : algoRunnerList){
 		algoRunner.resetRunnerForNewHouse(house, currHouseDockPos, currHouseTotDirt);
 	}

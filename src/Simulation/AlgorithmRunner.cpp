@@ -22,7 +22,6 @@ void AlgorithmRunner::resetRunnerForNewHouse(const House& house, Point currHouse
 
 	// set robot location
 	robotPos = currHouseDockPos;
-	cout << robotPos << endl;
 	// TODO: remove this
 //	roboti = currHouseDocki;
 //	robotj = currHouseDockj;
@@ -79,7 +78,6 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
 //		case Direction::Stay:
 //			break;
 //		}
-	cout << "sug pos:" << suggestedPos << endl;
 
     // check if the direction is legal
     if (!isLegalStep(suggestedPos.getY(), suggestedPos.getX())){

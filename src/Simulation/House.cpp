@@ -105,7 +105,7 @@ Point House::getHouseDockPlace() const {
 		for (size_t j=0; j<cols; j++){
 			currPlace = houseMatrix[i][j];
 			if (currPlace == 'D'){
-				dockPlace = {i, j};
+				dockPlace = {(long)j, (long)i};
 				cout << dockPlace << endl;
 //				get<0>(dockPlace) = i; // TODO: remove this
 //				get<1>(dockPlace) = j;
