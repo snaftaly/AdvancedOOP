@@ -5,17 +5,17 @@
 #include "Direction.h"
 
 class Point {
-    int x, y;
+    long x, y;
 public:
     Point(): x(-1), y(-1){}
-    Point(int _x, int _y) : x(_x), y(_y) {}
+    Point(long _x, long _y) : x(_x), y(_y) {}
     Point distance(const Point& other)const {
         return Point(x - other.x, y - other.y);
     }
-    int getX()const {return x;}
-    int getY()const {return y;}
+    long getX()const {return x;}
+    long getY()const {return y;}
     Point& adjustToScreen(size_t width, size_t height);
-    void move(int difx, int dify);
+    void move(long difx, long dify);
     void move(Direction d);
     // required by map<Point, T>
     bool operator<(const Point& other) const{

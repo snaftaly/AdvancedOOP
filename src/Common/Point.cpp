@@ -6,7 +6,7 @@ Point& Point::adjustToScreen(size_t width, size_t height) {
 	return *this;
 }
 
-void Point::move(int difx, int dify) {
+void Point::move(long difx, long dify) {
     x += difx;
     y += dify;
 }

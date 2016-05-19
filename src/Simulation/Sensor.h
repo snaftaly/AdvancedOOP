@@ -1,13 +1,15 @@
 #ifndef SENSOR_H_
 #define SENSOR_H_
 #include "../Common/AbstractSensor.h"
+#include "../Common/Point.h"
 #include "House.h"
 #include <iostream>
 
 class Sensor: public AbstractSensor {
 	// private
 	House * sensorHousePtr;
-	int * robotiPtr, * robotjPtr;
+//	int * robotiPtr, * robotjPtr;
+	Point * robotPosPtr;
 public:
 	// sensor c'tor declarations
 	Sensor();
@@ -22,13 +24,13 @@ public:
 		this->sensorHousePtr = sensorHouse;
 	}
 
-	void setRobotiPtr(int* robotiPrt) {
-		this->robotiPtr = robotiPrt;
+	void setRobotPosPtr(Point * robotPosPtr) {
+		this->robotPosPtr = robotPosPtr;
 	}
 
-	void setRobotjPtr(int* robotjPtr) {
-		this->robotjPtr = robotjPtr;
-	}
+//	void setRobotjPtr(int* robotjPtr) {
+//		this->robotjPtr = robotjPtr;
+//	}
 };
 
 #endif /* SENSOR_H_ */

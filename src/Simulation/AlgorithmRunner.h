@@ -9,6 +9,7 @@
 #include "../Common/Direction.h"
 #include "../Common/AbstractAlgorithm.h"
 #include "../Common/AbstractSensor.h"
+#include "../Common/Point.h"
 #include "Sensor.h"
 #include "SimulationState.h"
 
@@ -19,7 +20,8 @@ class AlgorithmRunner {
 
 	// current house info:
 	House currHouse;
-	int roboti, robotj;
+	Point robotPos;
+//	int roboti, robotj; // TODO: remove this
 
 	int batteryLevel;
 	int numSteps;
@@ -48,7 +50,7 @@ public:
 		return sensor;
 	}
 
-	void resetRunnerForNewHouse(const House& house, int currHouseDocki, int currHouseDockj, int houseTotDirt);
+	void resetRunnerForNewHouse(const House& house, Point currHouseDockPos, int currHouseDirt);
 	void setSensorForAlgorithm();
 
 	bool isHouseCleanAndRobotInDock();

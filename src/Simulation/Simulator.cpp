@@ -7,6 +7,7 @@
 #include "FileUtils.h"
 #include "AlgorithmRegistrar.h"
 #include "../Common/MakeUniqueAdder.h"
+#include "../Common/Point.h"
 
 using namespace std;
 
@@ -103,10 +104,11 @@ void Simulator::runSingleSubSimulation(const string& houseFileName){
 void Simulator::setHouseForEachAlgorithmRunner(const House& house, list<AlgorithmRunner>& algoRunnerList){
 	// set common data about the house for the algorithms
 	int currHouseTotDirt = house.calcDirtLevel();
-	int currHouseDocki, currHouseDockj;
-	std::tie(currHouseDocki, currHouseDockj) = house.getHouseDockPlace();
+//	int currHouseDocki, currHouseDockj; // TODO: remove this
+	Point currHouseDockPos = house.getHouseDockPlace();
+	cout << currHouseDockPos << endl;
 	for (AlgorithmRunner& algoRunner : algoRunnerList){
-		algoRunner.resetRunnerForNewHouse(house, currHouseDocki, currHouseDockj, currHouseTotDirt);
+		algoRunner.resetRunnerForNewHouse(house, currHouseDockPos, currHouseTotDirt);
 	}
 }
 

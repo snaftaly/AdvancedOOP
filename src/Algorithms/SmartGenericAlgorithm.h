@@ -20,13 +20,13 @@ class SmartGenericAlgorithm: public AbstractAlgorithm {
 	const AbstractSensor * sensor;
     struct CellInfo {
         int dirt = -1; // -1 represents "unknown"
-        int stepsToDocking = -1; // -1 represents "unknown"
+        long stepsToDocking = -1; // -1 represents "unknown"
         bool isWall;
     };
     std::map<Point, CellInfo> houseMapping;
 	BatteryManager batteryMng;
 
-    int stepsFromDocking = -1;
+    long stepsFromDocking = -1;
 
 	Direction prevStepFromAlgo = Direction::Stay; // = requestedStep in amir's implementation
     Direction currDir = Direction::East;

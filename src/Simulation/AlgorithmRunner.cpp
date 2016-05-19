@@ -8,19 +8,24 @@ using namespace std;
 map<string, int> AlgorithmRunner::config;
 
 AlgorithmRunner::AlgorithmRunner(unique_ptr<AbstractAlgorithm>& _algorithm, string algoName):
-		algoName(algoName), roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0),
+//		algoName(algoName),roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0), / todo: remove this
+		algoName(algoName), robotPos(), batteryLevel(0),  numSteps (0),
 		dirtCollected(0), prevStep(Direction::Stay), algoPositionInCompetition(-1), simulationState(SimulationState::Running)
+
 {
 	algorithm = std::move(_algorithm);
 	setSensorForAlgorithm();
 }
 
-void AlgorithmRunner::resetRunnerForNewHouse(const House& house, int currHouseDocki, int currHouseDockj, int currHouseDirt){
+void AlgorithmRunner::resetRunnerForNewHouse(const House& house, Point currHouseDockPos, int currHouseDirt){
 	setCurrHouse(house); // copy the house info using the = operator
 
 	// set robot location
-	roboti = currHouseDocki;
-	robotj = currHouseDockj;
+	robotPos = currHouseDockPos;
+	cout << robotPos << endl;
+	// TODO: remove this
+//	roboti = currHouseDocki;
+//	robotj = currHouseDockj;
 
 	algorithm->setSensor(sensor);//call set sensor again - reset of algo will be handled by algo
 
@@ -36,7 +41,7 @@ void AlgorithmRunner::resetRunnerForNewHouse(const House& house, int currHouseDo
 
 bool AlgorithmRunner::isHouseCleanAndRobotInDock(){
 	return (dirtCollected == AlgorithmRunner::currHouseTotDirt
-			&& currHouse.getHouseMatrix()[roboti][robotj] == 'D');
+			&& currHouse.getHouseMatrix()[robotPos.getY()][robotPos.getX()] == 'D');
 }
 
 bool AlgorithmRunner::isBatteryConsumedAndRobotNotInDock(){
@@ -45,43 +50,47 @@ bool AlgorithmRunner::isBatteryConsumedAndRobotNotInDock(){
 }
 
 bool AlgorithmRunner::isRobotInDock(){
-	return (currHouse.getHouseMatrix()[roboti][robotj] == 'D');
+	return (currHouse.getHouseMatrix()[robotPos.getY()][robotPos.getX()] == 'D');
 }
 
 
 bool AlgorithmRunner::getStepAndUpdateIfLegal(){
-	int stepi = roboti, stepj = robotj;
+	Point suggestedPos = robotPos;
+//	int stepi = robotPos.getX(), stepj = robotPos.getY(); // TODO: remove this
 	char movePlaceVal;
 
 	// get the direction from the algorithm
 	prevStep = algorithm->step(prevStep);
 
-    switch(prevStep) {
-		case Direction::East:
-			stepj += 1;
-			break;
-		case Direction::West:
-			stepj -= 1;
-			break;
-		case Direction::South:
-			stepi += 1;
-			break;
-		case Direction::North:
-			stepi -= 1;
-			break;
-		case Direction::Stay:
-			break;
-		}
+	suggestedPos.move(prevStep);
+//    switch(prevStep) {
+//		case Direction::East:
+//			stepj += 1;
+//			break;
+//		case Direction::West:
+//			stepj -= 1;
+//			break;
+//		case Direction::South:
+//			stepi += 1;
+//			break;
+//		case Direction::North:
+//			stepi -= 1;
+//			break;
+//		case Direction::Stay:
+//			break;
+//		}
+	cout << "sug pos:" << suggestedPos << endl;
 
     // check if the direction is legal
-    if (!isLegalStep(stepi, stepj)){
+    if (!isLegalStep(suggestedPos.getY(), suggestedPos.getX())){
     	return false;
     }
 
     // step is legal - update fields:
     // update robot location in runner and sensor
-    roboti = stepi, robotj = stepj;
-    movePlaceVal = currHouse.getHouseMatrix()[roboti][robotj];
+    robotPos = suggestedPos;
+//    roboti = stepi, robotj = stepj;
+    movePlaceVal = currHouse.getHouseMatrix()[robotPos.getY()][robotPos.getX()];
 
     // update num steps
     numSteps += 1;
@@ -92,11 +101,11 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     else{
     	batteryLevel = max(0, batteryLevel-config.find("BatteryConsumptionRate")->second);
     	if (movePlaceVal > '0' && movePlaceVal <= '9'){ // new place is dirty - update dirt
-    		currHouse.getHouseMatrix()[stepi][stepj] -= 1;
+    		currHouse.getHouseMatrix()[robotPos.getY()][robotPos.getX()] -= 1;
     		dirtCollected += 1;
     	}
     }
-//    printSimulation(stepi, stepj); // print for tests
+//    printSimulation(robotPos.getY(), robotPos.getX()); // print for tests
     return true;
 }
 
@@ -145,19 +154,20 @@ bool AlgorithmRunner::isMadeIllegalMove(){
 void AlgorithmRunner::setSensorForAlgorithm(){
 	algorithm->setSensor(sensor);
 	sensor.setSensorHouse(&currHouse);
-	sensor.setRobotiPtr(&roboti);
-	sensor.setRobotjPtr(&robotj);
+	sensor.setRobotPosPtr(&robotPos);
+//	sensor.setRobotiPtr(&roboti);
+//	sensor.setRobotjPtr(&robotj);
 }
 
 void AlgorithmRunner::printSimulation(int stepi, int stepj){
     // only for tests
     char currChar = currHouse.getHouseMatrix()[stepi][stepj];
     cout << "\033[2J\033[1;1H"; // clear screen
-    currHouse.getHouseMatrix()[roboti][robotj] = 'B';
+    currHouse.getHouseMatrix()[robotPos.getY()][robotPos.getX()] = 'B';
     cout << currHouse << endl;
     cout << "num steps: " << numSteps  << "/" << currHouse.getMaxSteps() << endl;
     cout << "Battery: " << batteryLevel << endl;
     cout << "dirt collected: " << dirtCollected << "/" <<  AlgorithmRunner::currHouseTotDirt << endl;
     usleep(50000);
-    currHouse.getHouseMatrix()[roboti][robotj] = currChar;
+    currHouse.getHouseMatrix()[robotPos.getY()][robotPos.getX()] = currChar;
 }

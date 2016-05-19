@@ -5,6 +5,7 @@
 #include <iostream>
 #include <tuple>
 #include "../Common/MakeUniqueAdder.h"
+#include "../Common/Point.h"
 
 class House
 {
@@ -40,7 +41,7 @@ public:
 
     int calcDirtLevel() const;
 
-    std::tuple<int, int> getHouseDockPlace() const;
+    Point getHouseDockPlace() const;
 
     bool readFromFile(std::string fileName);
 

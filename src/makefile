@@ -48,7 +48,7 @@ score_formula.o: $(SIM_DIR)score_formula.cpp
 main.o: $(SIM_DIR)main.cpp $(SIM_DIR)Simulator.h $(SIM_DIR)ErrorPrinter.h $(SIM_DIR)FileUtils.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)main.cpp
 
-Simulator.o: $(SIM_DIR)Simulator.cpp $(SIM_DIR)Simulator.h $(SIM_DIR)HouseSimulation.h $(SIM_DIR)ScoreManager.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)House.h $(SIM_DIR)ConfigManager.h $(SIM_DIR)HouseManager.h $(SIM_DIR)SimulationState.h $(SIM_DIR)FileUtils.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)MakeUniqueAdder.h
+Simulator.o: $(SIM_DIR)Simulator.cpp $(SIM_DIR)Simulator.h $(SIM_DIR)HouseSimulation.h $(SIM_DIR)ScoreManager.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)House.h $(SIM_DIR)ConfigManager.h $(SIM_DIR)HouseManager.h $(SIM_DIR)SimulationState.h $(SIM_DIR)FileUtils.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)MakeUniqueAdder.h $(COM_DIR)Point.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)Simulator.cpp
 
 HouseSimulation.o: $(SIM_DIR)HouseSimulation.cpp $(SIM_DIR)HouseSimulation.h $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)AlgorithmManager.h $(SIM_DIR)ScoreManager.h $(SIM_DIR)House.h $(SIM_DIR)FileUtils.h $(SIM_DIR)House.h
@@ -66,10 +66,10 @@ AlgorithmRegistrar.o: $(SIM_DIR)AlgorithmRegistrar.cpp $(SIM_DIR)AlgorithmRegist
 AlgorithmRegistration.o: $(SIM_DIR)AlgorithmRegistration.cpp $(SIM_DIR)AlgorithmRegistrar.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)MakeUniqueAdder.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)AlgorithmRegistration.cpp
 
-AlgorithmRunner.o: $(SIM_DIR)AlgorithmRunner.cpp $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)Sensor.h $(SIM_DIR)House.h $(SIM_DIR)SimulationState.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)SensorInformation.h $(COM_DIR)Direction.h 
+AlgorithmRunner.o: $(SIM_DIR)AlgorithmRunner.cpp $(SIM_DIR)AlgorithmRunner.h $(SIM_DIR)Sensor.h $(SIM_DIR)House.h $(SIM_DIR)SimulationState.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)SensorInformation.h $(COM_DIR)Direction.h $(COM_DIR)Point.h 
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)AlgorithmRunner.cpp
 	
-Sensor.o: $(SIM_DIR)Sensor.cpp $(SIM_DIR)Sensor.h $(SIM_DIR)House.h $(COM_DIR)Direction.h $(COM_DIR)SensorInformation.h $(COM_DIR)AbstractSensor.h  
+Sensor.o: $(SIM_DIR)Sensor.cpp $(SIM_DIR)Sensor.h $(SIM_DIR)House.h $(COM_DIR)Direction.h $(COM_DIR)SensorInformation.h $(COM_DIR)AbstractSensor.h $(COM_DIR)Point.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)Sensor.cpp
 
 HouseManager.o: $(SIM_DIR)HouseManager.cpp $(SIM_DIR)HouseManager.h $(SIM_DIR)House.h $(SIM_DIR)ErrorPrinter.h $(SIM_DIR)FileUtils.h
@@ -78,7 +78,7 @@ HouseManager.o: $(SIM_DIR)HouseManager.cpp $(SIM_DIR)HouseManager.h $(SIM_DIR)Ho
 ConfigManager.o: $(SIM_DIR)ConfigManager.cpp $(SIM_DIR)ConfigManager.h $(SIM_DIR)ErrorPrinter.h $(SIM_DIR)FileUtils.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)ConfigManager.cpp
 
-House.o: $(SIM_DIR)House.cpp $(SIM_DIR)House.h $(SIM_DIR)FileUtils.h $(COM_DIR)MakeUniqueAdder.h
+House.o: $(SIM_DIR)House.cpp $(SIM_DIR)House.h $(SIM_DIR)FileUtils.h $(COM_DIR)MakeUniqueAdder.h $(COM_DIR)Point.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)House.cpp
 
 ErrorPrinter.o: $(SIM_DIR)ErrorPrinter.cpp $(SIM_DIR)ErrorPrinter.h $(SIM_DIR)FileUtils.h

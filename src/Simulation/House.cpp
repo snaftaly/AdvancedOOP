@@ -95,8 +95,8 @@ int House::calcDirtLevel () const{
 	return dirtLevel;
 }
 
-tuple<int, int> House::getHouseDockPlace() const {
-	tuple<int, int> dockPlace{-1, -1};
+Point House::getHouseDockPlace() const {
+	Point dockPlace{-1, -1};
 	if (houseMatrix == NULL){
 		return dockPlace;
 	}
@@ -105,8 +105,10 @@ tuple<int, int> House::getHouseDockPlace() const {
 		for (size_t j=0; j<cols; j++){
 			currPlace = houseMatrix[i][j];
 			if (currPlace == 'D'){
-				get<0>(dockPlace) = i;
-				get<1>(dockPlace) = j;
+				dockPlace = {i, j};
+				cout << dockPlace << endl;
+//				get<0>(dockPlace) = i; // TODO: remove this
+//				get<1>(dockPlace) = j;
 				return dockPlace;
 			}
 		}
