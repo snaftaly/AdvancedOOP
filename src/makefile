@@ -7,7 +7,7 @@ ALG_DIR=Algorithms/
 COM_DIR=Common/
 SIM_DIR=Simulation/
 
-all: simulator 305220980_C_.so score_formula.so #305220980_A_.so 305220980_B_.so 
+all: simulator 305220980_C_.so score_formula.so 305220980_A_.so 305220980_B_.so 
 
 clean:
 	rm *.so *.o simulator
@@ -18,19 +18,19 @@ simulator: main.o Simulator.o HouseSimulation.o Sensor.o AlgorithmManager.o Scor
 score_formula.so: score_formula.o
 	g++ -shared -Wl,-soname,score_formula.so -o score_formula.so score_formula.o
 
-305220980_A_.so: _305220980_A.o GenericAlgorithm.o BatteryManager.o
-	g++ -shared -Wl,-soname,305220980_A_.so -o 305220980_A_.so _305220980_A.o GenericAlgorithm.o BatteryManager.o
+305220980_A_.so: _305220980_A.o SmartGenericAlgorithm.o BatteryManager.o Point.o
+	g++ -shared -Wl,-soname,305220980_A_.so -o 305220980_A_.so _305220980_A.o SmartGenericAlgorithm.o BatteryManager.o Point.o
 	
-305220980_B_.so: _305220980_B.o GenericAlgorithm.o BatteryManager.o
-	g++ -shared -Wl,-soname,305220980_B_.so -o 305220980_B_.so _305220980_B.o GenericAlgorithm.o BatteryManager.o
+305220980_B_.so: _305220980_B.o SmartGenericAlgorithm.o BatteryManager.o Point.o
+	g++ -shared -Wl,-soname,305220980_B_.so -o 305220980_B_.so _305220980_B.o SmartGenericAlgorithm.o BatteryManager.o Point.o
 
 305220980_C_.so: _305220980_C.o SmartGenericAlgorithm.o BatteryManager.o Point.o
 	g++ -shared -Wl,-soname,305220980_C_.so -o 305220980_C_.so _305220980_C.o SmartGenericAlgorithm.o BatteryManager.o Point.o
 
-_305220980_A.o: $(ALG_DIR)_305220980_A.cpp $(ALG_DIR)_305220980_A.h $(ALG_DIR)GenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h
+_305220980_A.o: $(ALG_DIR)_305220980_A.cpp $(ALG_DIR)_305220980_A.h $(ALG_DIR)SmartGenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)Point.h
 	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_A.cpp
 
-_305220980_B.o: $(ALG_DIR)_305220980_B.cpp $(ALG_DIR)_305220980_B.h $(ALG_DIR)GenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h
+_305220980_B.o: $(ALG_DIR)_305220980_B.cpp $(ALG_DIR)_305220980_B.h $(ALG_DIR)SmartGenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)Point.h
 	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_B.cpp
 	
 _305220980_C.o: $(ALG_DIR)_305220980_C.cpp $(ALG_DIR)_305220980_C.h $(ALG_DIR)SmartGenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)Point.h

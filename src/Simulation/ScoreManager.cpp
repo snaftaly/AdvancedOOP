@@ -44,12 +44,9 @@ int defaultFormula(const std::map<std::string, int>& resMap){
 	sum_dirt_in_house = resMap.find("sum_dirt_in_house")->second;
 	dirt_collected = resMap.find("dirt_collected")->second;
 	is_back_in_docking = resMap.find("is_back_in_docking")->second;
-	for (const auto& pair: resMap){
-		cout << pair.first << ": " << pair.second << endl;
-	}
+
 	if (sum_dirt_in_house == dirt_collected && is_back_in_docking){
 		position_in_competition = min(4, actual_position_in_competition);
-		cout << "position_in_competition: " << position_in_competition << endl;
 	}
 	else{
 		position_in_competition = 10;
@@ -62,8 +59,6 @@ int defaultFormula(const std::map<std::string, int>& resMap){
 			- (sum_dirt_in_house - dirt_collected)*3
 			+ (is_back_in_docking ? 50 : -200)
 			);
-	cout << "pos:" << position_in_competition << endl;
-	cout << "score: "<< score << endl;
 	return score;
 }
 
@@ -121,10 +116,11 @@ int ScoreManager::calcScore(bool isMadeIllegalMove, const std::map<std::string, 
 
 
 void ScoreManager::updateScore(const std::string& algoName, const std::string& houseFileNameNoExt, int score){
-	std::lock_guard<std::mutex> guard(scoreUpdateMutex); // use mutex for this part
+	std::lock_guard<std::mutex> guard(scoreUpdateMutex); // use mutex for this part since we use find_if which can be called by two threads concurrently and there me a race condition
 	//search for algo in list
 
-	auto result = std::find_if(algoScoresLst.begin(), algoScoresLst.end(), [algoName] (const algoHouseScores& s) { return s.getAlgoName() == algoName; });
+	auto result = std::find_if(algoScoresLst.begin(), algoScoresLst.end(),
+			[algoName] (const algoHouseScores& s) { return s.getAlgoName() == algoName; });
 	// if found - add to map
 	if (result != algoScoresLst.end()){
 		(*result).addHouseScore(houseFileNameNoExt, score);

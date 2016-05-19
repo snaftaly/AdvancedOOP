@@ -35,28 +35,10 @@ class SmartGenericAlgorithm: public AbstractAlgorithm {
 
 	int stepsUntillFinishing = -1; // -1 tells it was not yet updated by the simulation using aboutToFinish()
 
-	// TODO: have different directions for each algo
-	vector<Direction> directions = {Direction::East, Direction::West, Direction::South, Direction::North};
+	vector<Direction> directions;
 
     // informative information
 	int maxStepsAfterWinner;
-
-
-	// not sure if needed
-//	bool isGoingBack;
-//    int totalSteps = 0;
-
-	// unneeded data members:
-//	std::stack<Direction> previousSteps;
-//	int xDistanceFromDock;
-//	int yDistanceFromDock;
-//    const static Direction dir_by_phase[8];
-//    int phase = -1; // phases 0-7: explore surrounding, phase 8: select new direction
-
-
-
-
-
 
 public:
 	SmartGenericAlgorithm();
@@ -69,7 +51,7 @@ public:
 protected:
 //	virtual void updatePreviousStep(const Direction & nextStep);
 //	virtual void updateXYfromDock(const Direction & nextStep);
-	virtual Direction getStepAndUpdatePrevStep(const std::vector<Direction>& possibleMoves, Direction stepFromSimulator);
+	virtual Direction getStepAndUpdatePrevStep(const std::vector<Direction>& possibleMoves, Direction stepFromSimulator, bool useCaution);
 	bool isRobotInDock();
 
 	// functions for smart algo:

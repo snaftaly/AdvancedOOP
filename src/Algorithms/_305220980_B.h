@@ -3,20 +3,17 @@
 
 #include "../Common/Direction.h"
 #include "../Common/AbstractSensor.h"
-#include "GenericAlgorithm.h"
+#include "SmartGenericAlgorithm.h"
 
-class _305220980_B: public GenericAlgorithm {
-	int counter;
+class _305220980_B: public SmartGenericAlgorithm {
 	std::vector<Direction> possibleMoves;
 public:
 
-	 _305220980_B(): GenericAlgorithm(), counter(0){
-		 possibleMoves = {Direction::East};
+	 _305220980_B(): SmartGenericAlgorithm(){
+		 possibleMoves = {Direction::West, Direction::East, Direction::North, Direction::South};
 	 }
 
 	 virtual Direction step(Direction prevStep) override;
-
-	 virtual void setSensor(const AbstractSensor& sensor) override;
 };
 
 #endif /* 305220980B_H_ */

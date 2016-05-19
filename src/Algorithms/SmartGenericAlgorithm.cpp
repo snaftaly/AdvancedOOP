@@ -20,7 +20,6 @@ void SmartGenericAlgorithm::setSensor(const AbstractSensor& s){
 	//Reset previous knowledge.
 	stepsUntillFinishing = -1;
 	batteryMng.resetBattery();
-//	isGoingBack = false;
 	prevStepFromAlgo = Direction::Stay;
 }
 
@@ -29,6 +28,7 @@ void SmartGenericAlgorithm::setConfiguration(std::map<std::string, int> config){
 	batteryMng.setBatteryRechargeRate(config["BatteryRechargeRate"]);
 	batteryMng.setBatteryConsumptionRate(config["BatteryConsumptionRate"]);
 	maxStepsAfterWinner = config["MaxStepsAfterWinner"];
+	batteryMng.resetBattery();
 }
 
 void SmartGenericAlgorithm::aboutToFinish(int stepsTillFinishing){
@@ -37,7 +37,6 @@ void SmartGenericAlgorithm::aboutToFinish(int stepsTillFinishing){
 
 
 void SmartGenericAlgorithm::updateAlgorithmInfo(Direction lastStep){
-//    ++totalSteps; // update total steps
     currPosition.move(lastStep); // update the robot position, as managed by the algorithm, to the new position
     isRobotInDock() ? batteryMng.chargeBattery(): batteryMng.consumeBattery(); // update battery state
 
@@ -114,18 +113,23 @@ void SmartGenericAlgorithm::updateStepsToDocking(int stepsToDocking, const Point
 }
 
 Direction SmartGenericAlgorithm::getDirectionClosestToDocking() {
-	// if robot is in dock then stay, else go to the neighbor closest to dock that is not a wall
+	// if robot is in dock then stay, else go to the neighbor closest to dock that is not a wall which has the max dirt
 	Direction dirClosestToDock = Direction::Stay;
 	if (!isRobotInDock()){
 		int bestDistanceFromDock = stepsFromDocking;
+		int bestDirtFromDock = 0;
 		for(Direction d: directions) {
 			Point neighbour = currPosition;
 			neighbour.move(d);
 			auto neighbourInfo = houseMapping.find(neighbour);
 			if(neighbourInfo != houseMapping.end()) {
 				CellInfo cellinfo = neighbourInfo->second;
-				if(!cellinfo.isWall && cellinfo.stepsToDocking != -1 && cellinfo.stepsToDocking < bestDistanceFromDock) {
+				if(!cellinfo.isWall && cellinfo.stepsToDocking != -1 &&
+//						cellinfo.stepsToDocking < bestDistanceFromDock){
+						(cellinfo.stepsToDocking < bestDistanceFromDock ||
+						(cellinfo.stepsToDocking == bestDistanceFromDock && cellinfo.dirt > bestDirtFromDock))) {
 					bestDistanceFromDock = cellinfo.stepsToDocking;
+					bestDirtFromDock = cellinfo.dirt;
 					dirClosestToDock = d;
 				}
 			}
@@ -187,7 +191,10 @@ Direction  SmartGenericAlgorithm::getDirectionToClosestNeededPlace(){
 }
 
 
-Direction SmartGenericAlgorithm::getStepAndUpdatePrevStep(const std::vector<Direction>& possibleMoves, Direction stepFromSimulator){
+Direction SmartGenericAlgorithm::getStepAndUpdatePrevStep(const std::vector<Direction>& possibleMoves,
+		Direction stepFromSimulator, bool useCaution){
+
+	float cautionRate = useCaution ? 1.1 : 1.0;
 	directions = possibleMoves;
     updateAlgorithmInfo(stepFromSimulator);
 
@@ -206,8 +213,8 @@ Direction SmartGenericAlgorithm::getStepAndUpdatePrevStep(const std::vector<Dire
 		// - battery is not enough to go back
 		// - about to finish was not called but there might not be enough step (algo using caution)
 		if((stepsUntillFinishing != -1 && stepsUntillFinishing <= stepsFromDocking+1) ||
-				batteryMng.getBatteryState() <= batteryToGetToDockingForStep ||
-				stepsFromDocking+1 > maxStepsAfterWinner ){
+				batteryMng.getBatteryState() <= batteryToGetToDockingForStep*cautionRate ||
+				(useCaution && maxStepsAfterWinner <= stepsFromDocking)){
 			nextStep = getDirectionClosestToDocking(); // get the direction that has the minimum steps to docking
 //			cout << "robot needs to head back" << endl;
 
@@ -226,110 +233,8 @@ Direction SmartGenericAlgorithm::getStepAndUpdatePrevStep(const std::vector<Dire
 		}
 	}
 	return nextStep;
-
-//	if (stepFromSimulator != prevStepFromAlgo || !isGoingBack){
-//		// if the step from simulator is not what algo meant, we definitely have to add it to prevSteps (we are not going back for sure)
-//		// if the step is equal (got it from simulator as well as from algo) and we are not going back then we also need to update it
-//		updatePreviousStep(stepFromSimulator); //Step received from the simulator as previous step. EX. 3 modification.
-//	}
-//
-//	// update robot distance from battery for prev step
-//	updateXYfromDock(stepFromSimulator);
-//
-//	// update battery for prev step
-//	if (isRobotInDock()){
-//		batteryMng.chargeBattery();
-//	}
-//	else {
-//		batteryMng.consumeBattery();
-//	}
-//
-//	// update num steps remaining for next step
-//	if (stepsUntillFinishing != -1){
-//		stepsUntillFinishing--;
-//	}
-//
-//
-
-//	else {
-//		int numPrevSteps = previousSteps.size();
-//		int batteryToGetToDockingForStep = (numPrevSteps+1)*batteryMng.getBatteryConsumptionRate();
-//		if((stepsUntillFinishing != -1 && stepsUntillFinishing <= numPrevSteps+1) ||
-//				batteryMng.getBatteryState() <= batteryToGetToDockingForStep ||
-//				numPrevSteps+1 > maxStepsAfterWinner ){
-//			// The robot needs to head back to the docking station - either because:
-//			// - aboutToFinish is called and there are not enough steps
-//			// - battery is not enough to go back
-//			// - about to finish was not called but there might not be enough step (algo using caution)
-//			isGoingBack = true;
-//			if (!previousSteps.empty()){ // there are steps to go back
-//				nextStep = previousSteps.top();
-//				previousSteps.pop();
-//			}
-//			else {  // there are no more steps to go back
-//				nextStep = Direction::Stay;
-//			}
-//		}
-//		else{ // the robot doesn't have to go back
-//			isGoingBack = false;
-//			int dirtLevel = sensor->sense().dirtLevel; // the current place is dirty so stay in it
-//			if (dirtLevel > 0){
-//				nextStep = Direction::Stay;
-//			}
-//			else{
-//				for (Direction direction : possibleMoves){
-//					if (!(direction == Direction::Stay) && !sensor->sense().isWall[(int)direction]){
-//						nextStep = direction;
-//						break;
-//					}
-//				}
-//			}
-//		}
-//	}
-//	prevStepFromAlgo = nextStep;
-//	return nextStep;
 }
 
 bool SmartGenericAlgorithm::isRobotInDock(){
 	return (currPosition.getX() == 0 && currPosition.getY() == 0);
 }
-
-//void SmartGenericAlgorithm::updatePreviousStep(const Direction & prevStep){
-//	//Adds only steps that are not 'stay'
-//	switch (prevStep){
-//		case Direction::East:
-//			previousSteps.push(Direction::West);
-//			break;
-//		case Direction::West:
-//			previousSteps.push(Direction::East);
-//			break;
-//		case Direction::North:
-//			previousSteps.push(Direction::South);
-//			break;
-//		case Direction::South:
-//			previousSteps.push(Direction::North);
-//			break;
-//		case Direction::Stay:
-//			break;
-//	}
-//}
-
-//void SmartGenericAlgorithm::updateXYfromDock(const Direction & prevStep){
-//	// update robot distance from battery for next step
-//	switch (prevStep){
-//		case Direction::East:
-//			xDistanceFromDock++;
-//			break;
-//		case Direction::West:
-//			xDistanceFromDock--;
-//			break;
-//		case Direction::North:
-//			yDistanceFromDock++;
-//			break;
-//		case Direction::South:
-//			yDistanceFromDock--;
-//			break;
-//		case Direction::Stay:
-//			break;
-//	}
-//}
