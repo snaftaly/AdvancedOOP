@@ -14,7 +14,6 @@ class HouseManager {
 	std::list<std::string> validHousesFileNames;
 	std::map<std::string, std::string> housesErrors;
 public:
-
 	// HouseManager c'tor:
 	HouseManager(const std::string& _housesPath): housesPath(_housesPath){ }
 	bool readHousesFiles();

@@ -20,7 +20,7 @@ public:
 	// AlgorithmManager ctor
 	AlgorithmManager(const std::string& _algorithmsPath): algorithmsPath(_algorithmsPath){ }
 	// AlgorithmManager dtor
-	~AlgorithmManager(); // TODO: remove dtor
+	~AlgorithmManager();
 	bool readAlgoFiles();
 	void printAlgorithmsErrors(bool all);
 	void addAlgoRunError(const std::string & algoName,const std::string & houseName, int simulationStep);

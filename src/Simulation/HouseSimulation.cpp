@@ -21,7 +21,7 @@ HouseSimulation::~HouseSimulation() {
 
 void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreManager& scoreMgr, const House& house,
 		list<AlgorithmRunner>& algoRunnerList, const int _maxStepsAfterWinner){
-	int maxSteps = house.getMaxSteps(); // no need to save
+	int maxSteps = house.getMaxSteps();
 
 	currSuccessfullAlgoPosition = 1;
 	winnerNumSteps = maxSteps;
@@ -83,7 +83,6 @@ void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreMana
 	for (AlgorithmRunner& algoRunner : algoRunnerList){
 		// currSuccessfullAlgoPosition now has the position of the unsuccessful algos
 		algoScore = scoreMgr.calcScore(algoRunner.isMadeIllegalMove(), algoRunner.getScoreParams(winnerNumSteps, simulationSteps, currSuccessfullAlgoPosition));
-//		cout << algoRunner.getAlgoName() << ": " << house.getFileName() << ":" << algoScore << endl; // tODO: remove this;
 		scoreMgr.updateScore(algoRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), algoScore);
 	}
 }
@@ -105,7 +104,6 @@ void HouseSimulation::updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRu
 			// update other algos with result
 			updateAboutToFinish(algoRunnerList);
 		}
-
 	}
 }
 
