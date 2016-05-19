@@ -8,7 +8,6 @@ using namespace std;
 map<string, int> AlgorithmRunner::config;
 
 AlgorithmRunner::AlgorithmRunner(unique_ptr<AbstractAlgorithm>& _algorithm, string algoName):
-//		algoName(algoName),roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0), / todo: remove this
 		algoName(algoName), robotPos(), batteryLevel(0),  numSteps (0),
 		dirtCollected(0), prevStep(Direction::Stay), algoPositionInCompetition(-1), simulationState(SimulationState::Running)
 
@@ -22,9 +21,6 @@ void AlgorithmRunner::resetRunnerForNewHouse(const House& house, Point currHouse
 
 	// set robot location
 	robotPos = currHouseDockPos;
-	// TODO: remove this
-//	roboti = currHouseDocki;
-//	robotj = currHouseDockj;
 
 	algorithm->setSensor(sensor);//call set sensor again - reset of algo will be handled by algo
 
@@ -55,29 +51,12 @@ bool AlgorithmRunner::isRobotInDock(){
 
 bool AlgorithmRunner::getStepAndUpdateIfLegal(){
 	Point suggestedPos = robotPos;
-//	int stepi = robotPos.getX(), stepj = robotPos.getY(); // TODO: remove this
 	char movePlaceVal;
 
 	// get the direction from the algorithm
 	prevStep = algorithm->step(prevStep);
 
 	suggestedPos.move(prevStep);
-//    switch(prevStep) {
-//		case Direction::East:
-//			stepj += 1;
-//			break;
-//		case Direction::West:
-//			stepj -= 1;
-//			break;
-//		case Direction::South:
-//			stepi += 1;
-//			break;
-//		case Direction::North:
-//			stepi -= 1;
-//			break;
-//		case Direction::Stay:
-//			break;
-//		}
 
     // check if the direction is legal
     if (!isLegalStep(suggestedPos.getY(), suggestedPos.getX())){
@@ -87,7 +66,6 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     // step is legal - update fields:
     // update robot location in runner and sensor
     robotPos = suggestedPos;
-//    roboti = stepi, robotj = stepj;
     movePlaceVal = currHouse.getHouseMatrix()[robotPos.getY()][robotPos.getX()];
 
     // update num steps
@@ -153,8 +131,6 @@ void AlgorithmRunner::setSensorForAlgorithm(){
 	algorithm->setSensor(sensor);
 	sensor.setSensorHouse(&currHouse);
 	sensor.setRobotPosPtr(&robotPos);
-//	sensor.setRobotiPtr(&roboti);
-//	sensor.setRobotjPtr(&robotj);
 }
 
 void AlgorithmRunner::printSimulation(int stepi, int stepj){

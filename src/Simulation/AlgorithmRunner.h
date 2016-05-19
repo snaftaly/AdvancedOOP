@@ -21,7 +21,6 @@ class AlgorithmRunner {
 	// current house info:
 	House currHouse;
 	Point robotPos;
-//	int roboti, robotj; // TODO: remove this
 
 	int batteryLevel;
 	int numSteps;

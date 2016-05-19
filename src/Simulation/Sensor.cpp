@@ -7,7 +7,6 @@ using namespace std;
 Sensor::Sensor() {
 	sensorHousePtr = NULL;
 	robotPosPtr = NULL;
-//	robotjPtr = NULL;
 }
 
 SensorInformation Sensor::sense() const{

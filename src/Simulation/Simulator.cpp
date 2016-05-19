@@ -104,7 +104,6 @@ void Simulator::runSingleSubSimulation(const string& houseFileName){
 void Simulator::setHouseForEachAlgorithmRunner(const House& house, list<AlgorithmRunner>& algoRunnerList){
 	// set common data about the house for the algorithms
 	int currHouseTotDirt = house.calcDirtLevel();
-//	int currHouseDocki, currHouseDockj; // TODO: remove this
 	Point currHouseDockPos = house.getHouseDockPlace();
 	for (AlgorithmRunner& algoRunner : algoRunnerList){
 		algoRunner.resetRunnerForNewHouse(house, currHouseDockPos, currHouseTotDirt);

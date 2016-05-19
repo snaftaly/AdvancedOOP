@@ -8,7 +8,6 @@
 class Sensor: public AbstractSensor {
 	// private
 	House * sensorHousePtr;
-//	int * robotiPtr, * robotjPtr;
 	Point * robotPosPtr;
 public:
 	// sensor c'tor declarations
@@ -27,10 +26,6 @@ public:
 	void setRobotPosPtr(Point * robotPosPtr) {
 		this->robotPosPtr = robotPosPtr;
 	}
-
-//	void setRobotjPtr(int* robotjPtr) {
-//		this->robotjPtr = robotjPtr;
-//	}
 };
 
 #endif /* SENSOR_H_ */
