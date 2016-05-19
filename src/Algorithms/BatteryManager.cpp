@@ -14,7 +14,7 @@ void BatteryManager::consumeBattery(){
 }
 
 bool BatteryManager::isBatteryFull(){
-	return batteryState >= batteryCapacity;
+	return batteryState >= batteryCapacity && batteryState != 0;
 }
 
 void BatteryManager::resetBattery(){

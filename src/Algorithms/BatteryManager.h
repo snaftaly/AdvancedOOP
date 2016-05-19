@@ -4,6 +4,8 @@
 class BatteryManager {
 
 	int batteryState;
+
+	// informative information
 	int batteryCapacity;
 	int batteryConsumptionRate;
 	int batteryRechargeRate;

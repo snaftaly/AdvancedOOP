@@ -114,10 +114,11 @@ int ScoreManager::calcScore(bool isMadeIllegalMove, const std::map<std::string, 
 
 
 void ScoreManager::updateScore(const std::string& algoName, const std::string& houseFileNameNoExt, int score){
-	std::lock_guard<std::mutex> guard(scoreUpdateMutex); // use mutex for this part
+	std::lock_guard<std::mutex> guard(scoreUpdateMutex); // use mutex for this part since we use find_if which can be called by two threads concurrently and there me a race condition
 	//search for algo in list
 
-	auto result = std::find_if(algoScoresLst.begin(), algoScoresLst.end(), [algoName] (const algoHouseScores& s) { return s.getAlgoName() == algoName; });
+	auto result = std::find_if(algoScoresLst.begin(), algoScoresLst.end(),
+			[algoName] (const algoHouseScores& s) { return s.getAlgoName() == algoName; });
 	// if found - add to map
 	if (result != algoScoresLst.end()){
 		(*result).addHouseScore(houseFileNameNoExt, score);
