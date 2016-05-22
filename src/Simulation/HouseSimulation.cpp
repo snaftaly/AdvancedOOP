@@ -83,7 +83,6 @@ void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreMana
 	for (AlgorithmRunner& algoRunner : algoRunnerList){
 		// currSuccessfullAlgoPosition now has the position of the unsuccessful algos
 		algoScore = scoreMgr.calcScore(algoRunner.isMadeIllegalMove(), algoRunner.getScoreParams(winnerNumSteps, simulationSteps, currSuccessfullAlgoPosition));
-//		cout << algoRunner.getAlgoName() << ": " << house.getFileName() << ":" << algoScore << endl; // tODO: remove this;
 		scoreMgr.updateScore(algoRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), algoScore);
 	}
 }
