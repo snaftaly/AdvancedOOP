@@ -70,7 +70,6 @@ void AlgorithmManager::printAlgorithmsErrors(bool all){
 	}
 }
 
-
 void AlgorithmManager::addAlgoRunError(const string & algoName, const string & houseName, int simulationStep){
 	string errorStr = "Algorithm "
 			+ algoName

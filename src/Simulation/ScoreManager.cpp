@@ -130,7 +130,6 @@ void ScoreManager::printError(){
 	}
 }
 
-
 void ScoreManager::printRowSeparator(const int tableWidth){
 	cout << setw(tableWidth) << setfill('-') << "" << endl << setfill(' ');;
 }
