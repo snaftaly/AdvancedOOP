@@ -10,7 +10,7 @@ class _305220980_B: public SmartGenericAlgorithm {
 public:
 
 	 _305220980_B(): SmartGenericAlgorithm(){
-		 possibleMoves = {Direction::West, Direction::East, Direction::North, Direction::South};
+		 possibleMoves = {Direction::North, Direction::South, Direction::West, Direction::East};
 	 }
 
 	 virtual Direction step(Direction prevStep) override;

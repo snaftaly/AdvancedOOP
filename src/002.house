@@ -3,9 +3,9 @@ Simple2
 19
 80
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW 
-W  99   D              1234321                                                 W
-W  99      WWWWWWW     1234321                     W                       1   W
-W              W                                   W   555                 2   W
+W  99   D              1231321                                                 W
+W  99      WWWWWWW     1231321                     W                       1   W
+W              W       1111111                     W   555                 2   W
 W              W                                   W   555                 3   W
 W              W           WWWWWWWWWWWWWWWWWWWWWWWWW                       4   W
 W              W                                                           5   W
@@ -20,4 +20,4 @@ W              W                                    W   W                  5   W
 W              W                                                           4   W
 W              W                                                           3   W
 W              W                                                               W
-WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
