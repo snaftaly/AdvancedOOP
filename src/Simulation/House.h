@@ -48,6 +48,8 @@ public:
 
 	void fixHouse();
 
+	void fixUnknownLetters();
+
 	void fixMissingRowsAndCols();
 
 	void fixWalls();

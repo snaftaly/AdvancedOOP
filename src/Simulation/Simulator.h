@@ -26,6 +26,7 @@ class Simulator {
 	ScoreManager scoreMgr;
 	AlgorithmManager algoMgr;
 	HouseManager houseMgr;
+	VideoManager videoMgr;
 	size_t numThreads;
 	bool initSuccessfull;
 
@@ -33,8 +34,8 @@ class Simulator {
 
 	void updateOnSuccessfulAlgo(AlgorithmRunner& algorithmRunner);
 	void updateAboutToFinish();
-	void runSingleSubSimulationThread();
-	void runSingleSubSimulation(const string& houseFileName);
+	void runSingleSubSimulationThread(bool doVideo);
+	void runSingleSubSimulation(const string& houseFileName, bool doVideo);
 public:
 
 	//C'tor signature
@@ -46,7 +47,7 @@ public:
 	void createAlgorithmRunnerList();
 
 	//Function to run actual simulation
-	void runSimulation();
+	void runSimulation(bool doVideo);
 
 	void printResults();
 	void printTableHeader(const int tableWidth);

@@ -9,7 +9,8 @@ map<string, int> AlgorithmRunner::config;
 
 AlgorithmRunner::AlgorithmRunner(unique_ptr<AbstractAlgorithm>& _algorithm, string algoName):
 		algoName(algoName), roboti(-1), robotj(-1), batteryLevel(0),  numSteps (0),
-		dirtCollected(0), prevStep(Direction::Stay), algoPositionInCompetition(-1), simulationState(SimulationState::Running)
+		dirtCollected(0), prevStep(Direction::Stay), algoPositionInCompetition(-1), simulationState(SimulationState::Running),
+		doVideo(false), imagesCounter(0), failedImagesCounter(0)
 {
 	algorithm = std::move(_algorithm);
 	setSensorForAlgorithm();
@@ -49,7 +50,7 @@ bool AlgorithmRunner::isRobotInDock(){
 }
 
 
-bool AlgorithmRunner::getStepAndUpdateIfLegal(){
+bool AlgorithmRunner::getStepAndUpdateIfLegal(VideoManager& videoMgr){
 	int stepi = roboti, stepj = robotj;
 	char movePlaceVal;
 
@@ -97,6 +98,9 @@ bool AlgorithmRunner::getStepAndUpdateIfLegal(){
     	}
     }
 //    printSimulation(stepi, stepj); // print for tests
+    if (doVideo){
+    	addStepImage(videoMgr);
+    }
     return true;
 }
 
@@ -160,4 +164,28 @@ void AlgorithmRunner::printSimulation(int stepi, int stepj){
     cout << "dirt collected: " << dirtCollected << "/" <<  AlgorithmRunner::currHouseTotDirt << endl;
     usleep(50000);
     currHouse.getHouseMatrix()[roboti][robotj] = currChar;
+}
+
+void AlgorithmRunner::addStepImage(VideoManager& videoMgr){
+	// put the robot temporarily in the house matrix
+    char currChar = currHouse.getHouseMatrix()[roboti][robotj];
+    currHouse.getHouseMatrix()[roboti][robotj] = 'R';
+    vector<string> tilesForStep;
+
+	for (int i = 0; i< currHouse.getRows() ; i++){
+		for (int j = 0; j < currHouse.getCols(); j++){
+            if (currHouse[i][j] == ' ')
+            	tilesForStep.push_back("0");
+            else
+            	tilesForStep.push_back(string(currHouse[i][j]));
+
+		}
+	}
+	// put the curr char back in the house
+    currHouse.getHouseMatrix()[roboti][robotj] = currChar;
+    string counterStr = to_string(imagesCounter++);
+    string composedImage = imagesDir + "/image" + string(5-counterStr.length(), '0') + counterStr + ".jpg";
+    if (!Montage::compose(tilesForStep, currHouse.getCols(), currHouse.getRows(), composedImage)){
+    	failedImagesCounter++;
+    }
 }

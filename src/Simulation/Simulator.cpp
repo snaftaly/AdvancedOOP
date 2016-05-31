@@ -56,15 +56,15 @@ Simulator::~Simulator() {
 }
 
 
-void Simulator::runSingleSubSimulationThread(){
+void Simulator::runSingleSubSimulationThread(bool doVideo){
 	// fetch old value, then add.
 	for (size_t index = houseIndex++; index < houseMgr.getHousesFileNames().size();  index = houseIndex++){
-		runSingleSubSimulation(houseMgr.getHousesFileNames().at(index));
+		runSingleSubSimulation(houseMgr.getHousesFileNames().at(index), doVideo);
 	}
 }
 
 
-void Simulator::runSingleSubSimulation(const string& houseFileName){
+void Simulator::runSingleSubSimulation(const string& houseFileName, bool doVideo){
 	House currHouse;
 	if (!(currHouse.readFromFile(houseMgr.getHousesPath() + houseFileName))){
 		// there was an error reading from house from file, continue to next file
@@ -97,7 +97,7 @@ void Simulator::runSingleSubSimulation(const string& houseFileName){
 	// create an instance to run the simulation for the house
 	HouseSimulation houseSimulation;
 	size_t maxStepsAfterWinner = confMgr.getConfs().find("MaxStepsAfterWinner")->second;
-	houseSimulation.runSimulationForHouse(algoMgr, scoreMgr, currHouse, algorithmRunnerList, maxStepsAfterWinner);
+	houseSimulation.runSimulationForHouse(algoMgr, scoreMgr, videoMgr, currHouse, algorithmRunnerList, maxStepsAfterWinner, doVideo);
 }
 
 void Simulator::setHouseForEachAlgorithmRunner(const House& house, list<AlgorithmRunner>& algoRunnerList){
@@ -110,14 +110,14 @@ void Simulator::setHouseForEachAlgorithmRunner(const House& house, list<Algorith
 	}
 }
 
-void Simulator::runSimulation(){
+void Simulator::runSimulation(bool doVideo){
 
 	size_t numNeededTrheads = min(numThreads, houseMgr.getHousesFileNames().size());
 	vector<unique_ptr<thread>> threads(numNeededTrheads);	// create the threads
 
     for(auto& thread_ptr : threads) {
         // ===> actually create the threads and run them
-        thread_ptr = make_unique<thread>(&Simulator::runSingleSubSimulationThread, this); // create and run the thread
+        thread_ptr = make_unique<thread>(&Simulator::runSingleSubSimulationThread, this, doVideo); // create and run the thread
     }
 
     // ===> join all the threads to finish nicely (i.e. without crashing / terminating threads)

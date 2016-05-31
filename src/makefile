@@ -7,12 +7,12 @@ ALG_DIR=Algorithms/
 COM_DIR=Common/
 SIM_DIR=Simulation/
 
-all: simulator score_formula.so 305220980_A_.so 305220980_B_.so 305220980_C_.so 
+all: simulator score_formula.so 305220980_A_.so #305220980_B_.so 305220980_C_.so 
 
 clean:
 	rm *.so *.o simulator
 
-simulator: main.o Simulator.o HouseSimulation.o Sensor.o AlgorithmManager.o ScoreManager.o AlgorithmRunner.o AlgorithmRegistration.o AlgorithmRegistrar.o ConfigManager.o HouseManager.o House.o ErrorPrinter.o FileUtils.o Point.o $(LIBS)
+simulator: main.o Simulator.o HouseSimulation.o Sensor.o AlgorithmManager.o ScoreManager.o AlgorithmRunner.o AlgorithmRegistration.o AlgorithmRegistrar.o ConfigManager.o HouseManager.o House.o ErrorPrinter.o FileUtils.o Point.o Encoder.o Montage.o VideoManager.o $(LIBS)
 	g++ -rdynamic -o $@ $^ $(CPP_FLAGS)
 
 score_formula.so: score_formula.o
@@ -89,3 +89,12 @@ Point.o: $(COM_DIR)Point.cpp $(COM_DIR)Point.h $(COM_DIR)Direction.h
 
 FileUtils.o: $(SIM_DIR)FileUtils.cpp $(SIM_DIR)FileUtils.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)FileUtils.cpp
+
+VideoManager.o: $(SIM_DIR)VideoManager.cpp $(SIM_DIR)VideoManager.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)VideoManager.cpp
+
+Montage.o: $(SIM_DIR)Montage.cpp $(SIM_DIR)Montage.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)Montage.cpp
+
+Encoder.o: $(SIM_DIR)Encoder.cpp $(SIM_DIR)Encoder.h
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)Encoder.cpp

@@ -19,8 +19,8 @@ HouseSimulation::~HouseSimulation() {
 	// TODO Auto-generated destructor stub
 }
 
-void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreManager& scoreMgr, const House& house,
-		list<AlgorithmRunner>& algoRunnerList, const int _maxStepsAfterWinner){
+void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreManager& scoreMgr, VideoManager& videoMgr, const House& house,
+		list<AlgorithmRunner>& algoRunnerList, const int _maxStepsAfterWinner, bool doVideo){
 	int maxSteps = house.getMaxSteps(); // no need to save
 
 	currSuccessfullAlgoPosition = 1;
@@ -31,6 +31,22 @@ void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreMana
 	isThereAWinner = false;
 	isUpdatedAboutToFinish = false;
 	maxStepsAfterWinner = _maxStepsAfterWinner;
+
+	// if doVideo - create a directory for each algo and put the initial house state in it
+	if (doVideo){
+		for (AlgorithmRunner& algorithmRunner : algoRunnerList){
+			algorithmRunner.setDoVideo(true);
+			string imagesDirPath = algorithmRunner.getAlgoName() + "_" + FileUtils::getFileNameNoExt(house.getFileName());
+			if (!FileUtils::createDirectoryIfNotExists(imagesDirPath)){
+				algorithmRunner.setDoVideo(false);
+				videoMgr.addDirCreationError(algorithmRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), imagesDirPath);
+			}
+			else {
+				algorithmRunner.setImageDir(imagesDirPath);
+				algorithmRunner.addStepImage(videoMgr);
+			}
+		}
+	}
 
 	// run the simulation - for the different algorithms
 	while (numAlogsRunning > 0 && numStepsRemaining > 0){
@@ -58,7 +74,7 @@ void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreMana
 				numAlogsRunning--;
 			}
 			else {
-				bool isMadeLegalMove = algorithmRunner.getStepAndUpdateIfLegal();
+				bool isMadeLegalMove = algorithmRunner.getStepAndUpdateIfLegal(videoMgr);
 				if (!isMadeLegalMove){
 					algoMgr.addAlgoRunError(algorithmRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), simulationSteps);
 					algorithmRunner.setSimulationState(SimulationState::IllegalMove);
@@ -84,6 +100,21 @@ void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreMana
 		// currSuccessfullAlgoPosition now has the position of the unsuccessful algos
 		algoScore = scoreMgr.calcScore(algoRunner.isMadeIllegalMove(), algoRunner.getScoreParams(winnerNumSteps, simulationSteps, currSuccessfullAlgoPosition));
 		scoreMgr.updateScore(algoRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), algoScore);
+		if (doVideo){
+			// update error list if there was an error creating some image
+			if (algoRunner.getFailedImagesCounter() > 0){
+				videoMgr.addImageCreationErrors(algoRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), algoRunner.getFailedImagesCounter());
+			}
+			// create the video
+			string imagesExpression = algoRunner.getImagesDir() + "/image%50d.jpg";
+			if (!Encoder::encode(imagesExpression, algoRunner.getImagesDir() + ".mpg")){
+				videoMgr.addVideoCreationError(algoRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()));
+			}
+			// remove the directory
+			if(!FileUtils::removeDir(algoRunner.getImagesDir())){
+				// TODO: add dir removal errors?
+			}
+		}
 	}
 }
 

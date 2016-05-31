@@ -116,6 +116,7 @@ tuple<int, int> House::getHouseDockPlace() const {
 
 void House::fixHouse(){
 	fixMissingRowsAndCols();
+	fixUnknownLetters();
 	fixWalls();
 }
 
@@ -126,6 +127,23 @@ void House::fixMissingRowsAndCols(){
 		size_t rowSize = houseMatrix[i].size();
 		if (rowSize < cols){
 			houseMatrix[i].insert(rowSize, cols - rowSize, ' ');
+		}
+	}
+
+}
+
+void House::fixUnknownLetters(){
+	char currPlace;
+	for (size_t i=0; i < rows; i++){
+		for (size_t j=0; j < cols; j++){
+			currPlace = houseMatrix[i][j];
+			if ((currPlace >= '0' && currPlace <='9') || currPlace == ' ' || currPlace == 'D' || currPlace == 'W'){
+				continue;
+			}
+			else {
+				houseMatrix[i][j] = ' ';
+			}
+
 		}
 	}
 

@@ -5,6 +5,7 @@
 #include "AlgorithmRunner.h"
 #include "AlgorithmManager.h"
 #include "ScoreManager.h"
+#include "VideoManager.h"
 
 class HouseSimulation {
 
@@ -22,7 +23,8 @@ public:
 	HouseSimulation();
 	~HouseSimulation();
 
-	void runSimulationForHouse(AlgorithmManager& algoMgr, ScoreManager& scoreMgr, const House& house, std::list<AlgorithmRunner>& algoRunnerList, const int maxStepsAfterWinner);
+	void runSimulationForHouse(AlgorithmManager& algoMgr, ScoreManager& scoreMgr, VideoManager& videoMgr, const House& house,
+			std::list<AlgorithmRunner>& algoRunnerList, const int maxStepsAfterWinner, bool doVideo);
 	void updateOnSuccessfulAlgo(AlgorithmRunner& successAlgorithmRunner, list<AlgorithmRunner>& algoRunnerList);
 	void updateAboutToFinish(list<AlgorithmRunner>& algoRunnerList);
 

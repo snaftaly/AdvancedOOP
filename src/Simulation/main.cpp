@@ -15,6 +15,7 @@ int main(int argc, char* argv[]) {
 	string algorithmsDir = "./";
 	string scoreFormulaDir = "";
 	int numThreads = 1;
+	bool doVideo = false;
 
 
 	// parse the arguments of the program and check parameter names
@@ -59,6 +60,10 @@ int main(int argc, char* argv[]) {
 				return 1;
 			}
 		}
+		else if (!strcmp("-video", argv[i])){
+			doVideo = true;
+			i++;
+		}
 		else if (!strcmp("-threads", argv[i])){
 			if (i < argc - 1){
 				// try to get num threads, if it's NaN or <=0 then num Threads = 1
@@ -83,6 +88,11 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
+	if (doVideo && numThreads > 1){
+		cout << "Error: Cannot create video when running multiple threads" << endl;
+		return 1;
+	}
+
 	// add trailing '/' if it's missing
 	FileUtils::fixTrailingSlash(configDir);
 	if (!scoreFormulaDir.empty()){
@@ -100,7 +110,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	simulator.runSimulation();
+	simulator.runSimulation(doVideo);
 	simulator.printResults();
 
 	return 0;

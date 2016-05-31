@@ -9,6 +9,7 @@
 #include "../Common/Direction.h"
 #include "../Common/AbstractAlgorithm.h"
 #include "../Common/AbstractSensor.h"
+#include "VideoManager.h"
 #include "Sensor.h"
 #include "SimulationState.h"
 
@@ -30,12 +31,19 @@ class AlgorithmRunner {
 	int algoPositionInCompetition;
 	SimulationState simulationState;
 
+
+	bool doVideo;
+	std::string imagesDir;
+	int imagesCounter;
+	int failedImagesCounter;
+
 	static map<string, int> config;
 
 
 	bool isLegalStep(int stepi, int stepj);
 
 	void printSimulation(int stepi, int stepj);
+
 public:
 
 	AlgorithmRunner(unique_ptr<AbstractAlgorithm>& algo, string algoName);
@@ -53,7 +61,7 @@ public:
 
 	bool isHouseCleanAndRobotInDock();
 	bool isBatteryConsumedAndRobotNotInDock();
-	bool getStepAndUpdateIfLegal();
+	bool getStepAndUpdateIfLegal(VideoManager& videoMgr);
 	bool isRobotInDock();
 	int getActualPositionInCompetition();
 
@@ -63,9 +71,7 @@ public:
 	const std::map<std::string, int> getScoreParams(const int winnerNumSteps, const int simulationSteps,
 			const int unsuccessfullAlgosPosition);
 	bool isMadeIllegalMove();
-
-//	void getCurrHouseScoreAndUpdateIt(ScoreManager& scoreMgr, const int winnerNumSteps, const int simulationSteps,
-//			const int unsuccessfullAlgosPosition);
+	void addStepImage(VideoManager& videoMgr);
 
 	// setters
 
@@ -96,12 +102,27 @@ public:
 		return algoName;
 	}
 
-	// static functions
-//	static void resetCommonDataForNewHouse(const House& house);
+	int getFailedImagesCounter() const {
+		return failedImagesCounter;
+	}
+
+	const std::string& getImagesDir() const {
+		return imagesDir;
+	}
 
 	static void setConfig(const map<string, int>& conf) {
 		config = conf;
 	}
+
+	void setDoVideo(bool doVideo) {
+		this->doVideo = doVideo;
+	}
+
+	void setImageDir(const std::string& imageDir) {
+		this->imagesDir = imageDir;
+	}
+
+
 };
 
 #endif /* ALGORITHMRUNNER_H_ */

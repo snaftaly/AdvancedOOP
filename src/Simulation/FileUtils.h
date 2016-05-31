@@ -12,6 +12,9 @@ public:
 	static std::string getFileNameFromPath(const std::string& filePath);
 	static const std::string getFileNameNoExt(const std::string& fileName);
 	static std::string getFullPath(const std::string& fileName);
+	static bool createDirectoryIfNotExists(const std::string& dirPath);
+	static bool removeDir(const std::string& dirPath);
+
 };
 
 #endif /* FILEUTILS_H_ */

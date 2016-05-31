@@ -67,3 +67,25 @@ string FileUtils::getFullPath(const std::string& path){
 	free(fullPath);
 	return fullPathStr;
 }
+
+bool FileUtils::createDirectoryIfNotExists(const string& dirPath)
+{
+  string cmd = "mkdir -p " + dirPath;
+  int ret = system(cmd.c_str());
+  if (ret == -1)
+  {
+    return false;
+  }
+  return true;
+}
+
+bool FileUtils::removeDir(const string& dirPath)
+{
+  string cmd = "rm -rf " + dirPath;
+  int ret = system(cmd.c_str());
+  if (ret == -1)
+  {
+    return false;
+  }
+  return true;
+}
