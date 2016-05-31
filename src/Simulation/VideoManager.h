@@ -12,9 +12,9 @@ public:
 	VideoManager();
 	virtual ~VideoManager();
 
-	void VideoManager::addDirCreationError(const std::string & algoName, const std::string & houseName, const std::string & path);
-	void VideoManager::addImageCreationErrors(const std::string & algoName, const std::string & houseName, int numErrors);
-	void VideoManager::addVideoCreationError(const std::string & algoName, const std::string & houseName);
+	void addDirCreationError(const std::string & algoName, const std::string & houseName, const std::string & path);
+	void addImageCreationErrors(const std::string & algoName, const std::string & houseName, int numErrors);
+	void addVideoCreationError(const std::string & algoName, const std::string & houseName);
 };
 
 #endif /* VIDEOMANAGER_H_ */

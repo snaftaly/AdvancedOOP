@@ -17,7 +17,7 @@ void VideoManager::addDirCreationError(const string & algoName, const string & h
 }
 
 void VideoManager::addImageCreationErrors(const string & algoName, const string & houseName, int numErrors){
-	string errorStr = "Error: In the simulation " + algoName + ", " + houseName + ": the creation of " + numErrors + " images was failed";
+	string errorStr = "Error: In the simulation " + algoName + ", " + houseName + ": the creation of " + to_string(numErrors) + " images was failed";
 	imageCreationErrors.push_back(errorStr);
 }
 

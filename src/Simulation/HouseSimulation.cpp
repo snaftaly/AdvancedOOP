@@ -7,6 +7,7 @@
 
 #include "HouseSimulation.h"
 #include "FileUtils.h"
+#include "Encoder.h"
 
 using namespace std;
 

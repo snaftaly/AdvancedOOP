@@ -1,7 +1,8 @@
-#include "AlgorithmRunner.h"
 #include <tuple>
 #include <iostream>
 #include <unistd.h> // for usleep
+#include "AlgorithmRunner.h"
+#include "Montage.h"
 using namespace std;
 
 // initialization of static members
@@ -174,11 +175,13 @@ void AlgorithmRunner::addStepImage(VideoManager& videoMgr){
 
 	for (int i = 0; i< currHouse.getRows() ; i++){
 		for (int j = 0; j < currHouse.getCols(); j++){
-            if (currHouse[i][j] == ' ')
-            	tilesForStep.push_back("0");
-            else
-            	tilesForStep.push_back(string(currHouse[i][j]));
 
+            if (currHouse.getHouseMatrix()[i][j] == ' '){
+            	tilesForStep.push_back("0");
+            }
+            else {
+            	tilesForStep.push_back(string() + currHouse.getHouseMatrix()[i][j]);
+            }
 		}
 	}
 	// put the curr char back in the house
