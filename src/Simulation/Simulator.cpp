@@ -151,4 +151,5 @@ void Simulator::printErrors(){
 	houseMgr.printHousesErrors(false);
 	algoMgr.printAlgorithmsErrors(false);
 	scoreMgr.printError();
+	videoMgr.printErrors();
 }

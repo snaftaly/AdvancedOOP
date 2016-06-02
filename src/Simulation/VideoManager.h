@@ -15,6 +15,7 @@ public:
 	void addDirCreationError(const std::string & algoName, const std::string & houseName, const std::string & path);
 	void addImageCreationErrors(const std::string & algoName, const std::string & houseName, int numErrors);
 	void addVideoCreationError(const std::string & algoName, const std::string & houseName);
+	void printErrors();
 };
 
 #endif /* VIDEOMANAGER_H_ */

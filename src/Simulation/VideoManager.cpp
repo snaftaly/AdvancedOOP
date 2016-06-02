@@ -25,3 +25,15 @@ void VideoManager::addVideoCreationError(const string & algoName, const string &
 	string errorStr = "Error: In the simulation " + algoName + ", " + houseName + ": video file creation failed";
 	videoCreationErrors.push_back(errorStr);
 }
+
+void VideoManager::printErrors(){
+	for(const auto& err : dirCreationErrors){
+		cout << err << endl;
+	}
+	for(const auto& err : imageCreationErrors){
+		cout << err << endl;
+	}
+	for(const auto& err : videoCreationErrors){
+		cout << err << endl;
+	}
+}
