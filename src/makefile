@@ -28,22 +28,22 @@ score_formula.so: score_formula.o
 	g++ -shared -Wl,-soname,305220980_C_.so -o 305220980_C_.so _305220980_C.o SmartGenericAlgorithm.o BatteryManager.o Point.o
 
 _305220980_A.o: $(ALG_DIR)_305220980_A.cpp $(ALG_DIR)_305220980_A.h $(ALG_DIR)SmartGenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)Point.h
-	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_A.cpp #-mcmodel=large
+	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_A.cpp -mcmodel=large
 
 _305220980_B.o: $(ALG_DIR)_305220980_B.cpp $(ALG_DIR)_305220980_B.h $(ALG_DIR)SmartGenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)Point.h
-	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_B.cpp #-mcmodel=large
+	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_B.cpp -mcmodel=large
 	
 _305220980_C.o: $(ALG_DIR)_305220980_C.cpp $(ALG_DIR)_305220980_C.h $(ALG_DIR)SmartGenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)Point.h
-	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_C.cpp #-mcmodel=large
+	g++ $(CPP_FLAGS) -c $(ALG_DIR)_305220980_C.cpp -mcmodel=large
 
 SmartGenericAlgorithm.o: $(ALG_DIR)SmartGenericAlgorithm.cpp $(ALG_DIR)SmartGenericAlgorithm.h $(ALG_DIR)BatteryManager.h $(COM_DIR)AbstractAlgorithm.h $(COM_DIR)AbstractSensor.h $(COM_DIR)AlgorithmRegistration.h $(COM_DIR)MakeUniqueAdder.h $(COM_DIR)Point.h
-	g++ $(CPP_FLAGS) -c $(ALG_DIR)SmartGenericAlgorithm.cpp #-mcmodel=large
+	g++ $(CPP_FLAGS) -c $(ALG_DIR)SmartGenericAlgorithm.cpp -mcmodel=large
 
 BatteryManager.o: $(ALG_DIR)BatteryManager.cpp $(ALG_DIR)BatteryManager.h
-	g++ $(CPP_FLAGS) -c $(ALG_DIR)BatteryManager.cpp #-mcmodel=large
+	g++ $(CPP_FLAGS) -c $(ALG_DIR)BatteryManager.cpp -mcmodel=large
 
 score_formula.o: $(SIM_DIR)score_formula.cpp
-	g++ $(CPP_FLAGS) -c $(SIM_DIR)score_formula.cpp #-mcmodel=large
+	g++ $(CPP_FLAGS) -c $(SIM_DIR)score_formula.cpp -mcmodel=large
 
 main.o: $(SIM_DIR)main.cpp $(SIM_DIR)Simulator.h $(SIM_DIR)ErrorPrinter.h $(SIM_DIR)FileUtils.h
 	g++ $(CPP_FLAGS) -c $(SIM_DIR)main.cpp

@@ -107,7 +107,7 @@ void HouseSimulation::runSimulationForHouse(AlgorithmManager& algoMgr, ScoreMana
 				videoMgr.addImageCreationErrors(algoRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()), algoRunner.getFailedImagesCounter());
 			}
 			// create the video
-			string imagesExpression = algoRunner.getImagesDir() + "/image%50d.jpg";
+			string imagesExpression = algoRunner.getImagesDir() + "/image%05d.jpg";
 			if (!Encoder::encode(imagesExpression, algoRunner.getImagesDir() + ".mpg")){
 				videoMgr.addVideoCreationError(algoRunner.getAlgoName(), FileUtils::getFileNameNoExt(house.getFileName()));
 			}
