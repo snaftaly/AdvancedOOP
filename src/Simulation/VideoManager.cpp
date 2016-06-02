@@ -1,4 +1,5 @@
 #include "VideoManager.h"
+#include <iostream>
 
 using namespace std;
 
